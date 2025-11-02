@@ -19,6 +19,12 @@
             --dark-color: #34495e;
         }
 
+        /* --- ADICIONADO: Animação do Spinner --- */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -99,7 +105,8 @@
             font-size: 14px;
         }
 
-        select, input[type="date"] { /* Aplicar estilo base para select e date */
+        /* --- MODIFICADO: Transição adicionada --- */
+        select, input[type="date"] {
             width: 100%;
             padding: 10px;
             border: 1.5px solid var(--cor-primaria);
@@ -109,6 +116,7 @@
             box-sizing: border-box;
             color: white;
             font-weight: 700;
+            transition: background-color 0.2s ease; /* Adicionado */
         }
 
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -116,6 +124,7 @@
             cursor: pointer;
         }
 
+        /* --- MODIFICADO: Transição e Hover adicionados --- */
         .card {
             background-color: white;
             border-radius: 8px;
@@ -123,8 +132,13 @@
             padding: 20px;
             margin-bottom: 20px;
             color: black; /* Garante texto preto dentro dos cards */
+            transition: box-shadow 0.2s ease, transform 0.1s ease; /* Adicionado */
+        }
+        .card:hover { /* Adicionado */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
+        /* --- MODIFICADO: Hierarquia (div -> header/h2) --- */
         .card-header {
             border-bottom: 1px solid #eee;
             padding-bottom: 15px;
@@ -133,6 +147,8 @@
             font-weight: 700;
             color: var(--cor-primaria);
         }
+        /* O HTML foi alterado de <div class="card-header"> para <header><h2 class="card-header"> */
+
 
         .card-subheader {
             font-size: 14px;
@@ -148,6 +164,7 @@
             margin-bottom: 20px;
         }
 
+        /* --- MODIFICADO: Transição e Hover adicionados --- */
         .stat-card {
             background-color: white;
             border-radius: 8px;
@@ -156,6 +173,10 @@
             text-align: center;
             border-left: 5px solid var(--cor-primaria);
             color: black; /* Garante texto preto nos stat cards */
+            transition: box-shadow 0.2s ease, transform 0.1s ease; /* Adicionado */
+        }
+        .stat-card:hover { /* Adicionado */
+            transform: translateY(-1px);
         }
 
         .stat-card.alerta { border-left-color: var(--cor-alerta); }
@@ -178,10 +199,20 @@
             text-transform: uppercase;
         }
 
+        /* --- MODIFICADO: Responsividade do Gráfico --- */
         .chart-container {
             position: relative;
             width: 100%;
+            height: 400px; /* Altura padrão */
+            min-height: 300px; /* Altura mínima */
+            aspect-ratio: 2 / 1; /* Proporção sugerida */
         }
+        /* --- ADICIONADO: Responsividade do Canvas --- */
+        .chart-container > canvas {
+            height: 100%;
+            width: 100%;
+        }
+
 
         .tabs {
             border-bottom: 2px solid #dee2e6;
@@ -192,9 +223,11 @@
             color: white; font-size: 18px; font-weight: 600;
             border-bottom: 3px solid transparent; transition: all 0.3s ease;
         }
+        /* --- MODIFICADO: Fundo na aba ativa --- */
         .tab-link.active {
             color: var(--cor-secundaria);
             border-bottom-color: var(--cor-secundaria);
+            background-color: rgba(159, 196, 25, 0.1); /* Adicionado */
         }
         #scatter-legend-table {
             display: flex; justify-content: space-around; width: 100%;
@@ -298,6 +331,17 @@
             transition: width 0.3s ease-in-out;
         }
 
+        /* --- ADICIONADO: Estilo do Spinner --- */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(159, 196, 25, 0.3); /* Borda mais clara */
+            border-top: 3px solid var(--cor-secundaria); /* Cor principal */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+
         /* Ajuste do Header para incluir o seletor de projeto */
         header .container {
             display: flex;
@@ -352,11 +396,17 @@
             </div>
         </header>
 
+        <!-- --- MODIFICADO: Mensagem inicial atualizada --- -->
         <div id="initial-message" class="initial-message text-center py-10 text-gray-200 text-lg">
-            <p>Carregando dados do projeto...</p> </div>
+            <p>Carregando dados do projeto <span id="initial-project-name">...</span></p>
+        </div>
 
+        <!-- --- MODIFICADO: Spinner adicionado ao container de loading --- -->
         <div id="loading-container" class="text-center py-10" style="display: none;">
-            <p id="loading-status" class="text-gray-200 text-lg mb-4">Iniciando...</p>
+            <div class="flex items-center justify-center mb-4">
+                <div class="spinner mr-3"></div> <!-- SPINNER ADICIONADO -->
+                <p id="loading-status" class="text-gray-200 text-lg">Iniciando...</p>
+            </div>
             <div id="progress-bar-container" class="w-full max-w-md mx-auto bg-gray-600 rounded-full h-2.5">
                 <div id="progress-bar" class="bg-[--cor-secundaria] h-2.5 rounded-full" style="width: 0%"></div>
             </div>
@@ -413,55 +463,66 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Volume de Apontamentos por Mês</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="histogramChart"></canvas></div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Volume de Apontamentos por Mês</h2></header>
+                    <div class="chart-container"><canvas id="histogramChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Histórico de Taxa de Resolução (Mensal)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="monthlyResolutionRateChart"></canvas></div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Histórico de Taxa de Resolução (Mensal)</h2></header>
+                    <div class="chart-container"><canvas id="monthlyResolutionRateChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Histórico de Apontamentos por Mês (Criados vs. Resolvidos)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="statusHistoryChart"></canvas></div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Histórico de Apontamentos por Mês (Criados vs. Resolvidos)</h2></header>
+                    <div class="chart-container"><canvas id="statusHistoryChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Análise Detalhada por Descrição</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Análise Detalhada por Descrição</h2></header>
                     <div class="filters" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); display: grid;">
                         <div class="filter-group"><label for="groupname-filter">Groupname</label><select id="groupname-filter"><option value="all">Todos</option></select></div>
                         <div class="filter-group"><label for="categoria-filter">Categoria</label><select id="categoria-filter"><option value="all">Todas</option></select></div>
                         <div class="filter-group"><label for="tipo-filter">Tipo</label><select id="tipo-filter"><option value="all">Todos</option></select></div>
                         <div class="filter-group"><label for="descricao-filter">Descrição (Defeito)</label><select id="descricao-filter"><option value="all">Todas</option></select></div>
                     </div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="detailsChart"></canvas></div>
+                    <!-- Altura inline removida -->
+                    <div class="chart-container"><canvas id="detailsChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Mapa de Calor: Concentração por Categoria/Mês</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Mapa de Calor: Concentração por Categoria/Mês</h2></header>
                      <div class="filters" style="padding: 0; box-shadow: none; margin-bottom: 15px;">
                          <div class="filter-group" style="min-width: 150px; max-width: 200px;">
                              <label for="heatmap-year-filter">Ano do Mapa de Calor</label>
                              <select id="heatmap-year-filter"><option value="all">Todos</option></select>
                          </div>
                      </div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="heatmapChart"></canvas></div>
+                    <!-- Altura inline removida -->
+                    <div class="chart-container"><canvas id="heatmapChart"></canvas></div>
                     <div id="heatmap-legend" class="mt-4 flex items-center justify-center space-x-2 text-sm text-gray-600"></div>
                 </div>
             </div>
 
             <div id="eficiencia" class="tab-content" style="display: none;">
                 <div class="card">
-                    <div class="card-header">Desempenho de Resolução por Categoria</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Desempenho de Resolução por Categoria</h2></header>
                     <div class="card-subheader">(Eixo X = Tempo Médio de Resolução, Eixo Y = Volume de Apontamentos)</div>
-                     <div class="chart-container" style="height: 450px;"><canvas id="resolutionScatterChart"></canvas></div>
+                     <!-- Altura inline removida -->
+                     <div class="chart-container"><canvas id="resolutionScatterChart"></canvas></div>
                      <div id="scatter-legend-table"></div>
                      <div id="inference-section"></div>
                 </div>
                  <div class="card mt-6">
-                    <div class="card-header">Cumprimento de SLA por Categoria</div>
-                     <div class="chart-container" style="height: 400px;"><canvas id="slaByCategoryChart"></canvas></div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Cumprimento de SLA por Categoria</h2></header>
+                     <!-- Altura inline removida -->
+                     <div class="chart-container"><canvas id="slaByCategoryChart"></canvas></div>
                 </div>
             </div>
 
@@ -476,21 +537,27 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Volume de Apontamentos por Agrupamento</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Volume de Apontamentos por Agrupamento</h2></header>
                     <div class="card-subheader">Azul para Torre (T), Verde para Setor (S)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="groupingVolumeChart"></canvas></div>
+                    <!-- Altura inline removida -->
+                    <div class="chart-container"><canvas id="groupingVolumeChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Ranking de Locais por Volume de Apontamentos</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Ranking de Locais por Volume de Apontamentos</h2></header>
                     <div class="card-subheader">(Top 15 locais com maior incidência no agrupamento selecionado)</div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="locationRankingChart"></canvas></div>
+                    <!-- Altura inline removida -->
+                    <div class="chart-container"><canvas id="locationRankingChart"></canvas></div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Mapa de Calor: Categoria vs. Local</div>
+                    <!-- --- MODIFICADO: Hierarquia e altura removida --- -->
+                    <header><h2 class="card-header">Mapa de Calor: Categoria vs. Local</h2></header>
                     <div class="card-subheader">(Concentração de tipos de problema por local no agrupamento selecionado)</div>
-                    <div class="chart-container" style="height: 600px;"><canvas id="locationCategoryHeatmap"></canvas></div>
+                    <!-- Altura inline removida -->
+                    <div class="chart-container"><canvas id="locationCategoryHeatmap"></canvas></div>
                 </div>
             </div>
             </main>
@@ -701,9 +768,12 @@
              const initialMessage = document.getElementById('initial-message');
 
             try {
+                // --- MODIFICADO: Troca da mensagem inicial para a barra de progresso ---
                 statusText.textContent = 'Leitura concluída. Processando dados...';
                 progressBar.style.width = '50%';
                 initialMessage.style.display = 'none'; // Esconde msg inicial
+                loadingContainer.style.display = 'block'; // MOSTRA a barra de progresso
+                // --- Fim da Modificação ---
 
                  // Limpa dados e gráficos ANTES de processar novos dados
                  clearDashboardState();
@@ -853,13 +923,20 @@
             const dashboardContent = document.getElementById('dashboard-content');
             const initialMessage = document.getElementById('initial-message');
 
+            // --- MODIFICADO: Atualiza mensagem inicial e gerencia visibilidade ---
+            // ATUALIZADO: Define o nome do projeto na mensagem inicial
+            const initialProjectNameSpan = document.getElementById('initial-project-name');
+            if (initialProjectNameSpan) {
+                initialProjectNameSpan.textContent = `"${projectName}"`;
+            }
+
             // Exibir carregamento e ocultar conteúdo/erros
              dashboardContent.style.display = 'none';
-             initialMessage.style.display = 'none';
+             initialMessage.style.display = 'block'; // MOSTRA a mensagem inicial
              document.getElementById('error-message').style.display = 'none';
-             statusText.textContent = `Carregando dados do projeto ${projectName}...`;
-             progressBar.style.width = '5%';
-             loadingContainer.style.display = 'block';
+             loadingContainer.style.display = 'none'; // ESCONDE a barra de progresso por enquanto
+             // --- Fim da Modificação ---
+
 
              // Limpa o estado antes de carregar (IMPORTANTE)
              clearDashboardState();
@@ -867,19 +944,20 @@
 
             try {
                 // Busca o arquivo JSONL do projeto selecionado
-                statusText.textContent = `Buscando arquivo ${fileName}...`;
+                // statusText.textContent = `Buscando arquivo ${fileName}...`; // Removido, pois a barra não está visível ainda
                 const response = await fetch(fileName);
-                progressBar.style.width = '25%';
+                // progressBar.style.width = '25%'; // Removido
 
                 if (!response.ok) {
                     throw new Error(`Falha ao buscar ${fileName} (HTTP ${response.status})`);
                 }
 
-                statusText.textContent = `Lendo arquivo ${fileName}...`;
+                // statusText.textContent = `Lendo arquivo ${fileName}...`; // Removido
                 const content = await response.text();
-                progressBar.style.width = '45%';
+                // progressBar.style.width = '45%'; // Removido
 
                 // Processa o conteúdo usando a função existente
+                // processContent irá esconder 'initial-message' e mostrar 'loading-container'
                 await processContent(content, projectName); // Passa o NOME do projeto como descrição
 
             } catch (err) {
@@ -910,23 +988,35 @@
             const initialMessage = document.getElementById('initial-message');
 
 
+            // --- MODIFICADO: Atualiza mensagem inicial e gerencia visibilidade ---
+            // ATUALIZADO: Define o nome do arquivo na mensagem inicial
+            const initialProjectNameSpan = document.getElementById('initial-project-name');
+            if (initialProjectNameSpan) {
+                initialProjectNameSpan.textContent = `"${file.name}"`;
+            }
+            document.getElementById('file-name').textContent = `Arquivo Manual: ${file.name}`; // Mantém isso para o footer
+
             // Exibe carregamento, oculta conteúdo
-            initialMessage.style.display = 'none';
+            initialMessage.style.display = 'block'; // MOSTRA a mensagem inicial
             dashboardContent.style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
-            statusText.textContent = 'Lendo arquivo manual...';
-            progressBar.style.width = '0%';
-            loadingContainer.style.display = 'block';
+            loadingContainer.style.display = 'none'; // ESCONDE a barra de progresso
+            // --- Fim da Modificação ---
+
 
             // Limpa estado anterior ANTES de ler o novo arquivo
             clearDashboardState();
 
-            document.getElementById('file-name').textContent = `Arquivo Manual: ${file.name}`;
-
-
             const reader = new FileReader();
 
             reader.onprogress = (event) => {
+                // --- MODIFICADO: Mostra a barra de progresso no primeiro onprogress ---
+                if (initialMessage.style.display !== 'none') {
+                    initialMessage.style.display = 'none';
+                    loadingContainer.style.display = 'block';
+                }
+                // --- Fim da Modificação ---
+
                 if (event.lengthComputable) {
                     const percentage = Math.round((event.loaded / event.total) * 45); // Ajustado para 45%
                     statusText.textContent = `Lendo arquivo... ${Math.round(percentage / 0.45)}%`;
@@ -935,6 +1025,10 @@
             };
 
             reader.onload = async (e) => {
+                // Garante que a barra esteja visível caso onprogress não tenha sido chamado
+                initialMessage.style.display = 'none';
+                loadingContainer.style.display = 'block';
+                
                 // Passa o nome do arquivo único para processContent
                  // Usa o nome do arquivo como descrição para uploads manuais
                 await processContent(e.target.result, `Manual: ${file.name}`);
@@ -1499,7 +1593,7 @@
                      <h3>Inferência Estatística e Plano de Ação</h3>
                      <div class="inference-grid">
                          ${generateInferenceHTML('Pontos Críticos', 'Alto volume e alta demora. Estas categorias são as mais problemáticas e requerem atenção prioritária.', quadrants.criticos, ICON_CRITICO, 'criticos')}
-                         ${generateInferenceHTML('Pontos de Ineficiência', 'Baixo volume, mas alta demora. Sugere-se revisar o processo ou treinamento específico para estas tarefas.', quadrants.ineficientes, ICON_INEFICIENTE, 'ineficientes')}
+                         ${generateInHTML('Pontos de Ineficiência', 'Baixo volume, mas alta demora. Sugere-se revisar o processo ou treinamento específico para estas tarefas.', quadrants.ineficientes, ICON_INEFICIENTE, 'ineficientes')}
                          ${generateInferenceHTML('Pontos Eficientes', 'Alto volume e baixa demora. Estas categorias podem servir como modelo de boas práticas para outras áreas.', quadrants.eficientes, ICON_EFICIENTE, 'eficientes')}
                      </div>
                  `;
@@ -1945,4 +2039,5 @@
         });
     </script>
 </body>
+
 </html>
