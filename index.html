@@ -41,16 +41,13 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilo Adicional para o Seletor de Projeto */
         .project-selector-group {
             min-width: 200px;
             margin-left: 20px;
-            /* Espaçamento à esquerda */
         }
 
         .project-selector-group label {
             color: white;
-            /* Cor do label */
             margin-bottom: 5px;
             font-size: 14px;
             font-weight: 600;
@@ -59,9 +56,7 @@
         .project-selector-group select {
             width: 100%;
             padding: 8px 10px;
-            /* Ajuste no padding */
             border: 1.5px solid white;
-            /* Borda branca */
             border-radius: 5px;
             background-color: var(--cor-primaria);
             font-size: 14px;
@@ -71,7 +66,6 @@
             cursor: pointer;
         }
 
-        /* Ajuste para o ícone do dropdown no select */
         .project-selector-group select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
@@ -79,7 +73,6 @@
             background-position: right 0.7rem center;
             background-size: 1.2em 1.2em;
             padding-right: 2.5rem;
-            /* Espaço para o ícone */
         }
 
 
@@ -110,7 +103,6 @@
 
         select,
         input[type="date"] {
-            /* Aplicar estilo base para select e date */
             width: 100%;
             padding: 10px;
             border: 1.5px solid var(--cor-primaria);
@@ -134,7 +126,6 @@
             padding: 20px;
             margin-bottom: 20px;
             color: black;
-            /* Garante texto preto dentro dos cards */
         }
 
         .card-header {
@@ -168,7 +159,6 @@
             text-align: center;
             border-left: 5px solid var(--cor-primaria);
             color: black;
-            /* Garante texto preto nos stat cards */
         }
 
         .stat-card.alerta {
@@ -431,23 +421,18 @@
             transition: width 0.3s ease-in-out;
         }
 
-        /* Ajuste do Header para incluir o seletor de projeto */
         header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            /* Permite quebrar linha se não couber */
         }
 
         header .header-left {
             display: flex;
             align-items: center;
-            /* Alinha verticalmente título e seletor */
             flex-grow: 1;
-            /* Permite ocupar espaço */
             margin-right: 20px;
-            /* Espaço antes do botão de imprimir */
         }
 
         @media print {
@@ -507,25 +492,21 @@
             <div class="container mx-auto">
                 <div class="header-left">
                     <div>
-                        <h1 class="text-3xl font-bold text-white dark:text-white">Dashboard de Análise de Apontamentos
-                        </h1>
+                        <h1 class="text-3xl font-bold text-white dark:text-white">Dashboard de Apontamentos</h1>
                         <p class="text-gray-300 dark:text-gray-400">Relatório Interativo do SnagR</p>
                     </div>
                     <div class="project-selector-group">
                         <label for="project-selector">Selecionar Projeto</label>
                         <select id="project-selector">
-                            <option value="Hotel.jsonl" selected>Hotel</option>
-                            <option value="Centro medico.jsonl">Centro Medico</option>
-                            <option value="Ensino.jsonl">Ensino</option>
-                            <option value="Residencial.jsonl">Residencial</option>
-                            <option value="Embasamento.jsonl">Embasamento</option>
+                            <option value="Unificado">Unificado</option>
+                            <option value="Hotel" selected>Hotel</option>
+                            <option value="Centro Medico">Centro Medico</option>
+                            <option value="Ensino">Ensino</option>
+                            <option value="Residencial">Residencial</option>
+                            <option value="Embasamento">Embasamento</option>
                         </select>
                     </div>
                 </div>
-                <button id="print-button"
-                    class="bg-white text-gray-800 font-bold py-2 px-4 rounded shadow hover:bg-gray-200 transition-colors">
-                    Imprimir Relatório
-                </button>
             </div>
         </header>
 
@@ -544,6 +525,7 @@
             style="display: none;" role="alert"></div>
 
         <main id="dashboard-content" style="display: none;">
+
             <div class="tabs">
                 <button class="tab-link active" onclick="openTab(event, 'visaoGeral')">Visão Geral</button>
                 <button class="tab-link" onclick="openTab(event, 'eficiencia')">Eficiência (SLA)</button>
@@ -691,12 +673,6 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Volume de Apontamentos por Agrupamento</div>
-                    <div class="card-subheader">Azul para Torre (T), Verde para Setor (S)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="groupingVolumeChart"></canvas></div>
-                </div>
-
-                <div class="card">
                     <div class="card-header">Ranking de Locais por Volume de Apontamentos</div>
                     <div class="card-subheader">(Top 15 locais com maior incidência no agrupamento selecionado)</div>
                     <div class="chart-container" style="height: 500px;"><canvas id="locationRankingChart"></canvas>
@@ -711,6 +687,7 @@
                     </div>
                 </div>
             </div>
+
         </main>
     </div>
 
@@ -745,15 +722,15 @@
 
     <script>
         // ### VARIÁVEIS GLOBAIS E DE ESTADO ###
-        let allData = []; // Armazena todos os dados brutos processados do arquivo
-        let currentFinalData = []; // Armazena os dados filtrados atualmente exibidos nos gráficos
+        let allData = [];
+        let currentFinalData = [];
         let histogramChart, detailsChart, heatmapChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart;
-        let locationRankingChart, locationCategoryHeatmap, groupingVolumeChart;
-        // Regras de SLA (Service Level Agreement) por prioridade
-        const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 }; // Prioridade: Dias
+        let locationRankingChart, locationCategoryHeatmap;
+        const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
 
-        // NOVO: Mapeamento de Nome do Projeto para Nome do Arquivo
+        // *** JAVASCRIPT ALTERADO AQUI ***
         const PROJECT_FILES = {
+            "Unificado": "./Snags_Unificado_CM.jsonl", // Adicionado "Unificado"
             "Hotel": "./Hotel.jsonl",
             "Centro Medico": "./Centro medico.jsonl",
             "Ensino": "./Ensino.jsonl",
@@ -761,63 +738,98 @@
             "Embasamento": "./Embasamento.jsonl"
         };
 
-        // ### PROCESSAMENTO E NORMALIZAÇÃO DE DADOS ###
+        // ### FUNÇÃO AUXILIAR PARA PARSE DE DATAS ###
+        /**
+         * Tenta parsear uma string de data em vários formatos e retorna YYYY-MM-DD ou null.
+         * @param {string | null} dateStr A string da data a ser parseada.
+         * @returns {string | null} A data no formato YYYY-MM-DD ou null se inválida/não reconhecida.
+         */
+        function parseDateString(dateStr) {
+            if (!dateStr || typeof dateStr !== 'string') {
+                return null;
+            }
+            // Remove a parte da hora, separada por espaço ou 'T'
+            const datePart = dateStr.split(/[ T]/)[0];
 
+            // 1. Tenta formato YYYY-MM-DD (já está correto)
+            if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+                try {
+                    const [year, month, day] = datePart.split('-').map(Number);
+                    if (year > 1900 && year < 3000 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                        // Validação básica OK, retorna formatado para garantir padding
+                        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    }
+                } catch (e) { /* ignore */ }
+            }
+
+            // 2. Tenta formato DD/MM/YYYY
+            if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(datePart)) {
+                try {
+                    const parts = datePart.split('/');
+                    if (parts.length === 3) {
+                        const [day, month, year] = parts.map(Number);
+                        if (year > 1900 && year < 3000 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                            return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+            }
+
+            // 3. Fallback: Tenta usar o construtor Date (menos confiável)
+            try {
+                // Tenta criar um objeto Date. Adicionar 'Z' pode ajudar a interpretar como UTC.
+                // Usar replace para garantir que T seja usado como separador se houver espaço
+                const d = new Date(dateStr.replace(' ', 'T') + 'Z');
+                if (!isNaN(d.getTime())) { // Verifica se a data é válida
+                    // Extrai ano, mês e dia em UTC para evitar problemas de fuso horário local
+                    const year = d.getUTCFullYear();
+                    const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // Mês é 0-indexed
+                    const day = String(d.getUTCDate()).padStart(2, '0');
+                    if (year > 1900 && year < 3000) { // Verifica o ano novamente
+                        return `${year}-${month}-${day}`;
+                    }
+                }
+            } catch (e) { /* ignore Date constructor errors */ }
+
+
+            console.warn(`Formato de data não reconhecido ou inválido: ${dateStr}`); // Loga formatos não reconhecidos
+            return null; // Retorna null se nenhum formato funcionar
+        }
+
+
+        // ### PROCESSAMENTO E NORMALIZAÇÃO DE DADOS ###
         const processAndNormalizeData = (rawData) => {
             return rawData.map(item => {
-                // Corrigir possível caractere inválido no início de algumas chaves (ex: "﻿SnagID")
                 const cleanItem = {};
                 for (const key in item) {
                     if (Object.hasOwnProperty.call(item, key)) {
-                        const cleanKey = key.replace(/^\uFEFF/, ''); // Remove BOM character if present
+                        const cleanKey = key.replace(/^\uFEFF/, '');
                         cleanItem[cleanKey] = item[key];
                     }
                 }
-                item = cleanItem; // Usa o item limpo
+                item = cleanItem;
 
                 if (!item.SnagID) return null;
-                // Ajuste para formatos de data variados (ISO e DD/MM/YYYY HH:MM:SS)
-                let spottedDate = null;
-                if (item.Spotted) {
-                    if (item.Spotted.includes('T')) { // Formato ISO 8601
-                        spottedDate = item.Spotted.split('T')[0];
-                    } else if (item.Spotted.includes('/')) { // Formato DD/MM/YYYY HH:MM:SS
-                        const parts = item.Spotted.split(' ')[0].split('/');
-                        if (parts.length === 3) {
-                            // Formato DD/MM/YYYY -> YYYY-MM-DD
-                            spottedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
-                        }
-                    }
-                }
 
-                // Ajuste para Data alteração (pode ter T ou não)
-                let fixDate = null;
-                let lastChangedDate = null;
-                const changeDateField = item['Data alteração'] || item['LastChanged']; // Usar LastChanged se Data alteração não existir
-                if (changeDateField) {
-                    if (changeDateField.includes('T')) { // Formato ISO
-                        fixDate = changeDateField.split('T')[0];
-                        lastChangedDate = fixDate;
-                    } else if (changeDateField.includes('/')) { // Formato DD/MM/YYYY HH:MM:SS
-                        const parts = changeDateField.split(' ')[0].split('/');
-                        if (parts.length === 3) {
-                            fixDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
-                            lastChangedDate = fixDate;
-                        }
-                    }
-                }
+                // Usa a nova função parseDateString
+                let spottedDate = parseDateString(item.Spotted);
+                const changeDateField = item['Data alteração'] || item['LastChanged'];
+                let fixDate = parseDateString(changeDateField);
+                let lastChangedDate = fixDate; // Assume que a data de correção é a última alteração relevante
 
-
+                // Restante da lógica permanece igual...
                 let finalStatus = item.Status;
                 if (item.FixStatus?.toLowerCase() === 'signedoff') finalStatus = 'SignedOff';
                 if (item.FixStatus?.toLowerCase() === 'notadefect') finalStatus = 'NotADefect';
                 let daysToResolve = null;
                 if ((finalStatus === 'Closed' || finalStatus === 'SignedOff') && spottedDate && fixDate) {
                     try {
-                        const start = new Date(spottedDate);
-                        const end = new Date(fixDate);
-                        if (!isNaN(start) && !isNaN(end) && end >= start) { // Adicionado check end >= start
-                            daysToResolve = (end - start) / (1000 * 60 * 60 * 24);
+                        // Usa Date.UTC para evitar problemas de fuso horário no cálculo da diferença
+                        const startUTC = Date.UTC(...spottedDate.split('-').map((v, i) => i === 1 ? v - 1 : v)); // month is 0-indexed
+                        const endUTC = Date.UTC(...fixDate.split('-').map((v, i) => i === 1 ? v - 1 : v));
+
+                        if (!isNaN(startUTC) && !isNaN(endUTC) && endUTC >= startUTC) {
+                            daysToResolve = (endUTC - startUTC) / (1000 * 60 * 60 * 24);
                         } else {
                             // console.warn(`Datas inválidas ou data final anterior à inicial para ${item.SnagID}: Spotted=${spottedDate}, Fix=${fixDate}`);
                         }
@@ -833,7 +845,6 @@
                 let tipoAgrupamento = "Outro";
                 let pavimento = location;
 
-                // Tenta extrair Agrupamento/Pavimento (mantém a lógica original)
                 const match = location.match(/^(T|S)0?([1-5])_?/i);
 
                 if (match) {
@@ -849,13 +860,10 @@
                     }
                     pavimento = location.substring(match[0].length).trim();
                 } else {
-                    // Adicionar lógica para tentar extrair de formatos como "Est Pav XX" ou "Subsolo XX"
                     const pavMatch = location.match(/^(?:Est\s)?(?:Pav|Subsolo)\s(\d+)/i);
                     if (pavMatch && pavMatch[1]) {
-                        // Não define agrupamento Torre/Setor, mas extrai pavimento
-                        pavimento = location; // Ou poderia tentar normalizar, mas manter original é mais seguro
+                        pavimento = location;
                     } else {
-                        // Se não corresponder a T/S nem Pav/Subsolo, usa a localização inteira como pavimento
                         pavimento = location;
                     }
                 }
@@ -864,8 +872,8 @@
                 return {
                     id: item.SnagID,
                     responsavel: item.Fullname || "Não atribuído",
-                    data: spottedDate, // Já está em YYYY-MM-DD ou null
-                    lastChangedDate: lastChangedDate, // Já está em YYYY-MM-DD ou null
+                    data: spottedDate,
+                    lastChangedDate: lastChangedDate,
                     tipo: item.Description || "Não definido",
                     categoria: item.Category || "Não definida",
                     descricao: item.Defect || "Não definido",
@@ -879,7 +887,7 @@
                     TipoAgrupamento: tipoAgrupamento,
                     Pavimento: pavimento
                 };
-            }).filter(item => item !== null && item.data); // MODIFICADO: Filtrar também itens sem data (spottedDate) válida
+            }).filter(item => item !== null && item.data); // Garante que itens sem data de criação válida sejam removidos
         };
 
 
@@ -888,13 +896,10 @@
             let processedData = [];
             for (let i = 0; i < rawData.length; i += chunkSize) {
                 const chunk = rawData.slice(i, i + chunkSize);
-
                 const processedChunk = processAndNormalizeData(chunk);
                 processedData = processedData.concat(processedChunk);
-
                 const progress = Math.round(((i + chunk.length) / rawData.length) * 100);
                 onProgress(progress);
-
                 await new Promise(resolve => setTimeout(resolve, 0));
             }
             return processedData;
@@ -903,18 +908,13 @@
         const getUniqueRecords = (data) => {
             const seenIds = new Set();
             return data.filter(item => {
-                if (!item || !item.id) return false; // Adiciona checagem extra
+                if (!item || !item.id) return false;
                 if (seenIds.has(item.id)) return false;
                 seenIds.add(item.id);
                 return true;
             });
         };
 
-        /**
-         * Processa o conteúdo de texto de um arquivo.
-         * @param {string} content - Conteúdo do arquivo JSONL.
-         * @param {string} fileDescription - Descrição do arquivo/projeto (ex: "Hotel").
-         */
         const processContent = async (content, fileDescription) => {
             const loadingContainer = document.getElementById('loading-container');
             const statusText = document.getElementById('loading-status');
@@ -925,67 +925,52 @@
             try {
                 statusText.textContent = 'Leitura concluída. Processando dados...';
                 progressBar.style.width = '50%';
-                initialMessage.style.display = 'none'; // Esconde msg inicial
-
-                // Limpa dados e gráficos ANTES de processar novos dados
+                initialMessage.style.display = 'none';
                 clearDashboardState();
-
                 let rawData;
                 try {
                     rawData = content.split('\n')
-                        .filter(line => line.trim().length > 0) // Ignora linhas vazias
+                        .filter(line => line.trim().length > 0)
                         .map(line => JSON.parse(line.replace(/:\s*NaN/g, ': null')));
                 } catch (parseErr) {
-                    console.error("Erro de parse JSONL:", parseErr, "Linha problemática pode estar próxima.");
-                    // Tentar encontrar a linha problemática (simplificado)
+                    console.error("Erro de parse JSONL:", parseErr);
                     content.split('\n').forEach((line, index) => {
-                        if (line.trim().length > 0) { // Only try to parse non-empty lines
-                            try {
-                                JSON.parse(line.replace(/:\s*NaN/g, ': null'));
-                            } catch (e) {
+                        if (line.trim().length > 0) {
+                            try { JSON.parse(line.replace(/:\s*NaN/g, ': null')); } catch (e) {
                                 console.error(`Erro ao parsear linha ${index + 1}: ${line.substring(0, 100)}...`, e);
                             }
                         }
                     });
-                    throw new Error(`Formato JSON inválido no arquivo ${fileDescription}. Verifique o console para detalhes.`);
+                    throw new Error(`Formato JSON inválido no arquivo ${fileDescription}. Verifique o console.`);
                 }
 
-
-                // Processa os dados brutos em blocos
                 allData = await processDataInChunks(rawData, (progress) => {
                     const totalProgress = 50 + (progress / 2);
                     statusText.textContent = `Processando dados de ${fileDescription}... ${progress}%`;
                     progressBar.style.width = `${totalProgress}%`;
                 });
 
-                // Ordena os dados pela data 'Spotted' (mais antigos primeiro) - pode ajudar em gráficos de histórico
                 allData.sort((a, b) => {
-                    if (!a.data) return 1; // Coloca itens sem data no final
-                    if (!b.data) return -1;
+                    if (!a.data) return 1; if (!b.data) return -1;
                     try {
-                        const dateA = new Date(a.data);
-                        const dateB = new Date(b.data);
-                        if (isNaN(dateA)) return 1;
-                        if (isNaN(dateB)) return -1;
-                        return dateA - dateB;
-                    } catch (e) {
-                        return 0; // Mantém a ordem original em caso de erro de data
-                    }
+                        // Comparação direta de strings YYYY-MM-DD funciona
+                        return a.data.localeCompare(b.data);
+                    } catch (e) { return 0; }
                 });
 
-                console.log(`Dados processados e ordenados (${allData.length} registros) para ${fileDescription}`);
+                console.log(`Dados processados (${allData.length} registros válidos com data) para ${fileDescription}`);
 
                 if (allData.length === 0) {
-                    showError(`O arquivo ${fileDescription} não contém dados de apontamentos válidos ou com data.`);
+                    showError(`O arquivo ${fileDescription} não contém dados de apontamentos válidos ou com data reconhecida.`);
                     loadingContainer.style.display = 'none';
                     return;
                 }
 
                 statusText.textContent = 'Gerando gráficos...';
                 document.getElementById('file-name').textContent = `Projeto: ${fileDescription}`;
-                populateGlobalFilters(); // Popula filtros de Ano/Mês
+                populateGlobalFilters();
                 populateHeatmapYearFilter(allData);
-                runUpdate(); // Gera os gráficos com base nos dados carregados e filtros padrão
+                runUpdate();
 
                 loadingContainer.style.display = 'none';
                 dashboardContent.style.display = 'block';
@@ -994,59 +979,41 @@
                 console.error(`Erro detalhado ao processar ${fileDescription}:`, err);
                 showError(`Erro ao processar os dados do projeto ${fileDescription}. Detalhe: ${err.message}`);
                 loadingContainer.style.display = 'none';
-                dashboardContent.style.display = 'none'; // Garante que o dashboard não seja exibido
-                initialMessage.style.display = 'block'; // Mostra msg inicial em caso de erro
-                initialMessage.textContent = `Falha ao carregar dados do projeto ${fileDescription}. Tente outro projeto ou carregue um arquivo.`
+                dashboardContent.style.display = 'none';
+                initialMessage.style.display = 'block';
+                initialMessage.textContent = `Falha ao carregar dados do projeto ${fileDescription}.`
             }
         };
 
-
-        /**
-         * Limpa o estado atual do dashboard (gráficos, dados, filtros).
-         */
         function clearDashboardState() {
             allData = [];
             currentFinalData = [];
-
-            // Destroi gráficos existentes se eles existirem
             const charts = [
                 histogramChart, detailsChart, heatmapChart, slaByCategoryChart,
                 monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart,
-                locationRankingChart, locationCategoryHeatmap, groupingVolumeChart
+                locationRankingChart, locationCategoryHeatmap
             ];
             charts.forEach(chart => {
                 if (chart && typeof chart.destroy === 'function') {
-                    try {
-                        chart.destroy();
-                    } catch (e) {
-                        console.error("Erro ao destruir gráfico:", e);
-                    }
+                    try { chart.destroy(); } catch (e) { console.error("Erro ao destruir gráfico:", e); }
                 }
             });
-            // Limpa as variáveis para garantir que não sejam reutilizadas acidentalmente
-            histogramChart = detailsChart = heatmapChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = locationCategoryHeatmap = groupingVolumeChart = null;
+            histogramChart = detailsChart = heatmapChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = locationCategoryHeatmap = null;
 
-
-            // Limpa legendas e inferências
             document.getElementById('scatter-legend-table').innerHTML = '';
             document.getElementById('inference-section').innerHTML = '';
             document.getElementById('heatmap-legend').innerHTML = '';
 
-            // Reseta filtros principais para 'Todos'
             const filterIdsToReset = ['year-filter', 'month-filter', 'groupname-filter', 'categoria-filter', 'tipo-filter', 'descricao-filter', 'heatmap-year-filter', 'grouping-filter'];
             filterIdsToReset.forEach(id => {
                 const select = document.getElementById(id);
                 if (select) {
-                    // Limpa opções antigas (exceto a primeira 'Todos')
-                    while (select.options.length > 1) {
-                        select.remove(1);
-                    }
-                    select.value = 'all'; // Define o valor para 'Todos'
+                    while (select.options.length > 1) { select.remove(1); }
+                    select.value = 'all';
                 }
             });
-            document.getElementById('spotted-filter').value = ''; // Limpa filtro de data específica
+            document.getElementById('spotted-filter').value = '';
 
-            // Limpa KPIs
             document.getElementById('total-records').textContent = '0';
             document.getElementById('open-records').textContent = '0';
             document.getElementById('closed-records').textContent = '0';
@@ -1054,161 +1021,121 @@
             document.getElementById('not-accepted-records').textContent = '0';
             document.getElementById('resolution-rate').textContent = '0%';
 
-            // Garante que a primeira aba esteja ativa visualmente (se aplicável)
             openTab({ currentTarget: document.querySelector('.tab-link') }, 'visaoGeral');
         }
 
-        /**
-         * NOVA FUNÇÃO: Carrega e processa dados de um projeto selecionado.
-         * @param {string} projectName - O nome do projeto (chave do objeto PROJECT_FILES).
-         */
         const loadProjectData = async (projectName) => {
             const fileName = PROJECT_FILES[projectName];
-            if (!fileName) {
-                showError(`Arquivo de dados não definido para o projeto "${projectName}".`);
-                return;
-            }
-
+            if (!fileName) { showError(`Arquivo não definido para "${projectName}".`); return; }
             const loadingContainer = document.getElementById('loading-container');
             const statusText = document.getElementById('loading-status');
             const progressBar = document.getElementById('progress-bar');
             const dashboardContent = document.getElementById('dashboard-content');
             const initialMessage = document.getElementById('initial-message');
-
-            // Exibir carregamento e ocultar conteúdo/erros
-            dashboardContent.style.display = 'none';
-            initialMessage.style.display = 'none';
+            dashboardContent.style.display = 'none'; initialMessage.style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
-            statusText.textContent = `Carregando dados do projeto ${projectName}...`;
-            progressBar.style.width = '5%';
+            statusText.textContent = `Carregando ${projectName}...`; progressBar.style.width = '5%';
             loadingContainer.style.display = 'block';
-
-            // Limpa o estado antes de carregar (IMPORTANTE)
             clearDashboardState();
-
-
             try {
-                // Busca o arquivo JSONL do projeto selecionado
-                statusText.textContent = `Buscando arquivo ${fileName}...`;
-                const response = await fetch(fileName);
-                progressBar.style.width = '25%';
-
-                if (!response.ok) {
-                    throw new Error(`Falha ao buscar ${fileName} (HTTP ${response.status})`);
-                }
-
-                statusText.textContent = `Lendo arquivo ${fileName}...`;
-                const content = await response.text();
-                progressBar.style.width = '45%';
-
-                // Processa o conteúdo usando a função existente
-                await processContent(content, projectName); // Passa o NOME do projeto como descrição
-
+                statusText.textContent = `Buscando ${fileName}...`;
+                const response = await fetch(fileName); progressBar.style.width = '25%';
+                if (!response.ok) { throw new Error(`Falha ${response.status} ao buscar ${fileName}`); }
+                statusText.textContent = `Lendo ${fileName}...`;
+                const content = await response.text(); progressBar.style.width = '45%';
+                await processContent(content, projectName);
             } catch (err) {
-                console.error(`Falha ao carregar dados do projeto ${projectName}:`, err);
-                showError(`Não foi possível carregar os dados para o projeto ${projectName}. Detalhe: ${err.message}. Verifique se o arquivo ${fileName} existe e está acessível.`);
-                loadingContainer.style.display = 'none';
-                initialMessage.style.display = 'block'; // Mostra msg inicial em caso de erro
-                initialMessage.textContent = `Falha ao carregar dados do projeto ${projectName}. Tente outro projeto ou carregue um arquivo.`
+                console.error(`Falha ao carregar ${projectName}:`, err);
+                showError(`Erro ao carregar ${projectName}. Detalhe: ${err.message}.`);
+                loadingContainer.style.display = 'none'; initialMessage.style.display = 'block';
+                initialMessage.textContent = `Falha ao carregar ${projectName}.`
             }
         };
 
-
-        /**
-         * Processa um arquivo carregado manualmente pelo usuário. (Mantida para upload manual)
-         */
-        const processFile = async (file) => {
-            if (!file) return;
-
-            if (!file.name.endsWith('.jsonl') && !file.name.endsWith('.txt') && !file.name.endsWith('.json')) {
-                showError('Por favor, carregue um arquivo válido (.jsonl, .json ou .txt).');
-                return;
-            }
-
+        // Função loadAllProjectsData ainda existe, mas não é chamada pelo seletor ou carga inicial
+        const loadAllProjectsData = async () => {
             const loadingContainer = document.getElementById('loading-container');
             const statusText = document.getElementById('loading-status');
             const progressBar = document.getElementById('progress-bar');
             const dashboardContent = document.getElementById('dashboard-content');
             const initialMessage = document.getElementById('initial-message');
-
-
-            // Exibe carregamento, oculta conteúdo
-            initialMessage.style.display = 'none';
-            dashboardContent.style.display = 'none';
+            dashboardContent.style.display = 'none'; initialMessage.style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
-            statusText.textContent = 'Lendo arquivo manual...';
-            progressBar.style.width = '0%';
+            statusText.textContent = `Carregando dados mesclados...`; progressBar.style.width = '5%';
             loadingContainer.style.display = 'block';
-
-            // Limpa estado anterior ANTES de ler o novo arquivo
             clearDashboardState();
+            try {
+                const fileNames = Object.values(PROJECT_FILES);
+                const fetchPromises = fileNames.map(fileName =>
+                    fetch(fileName).then(response => {
+                        if (!response.ok) { console.error(`Falha ${response.status} ao buscar ${fileName}`); throw new Error(`Falha ${fileName}`); }
+                        return response.text();
+                    }).catch(err => { console.error(`Erro ${fileName}:`, err); return ""; })
+                );
+                statusText.textContent = 'Baixando arquivos...';
+                const allFileContents = await Promise.all(fetchPromises); progressBar.style.width = '45%';
+                const combinedContent = allFileContents.join('\n');
+                if (combinedContent.trim().length === 0) { throw new Error("Nenhum dado carregado."); }
+                await processContent(combinedContent, "Mesclado (Todos os Projetos)"); // Mantendo descrição antiga se precisar
+            } catch (err) {
+                console.error(`Falha dados mesclados:`, err);
+                showError(`Erro ao carregar dados mesclados. Detalhe: ${err.message}.`);
+                loadingContainer.style.display = 'none'; initialMessage.style.display = 'block';
+                initialMessage.textContent = 'Falha ao carregar dados mesclados.'
+            }
+        };
 
-            document.getElementById('file-name').textContent = `Arquivo Manual: ${file.name}`;
-
-
+        const processFile = async (file) => {
+            if (!file) return;
+            if (!file.name.endsWith('.jsonl') && !file.name.endsWith('.txt') && !file.name.endsWith('.json')) {
+                showError('Carregue um arquivo .jsonl, .json ou .txt.'); return;
+            }
+            const loadingContainer = document.getElementById('loading-container');
+            const statusText = document.getElementById('loading-status');
+            const progressBar = document.getElementById('progress-bar');
+            const dashboardContent = document.getElementById('dashboard-content');
+            const initialMessage = document.getElementById('initial-message');
+            initialMessage.style.display = 'none'; dashboardContent.style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            statusText.textContent = 'Lendo arquivo...'; progressBar.style.width = '0%';
+            loadingContainer.style.display = 'block';
+            clearDashboardState();
+            document.getElementById('file-name').textContent = `Arquivo: ${file.name}`;
             const reader = new FileReader();
-
             reader.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    const percentage = Math.round((event.loaded / event.total) * 45); // Ajustado para 45%
-                    statusText.textContent = `Lendo arquivo... ${Math.round(percentage / 0.45)}%`;
+                    const percentage = Math.round((event.loaded / event.total) * 45);
+                    statusText.textContent = `Lendo... ${Math.round(percentage / 0.45)}%`;
                     progressBar.style.width = `${percentage}%`;
                 }
             };
-
-            reader.onload = async (e) => {
-                // Passa o nome do arquivo único para processContent
-                // Usa o nome do arquivo como descrição para uploads manuais
-                await processContent(e.target.result, `Manual: ${file.name}`);
-            };
-
+            reader.onload = async (e) => { await processContent(e.target.result, `Manual: ${file.name}`); };
             reader.onerror = () => {
-                showError('Não foi possível ler o arquivo carregado.');
-                loadingContainer.style.display = 'none';
-                initialMessage.style.display = 'block'; // Mostra msg inicial em caso de erro
-                initialMessage.textContent = 'Falha ao ler o arquivo. Tente novamente ou selecione um projeto.'
+                showError('Não foi possível ler o arquivo.'); loadingContainer.style.display = 'none';
+                initialMessage.style.display = 'block'; initialMessage.textContent = 'Falha ao ler o arquivo.'
             };
-
             reader.readAsText(file);
         };
 
-        // --- MANIPULADOR DE UPLOAD E ATUALIZAÇÃO ---
-
-        const handleFileUpload = (event) => {
-            const file = event.target.files[0];
-            processFile(file); // Chama a função mantida para upload manual
-        };
+        const handleFileUpload = (event) => { processFile(event.target.files[0]); };
 
         const runUpdate = () => {
-            if (allData.length === 0) {
-                console.warn("runUpdate chamado sem dados em allData.");
-                // Poderia opcionalmente limpar a tela aqui ou mostrar uma mensagem
-                return;
-            }
-
-            // Lógica de filtragem existente...
+            if (allData.length === 0) { console.warn("runUpdate sem dados."); return; }
             const selectedSpottedDate = document.getElementById('spotted-filter').value;
             const selectedYear = document.getElementById('year-filter').value;
             const selectedMonth = document.getElementById('month-filter').value;
             let baseFilteredData = allData;
-            if (selectedSpottedDate) {
-                baseFilteredData = baseFilteredData.filter(d => d.data === selectedSpottedDate);
-            }
+            if (selectedSpottedDate) { baseFilteredData = baseFilteredData.filter(d => d.data === selectedSpottedDate); }
             if (selectedYear !== 'all') {
                 const yearNumber = parseInt(selectedYear, 10);
-                const today = new Date();
-                const currentYear = today.getFullYear();
-                today.setHours(0, 0, 0, 0);
+                const today = new Date(); const currentYear = today.getFullYear(); today.setHours(0, 0, 0, 0);
                 baseFilteredData = baseFilteredData.filter(d => {
                     if (!d.data) return false;
                     try {
-                        const recordDate = new Date(d.data);
-                        if (isNaN(recordDate.getTime())) return false; // Ignora datas inválidas
+                        const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false;
                         if (recordDate.getFullYear() !== yearNumber) return false;
-                        // Não filtra datas futuras se o ano selecionado for anterior ao atual
-                        if (yearNumber === currentYear && recordDate > today) return false;
-                        return true;
-                    } catch (e) { return false; } // Ignora erros de data
+                        if (yearNumber === currentYear && recordDate > today) return false; return true;
+                    } catch (e) { return false; }
                 });
             }
             if (selectedMonth !== 'all') {
@@ -1216,19 +1143,13 @@
                 baseFilteredData = baseFilteredData.filter(d => {
                     if (!d.data) return false;
                     try {
-                        const recordDate = new Date(d.data);
-                        if (isNaN(recordDate.getTime())) return false;
+                        const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false;
                         return recordDate.getMonth() === monthNumber;
                     } catch (e) { return false; }
                 });
             }
-
             const uniqueBaseFilteredData = getUniqueRecords(baseFilteredData);
-
-            // Atualiza filtros de detalhe ANTES de aplicar seus valores
             updateDetailFilters(uniqueBaseFilteredData);
-
-            // Aplica filtros de detalhe...
             const selectedGroupname = document.getElementById('groupname-filter').value;
             const selectedCategoria = document.getElementById('categoria-filter').value;
             const selectedTipo = document.getElementById('tipo-filter').value;
@@ -1236,692 +1157,219 @@
             let finalFilteredData = uniqueBaseFilteredData;
             if (selectedGroupname !== 'all') finalFilteredData = finalFilteredData.filter(d => d.groupname === selectedGroupname);
             if (selectedCategoria !== 'all') finalFilteredData = finalFilteredData.filter(d => d.categoria === selectedCategoria);
-            if (selectedTipo !== 'all') finalFilteredData = finalFilteredData.filter(d => d.tipo === selectedTipo);
-            if (selectedDescricao !== 'all') finalFilteredData = finalFilteredData.filter(d => d.descricao === selectedDescricao);
-
-            currentFinalData = finalFilteredData; // Atualiza os dados finais filtrados
-
-            // Atualiza KPIs e Gráficos...
-            updateKPIs(uniqueBaseFilteredData); // KPIs baseados nos filtros de data/ano/mês
-            updateHistogramChart(uniqueBaseFilteredData);
-            updateDetailsChart(finalFilteredData); // Gráfico de detalhes usa todos os filtros
-            updateHeatmapChart(uniqueBaseFilteredData); // Heatmap usa filtros de data/ano/mês
-            updateMonthlyResolutionRateChart(getUniqueRecords(allData), selectedYear, selectedMonth);
-
-            // Histórico usa todos os dados (ou filtrados por ano/mês globalmente)
-            updateStatusHistoryChart(getUniqueRecords(allData), selectedYear, selectedMonth); // Usar allData aqui para histórico completo
-
-            // Gráficos de eficiência usam todos os filtros
-            updateResolutionScatterChart(finalFilteredData);
-            updateSlaByCategoryChart(finalFilteredData);
-
-            // Popula filtro de agrupamento e atualiza gráficos de localização
-            populateGroupingFilter(finalFilteredData); // Baseado nos dados filtrados
-            updateGroupingVolumeChart(finalFilteredData); // Baseado nos dados filtrados
-
-            const selectedGrouping = document.getElementById('grouping-filter').value;
-            let locationFilteredData = finalFilteredData;
-            if (selectedGrouping !== 'all') {
-                locationFilteredData = finalFilteredData.filter(d => d.Agrupamento === selectedGrouping);
-            }
-
-            updateLocationRankingChart(locationFilteredData); // Usa filtro de agrupamento
-            updateLocationCategoryHeatmap(locationFilteredData); // Usa filtro de agrupamento
-
+            if (selectedGrouping !== 'all') { locationFilteredData = finalFilteredData.filter(d => d.Agrupamento === selectedGrouping); }
+            updateLocationRankingChart(locationFilteredData); updateLocationCategoryHeatmap(locationFilteredData);
             console.log("Dashboard atualizado.");
         };
 
-        // --- FUNÇÕES DE ATUALIZAÇÃO DE GRÁFICOS E FILTROS ---
-
         const updateDetailFilters = (data) => {
-            // Esta função já depende dos valores atuais dos filtros, o que é bom
             const groupnameSelect = document.getElementById('groupname-filter');
             const categoriaSelect = document.getElementById('categoria-filter');
             const tipoSelect = document.getElementById('tipo-filter');
             const descricaoSelect = document.getElementById('descricao-filter');
-
-            // Guarda os valores selecionados atualmente
-            const currentGroupname = groupnameSelect.value;
-            const currentCategoria = categoriaSelect.value;
-            const currentTipo = tipoSelect.value;
-            const currentDescricao = descricaoSelect.value;
-
-            // Popula Groupname
+            const currentGroupname = groupnameSelect.value; const currentCategoria = categoriaSelect.value;
+            const currentTipo = tipoSelect.value; const currentDescricao = descricaoSelect.value;
             const groupnamesUnicos = [...new Set(data.map(item => item.groupname))].filter(Boolean);
             populateDropdown('groupname-filter', groupnamesUnicos, currentGroupname);
-
-            // Filtra para Categoria (baseado no groupname selecionado ou todos)
             const dataFiltradaPorGrupo = currentGroupname === 'all' ? data : data.filter(d => d.groupname === currentGroupname);
             const categoriasUnicas = [...new Set(dataFiltradaPorGrupo.map(item => item.categoria))].filter(Boolean);
             populateDropdown('categoria-filter', categoriasUnicas, currentCategoria);
-
-            // Filtra para Tipo (baseado no groupname e categoria selecionados ou todos)
             const dataFiltradaPorCategoria = currentCategoria === 'all' ? dataFiltradaPorGrupo : dataFiltradaPorGrupo.filter(d => d.categoria === currentCategoria);
             const tiposUnicos = [...new Set(dataFiltradaPorCategoria.map(item => item.tipo))].filter(Boolean);
             populateDropdown('tipo-filter', tiposUnicos, currentTipo);
-
-            // Filtra para Descrição (baseado em groupname, categoria e tipo selecionados ou todos)
             const dataFiltradaPorTipo = currentTipo === 'all' ? dataFiltradaPorCategoria : dataFiltradaPorCategoria.filter(d => d.tipo === currentTipo);
             const descricoesUnicas = [...new Set(dataFiltradaPorTipo.map(item => item.descricao))].filter(Boolean);
             populateDropdown('descricao-filter', descricoesUnicas, currentDescricao);
         };
 
-        // ****** FUNÇÃO CORRIGIDA ******
         const populateDropdown = (elementId, options, selectedValue = 'all') => {
-            const select = document.getElementById(elementId);
-            if (!select) return; // Segurança
-
-            const currentValue = select.value; // Guarda o valor atual ANTES de limpar
-
-            // Limpa opções existentes (exceto a primeira "Todos")
-            while (select.options.length > 1) {
-                select.remove(1);
-            }
-
-            // Adiciona novas opções ordenadas, convertendo para string ANTES de comparar
+            const select = document.getElementById(elementId); if (!select) return;
+            const currentValue = select.value;
+            while (select.options.length > 1) { select.remove(1); }
             options.sort((a, b) => {
-                // Converte null/undefined para strings vazias e números para strings
                 const strA = String(a === null || a === undefined ? '' : a);
                 const strB = String(b === null || b === undefined ? '' : b);
-                return strA.localeCompare(strB); // Agora compara strings com segurança
+                return strA.localeCompare(strB);
             }).forEach(optionValue => {
-                if (optionValue !== null && optionValue !== undefined) { // Não adicionar opções nulas ou undefined explicitamente
-                    // Cria a opção. Converte para string para o texto visível se for número (ex: ano)
+                if (optionValue !== null && optionValue !== undefined) {
                     select.add(new Option(String(optionValue), optionValue));
                 }
             });
-
-            // Tenta restaurar o valor selecionado anteriormente, se ainda existir
-            // Se não existir (ou era 'all'), mantém 'all'
-            select.value = [...select.options].some(opt => opt.value === String(currentValue)) ? String(currentValue) : 'all'; // Compara como string também
+            select.value = [...select.options].some(opt => opt.value === String(currentValue)) ? String(currentValue) : 'all';
         };
-        // ****** FIM DA CORREÇÃO ******
 
         const populateGlobalFilters = () => {
-            // Popula apenas Ano, Mês é fixo
             const years = [...new Set(allData.map(item => item.data ? new Date(item.data).getFullYear() : null))]
-                .filter(Boolean) // Remove nulos/undefined
-                .sort((a, b) => b - a); // Ordena do mais recente para o mais antigo
-            populateDropdown('year-filter', years);
-            // Resetar mês para 'Todos' ao carregar novos dados
-            document.getElementById('month-filter').value = 'all';
+                .filter(Boolean).sort((a, b) => b - a);
+            populateDropdown('year-filter', years); document.getElementById('month-filter').value = 'all';
         };
-
         const populateHeatmapYearFilter = (data) => {
             const years = [...new Set(data.map(item => item.data ? new Date(item.data).getFullYear() : null))]
-                .filter(Boolean)
-                .sort((a, b) => b - a);
+                .filter(Boolean).sort((a, b) => b - a);
             populateDropdown('heatmap-year-filter', years);
-            // Mantém o valor selecionado se possível, senão volta para 'all'
             const currentHeatmapYear = document.getElementById('heatmap-year-filter').value;
-            if (!years.map(String).includes(currentHeatmapYear)) {
-                document.getElementById('heatmap-year-filter').value = 'all';
-            }
+            if (!years.map(String).includes(currentHeatmapYear)) { document.getElementById('heatmap-year-filter').value = 'all'; }
         };
-
         const populateGroupingFilter = (data) => {
             const groupings = [...new Set(data.map(item => item.Agrupamento))]
-                .filter(g => g && g !== 'N/A') // Filtra nulos/undefined e 'N/A'
-                .sort(); // Ordena alfabeticamente
+                .filter(g => g && g !== 'N/A').sort();
             populateDropdown('grouping-filter', groupings);
-            // Mantém o valor selecionado se possível, senão volta para 'all'
             const currentGrouping = document.getElementById('grouping-filter').value;
-            const legendContainer = document.getElementById('scatter-legend-table');
-            const inferenceContainer = document.getElementById('inference-section');
-
-            // Limpa o estado anterior
-            if (resolutionScatterChart) {
-                try { resolutionScatterChart.destroy(); } catch (e) { }
-                resolutionScatterChart = null;
-            }
-            legendContainer.innerHTML = '';
-            inferenceContainer.innerHTML = '';
-
-            const statsByCategory = {};
-            data.forEach(item => {
-                if (item.daysToResolve !== null && item.categoria) {
-                    if (!statsByCategory[item.categoria]) {
-                        statsByCategory[item.categoria] = { totalDays: 0, count: 0 };
-                    }
-                    statsByCategory[item.categoria].totalDays += item.daysToResolve;
-                    statsByCategory[item.categoria].count++;
-                }
-            });
-            const scatterData = Object.keys(statsByCategory).map(category => {
-                const stats = statsByCategory[category];
-                const avgDays = stats.count > 0 ? (stats.totalDays / stats.count) : 0;
-                return { x: avgDays, y: stats.count, label: category };
-            }).filter(d => d.y > 0); // Filtra categorias sem apontamentos resolvidos
-
-            if (scatterData.length === 0) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Limpa o canvas
-                inferenceContainer.innerHTML = `<h3>Inferência Estatística e Plano de Ação</h3><p style="text-align:center; color: #555; padding: 20px 0;">Nenhum dado de resolução disponível para as categorias selecionadas.</p>`;
-                return; // Sai se não houver dados
-            }
-
-            // Lógica de cores e gráfico (igual à original)
-            const avgDaysValues = scatterData.map(d => d.x);
-            const minAvg = Math.min(...avgDaysValues);
-            const maxAvg = Math.max(...avgDaysValues);
-            const getColorForTime = (value) => {
-                if (maxAvg === minAvg || isNaN(minAvg) || isNaN(maxAvg)) return 'rgb(159, 196, 25)'; // Verde padrão se não houver variação ou valores inválidos
-                const ratio = (value - minAvg) / (maxAvg - minAvg);
-                // Interpolação de Cor: Verde (159, 196, 25) -> Azul Primário (1, 69, 92)
-                const r = Math.round(159 + (1 - 159) * ratio);
-                const g = Math.round(196 + (69 - 196) * ratio);
-                const b = Math.round(25 + (92 - 25) * ratio);
-                return `rgb(${r}, ${g}, ${b})`;
-            };
-            scatterData.forEach(d => d.color = getColorForTime(d.x));
-
-            resolutionScatterChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{ data: scatterData, pointBackgroundColor: context => context.raw.color, pointRadius: 8, pointHoverRadius: 12, borderWidth: 0 }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { beginAtZero: true, title: { display: true, text: 'Tempo Médio de Resolução (Dias)' } },
-                        y: { beginAtZero: true, title: { display: true, text: 'Volume de Apontamentos Resolvidos' } }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (context) => { const point = context.raw; return point ? [`${point.label}`, `Volume: ${point.y}`, `Tempo Médio: ${point.x.toFixed(1)} dias`] : ''; } } }
-                    }
-                }
-            });
-
-            // Geração da Legenda (Top 10)
-            const top10Volume = [...scatterData].sort((a, b) => b.y - a.y).slice(0, 10);
-            const top10Time = [...scatterData].sort((a, b) => b.x - a.x).slice(0, 10);
-            const generateListHTML = (title, items, metric) => {
-                let listItems = items.map(item => `<li><div class="legend-color-box" style="background-color: ${item.color};"></div><div>${item.label} (${metric === 'volume' ? `${item.y} apont.` : `${item.x.toFixed(1)} dias`})</div></li>`).join('');
-                return `<div class="px-4"><h3>${title}</h3><ol>${listItems}</ol></div>`;
-            };
-            legendContainer.innerHTML = generateListHTML('Top 10 por Volume', top10Volume, 'volume') + generateListHTML('Top 10 por Tempo de Resolução', top10Time, 'time');
-
-            // Lógica de Inferência (igual à original, mas com verificação de dados)
-            if (scatterData.length < 2) {
-                inferenceContainer.innerHTML = `<h3>Inferência Estatística e Plano de Ação</h3><p style="text-align:center; color: #555; padding: 20px 0;">A análise de quadrantes requer a comparação entre múltiplas categorias. Com apenas ${scatterData.length} categoria(s) visível(is), não é possível gerar uma inferência comparativa.</p>`;
-            } else {
-                const validAvgDaysValues = avgDaysValues.filter(v => !isNaN(v)); // Filtra NaN
-                const avgX = validAvgDaysValues.length > 0 ? validAvgDaysValues.reduce((a, b) => a + b, 0) / validAvgDaysValues.length : 0;
-                const validYValues = scatterData.map(d => d.y).filter(v => !isNaN(v));
-                const avgY = validYValues.length > 0 ? validYValues.reduce((a, b) => a + b, 0) / validYValues.length : 0;
-
-                const quadrants = {
-                    criticos: scatterData.filter(d => d.x > avgX && d.y > avgY).sort((a, b) => b.y - a.y),
-                    eficientes: scatterData.filter(d => d.x <= avgX && d.y > avgY).sort((a, b) => b.y - a.y),
-                    ineficientes: scatterData.filter(d => d.x > avgX && d.y <= avgY).sort((a, b) => b.x - a.x)
-                };
-
-                const ICON_CRITICO = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-alerta)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`;
-                const ICON_EFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-secundaria)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a14.96 14.96 0 00-5.84-2.56m0 0a14.96 14.96 0 01-5.84-2.56m5.84 2.56v-4.82m0 0a6 6 0 00-5.84-7.38v4.82m5.84 2.56h4.82a6 6 0 01-7.38 5.84m0 0a6 6 0 00-7.38-5.84h4.82" /></svg>`;
-                const ICON_INEFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-aviso)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-
-                const generateInferenceHTML = (title, description, categories, iconSvg, quadrantClass) => {
-                    if (categories.length === 0) return '';
-                    const items = categories.map(cat => `<span class="inference-category-tag" onclick="showDefectDetails('${cat.label.replace(/'/g, "\\'")}')">${cat.label}</span>`).join('');
-                    return `
-                         <div class="inference-card ${quadrantClass}">
-                             <div class="inference-card-header">
-                                 ${iconSvg}
-                                 <h4>${title}</h4>
-                             </div>
-                             <p>${description}</p>
-                             <div class="inference-tag-container">${items}</div>
-                         </div>
-                     `;
-                };
-                inferenceContainer.innerHTML = `
-                     <h3>Inferência Estatística e Plano de Ação</h3>
-                     <div class="inference-grid">
-                         ${generateInferenceHTML('Pontos Críticos', 'Alto volume e alta demora. Estas categorias são as mais problemáticas e requerem atenção prioritária.', quadrants.criticos, ICON_CRITICO, 'criticos')}
-                         ${generateInferenceHTML('Pontos de Ineficiência', 'Baixo volume, mas alta demora. Sugere-se revisar o processo ou treinamento específico para estas tarefas.', quadrants.ineficientes, ICON_INEFICIENTE, 'ineficientes')}
-                         ${generateInferenceHTML('Pontos Eficientes', 'Alto volume e baixa demora. Estas categorias podem servir como modelo de boas práticas para outras áreas.', quadrants.eficientes, ICON_EFICIENTE, 'eficientes')}
-                     </div>
-                 `;
-            }
+            if (!groupings.includes(currentGrouping)) { document.getElementById('grouping-filter').value = 'all'; }
         };
 
+        const updateKPIs = (data) => {
+            const totalCount = data.length; document.getElementById('total-records').textContent = totalCount;
+            document.getElementById('open-records').textContent = data.filter(d => d.situacao?.toLowerCase() === 'open').length;
+            const closedCount = data.filter(d => d.situacao?.toLowerCase() === 'closed').length;
+            const signedOffCount = data.filter(d => d.situacao?.toLowerCase() === 'signedoff').length;
+            document.getElementById('closed-records').textContent = closedCount; document.getElementById('signed-off-records').textContent = signedOffCount;
+            document.getElementById('not-accepted-records').textContent = data.filter(d => d.situacao?.toLowerCase() === 'notadefect').length;
+            const resolvedCount = closedCount + signedOffCount;
+            const resolutionRate = totalCount > 0 ? ((resolvedCount / totalCount) * 100).toFixed(1) : 0;
+            document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
+        };
+
+        const updateHistogramChart = (data) => {
+            const ctx = document.getElementById('histogramChart').getContext('2d'); const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const monthlyCounts = Array(12).fill(0);
+            const monthlyResolved = Array(12).fill(0);
+            data.forEach(item => { const status = item.situacao?.toLowerCase(); if (item.lastChangedDate && (status === 'closed' || status === 'signedoff')) { try { const resolvedDate = new Date(item.lastChangedDate); if (isNaN(resolvedDate.getTime()) || resolvedDate > today) return; if (selectedYear !== 'all' && resolvedDate.getFullYear() != selectedYear) return; if (selectedMonth !== 'all' && resolvedDate.getMonth() != selectedMonth) return; const monthIndex = resolvedDate.getMonth(); if (monthIndex >= 0 && monthIndex < 12) { monthlyResolved[monthIndex]++; } } catch (e) { } } });
+            if (statusHistoryChart) statusHistoryChart.destroy();
+            statusHistoryChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: [{ label: 'Criados no Mês', data: monthlyCreated, backgroundColor: 'rgba(239, 68, 68, 0.7)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 }, { label: 'Resolvidos no Mês', data: monthlyResolved, backgroundColor: 'rgba(159, 196, 25, 0.7)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: false }, y: { beginAtZero: true, ticks: { precision: 0 }, stacked: false } }, plugins: { legend: { display: true, position: 'top' }, tooltip: { mode: 'index', intersect: false } } } });
+        };
+
+        const updateDetailsChart = (data) => {
+            const ctx = document.getElementById('detailsChart').getContext('2d'); const descriptionCounts = data.reduce((acc, item) => { const key = item.descricao || "Não definido"; acc[key] = (acc[key] || 0) + 1; return acc; }, {});
+            const sortedData = Object.entries(descriptionCounts).sort(([, a], [, b]) => b - a).slice(0, 15); const labels = sortedData.map(item => item[0]); const values = sortedData.map(item => item[1]);
+            if (detailsChart) detailsChart.destroy();
+            detailsChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Contagem', data: values, backgroundColor: 'rgba(159, 196, 25, 0.7)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 1 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` Apontamentos: ${context.raw}` } } } } });
+        };
+
+        const updateHeatmapChart = (data) => {
+            const selectedYear = document.getElementById('heatmap-year-filter').value; let chartData = data;
+            if (selectedYear !== 'all') { const yearNumber = parseInt(selectedYear, 10); const today = new Date(); const currentYear = today.getFullYear(); today.setHours(0, 0, 0, 0); chartData = data.filter(d => { if (!d.data) return false; try { const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false; if (recordDate.getFullYear() !== yearNumber) return false; if (yearNumber === currentYear && recordDate > today) return false; return true; } catch (e) { return false; } }); }
+            const ctx = document.getElementById('heatmapChart').getContext('2d'); const monthLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']; const categoryCounts = {};
+            chartData.forEach(item => { if (item.data && item.categoria) { try { const date = new Date(item.data); if (!isNaN(date)) { const category = item.categoria; const monthIndex = date.getMonth(); if (monthIndex >= 0 && monthIndex < 12) { const month = monthLabels[monthIndex]; if (!categoryCounts[category]) categoryCounts[category] = {}; categoryCounts[category][month] = (categoryCounts[category][month] || 0) + 1; } } } catch (e) { } } });
+            const heatmapData = []; let maxValue = 0; const categoryLabels = Object.keys(categoryCounts).sort();
+            categoryLabels.forEach(category => { monthLabels.forEach(month => { const value = categoryCounts[category]?.[month] || 0; if (value > 0) heatmapData.push({ x: month, y: category, v: value }); if (value > maxValue) maxValue = value; }); });
+            if (heatmapChart) { try { heatmapChart.destroy(); } catch (e) { } }
+            if (categoryLabels.length === 0 || heatmapData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); document.getElementById('heatmap-legend').innerHTML = ''; heatmapChart = null; return; }
+            heatmapChart = new Chart(ctx, { type: 'matrix', data: { datasets: [{ label: 'Apontamentos', data: heatmapData, backgroundColor: (context) => { const value = context.dataset.data[context.dataIndex]?.v; if (!value) return 'rgba(245, 245, 245, 0.5)'; const alpha = value / maxValue; return `rgba(1, 70, 92, ${alpha})`; }, borderColor: 'white', borderWidth: 1, width: ({ chart }) => (chart.chartArea || {}).width / monthLabels.length - 1, height: ({ chart }) => (chart.chartArea || {}).height / categoryLabels.length - 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: monthLabels }, y: { type: 'category', labels: categoryLabels, offset: true } }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: () => '', label: (context) => { const v = context.dataset.data[context.dataIndex]; return v ? `${v.y} em ${v.x}: ${v.v} apontamentos` : ''; } } } } } });
+            const legendContainer = document.getElementById('heatmap-legend'); legendContainer.innerHTML = '';
+            if (maxValue > 0) { const gradient = 'linear-gradient(to right, rgba(1, 70, 92, 0.05), rgba(1, 70, 92, 1))'; legendContainer.innerHTML = `<span>Baixa (1)</span><div style="width: 150px; height: 20px; background: ${gradient}; border-radius: 5px; margin: 0 10px;"></div><span>Alta (${maxValue})</span>`; }
+        };
+
+        const updateResolutionScatterChart = (data) => {
+            const ctx = document.getElementById('resolutionScatterChart').getContext('2d'); const legendContainer = document.getElementById('scatter-legend-table'); const inferenceContainer = document.getElementById('inference-section');
+            if (resolutionScatterChart) { try { resolutionScatterChart.destroy(); } catch (e) { } resolutionScatterChart = null; }
+            legendContainer.innerHTML = ''; inferenceContainer.innerHTML = ''; const statsByCategory = {};
+            data.forEach(item => { if (item.daysToResolve !== null && item.categoria) { if (!statsByCategory[item.categoria]) { statsByCategory[item.categoria] = { totalDays: 0, count: 0 }; } statsByCategory[item.categoria].totalDays += item.daysToResolve; statsByCategory[item.categoria].count++; } });
+            const scatterData = Object.keys(statsByCategory).map(category => { const stats = statsByCategory[category]; const avgDays = stats.count > 0 ? (stats.totalDays / stats.count) : 0; return { x: avgDays, y: stats.count, label: category }; }).filter(d => d.y > 0);
+            if (scatterData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); inferenceContainer.innerHTML = `<h3>Inferência Estatística</h3><p style="text-align:center; color: #555;">Nenhum dado de resolução disponível.</p>`; return; }
+            const avgDaysValues = scatterData.map(d => d.x); const minAvg = Math.min(...avgDaysValues); const maxAvg = Math.max(...avgDaysValues);
+            const getColorForTime = (value) => { if (maxAvg === minAvg || isNaN(minAvg) || isNaN(maxAvg)) return 'rgb(159, 196, 25)'; const ratio = (value - minAvg) / (maxAvg - minAvg); const r = Math.round(159 + (1 - 159) * ratio); const g = Math.round(196 + (69 - 196) * ratio); const b = Math.round(25 + (92 - 25) * ratio); return `rgb(${r}, ${g}, ${b})`; };
+            scatterData.forEach(d => d.color = getColorForTime(d.x));
+            resolutionScatterChart = new Chart(ctx, { type: 'scatter', data: { datasets: [{ data: scatterData, pointBackgroundColor: context => context.raw.color, pointRadius: 8, pointHoverRadius: 12, borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, title: { display: true, text: 'Tempo Médio Resolução (Dias)' } }, y: { beginAtZero: true, title: { display: true, text: 'Volume Resolvidos' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => { const point = context.raw; return point ? [`${point.label}`, `Volume: ${point.y}`, `Tempo Médio: ${point.x.toFixed(1)} dias`] : ''; } } } } } });
+            const top10Volume = [...scatterData].sort((a, b) => b.y - a.y).slice(0, 10); const top10Time = [...scatterData].sort((a, b) => b.x - a.x).slice(0, 10);
+            const generateListHTML = (title, items, metric) => { let listItems = items.map(item => `<li><div class="legend-color-box" style="background-color: ${item.color};"></div><div>${item.label} (${metric === 'volume' ? `${item.y} apont.` : `${item.x.toFixed(1)} dias`})</div></li>`).join(''); return `<div class="px-4"><h3>${title}</h3><ol>${listItems}</ol></div>`; };
+            legendContainer.innerHTML = generateListHTML('Top 10 Volume', top10Volume, 'volume') + generateListHTML('Top 10 Tempo Médio', top10Time, 'time');
+            if (scatterData.length < 2) { inferenceContainer.innerHTML = `<h3>Inferência Estatística</h3><p style="text-align:center; color: #555;">Análise de quadrantes requer múltiplas categorias.</p>`; } else { const validAvgDaysValues = avgDaysValues.filter(v => !isNaN(v)); const avgX = validAvgDaysValues.length > 0 ? validAvgDaysValues.reduce((a, b) => a + b, 0) / validAvgDaysValues.length : 0; const validYValues = scatterData.map(d => d.y).filter(v => !isNaN(v)); const avgY = validYValues.length > 0 ? validYValues.reduce((a, b) => a + b, 0) / validYValues.length : 0; const quadrants = { criticos: scatterData.filter(d => d.x > avgX && d.y > avgY).sort((a, b) => b.y - a.y), eficientes: scatterData.filter(d => d.x <= avgX && d.y > avgY).sort((a, b) => b.y - a.y), ineficientes: scatterData.filter(d => d.x > avgX && d.y <= avgY).sort((a, b) => b.x - a.x) }; const ICON_CRITICO = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-alerta)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`; const ICON_EFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-secundaria)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a14.96 14.96 0 00-5.84-2.56m0 0a14.96 14.96 0 01-5.84-2.56m5.84 2.56v-4.82m0 0a6 6 0 00-5.84-7.38v4.82m5.84 2.56h4.82a6 6 0 01-7.38 5.84m0 0a6 6 0 00-7.38-5.84h4.82" /></svg>`; const ICON_INEFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-aviso)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`; const generateInferenceHTML = (title, description, categories, iconSvg, quadrantClass) => { if (categories.length === 0) return ''; const items = categories.map(cat => `<span class="inference-category-tag" onclick="showDefectDetails('${cat.label.replace(/'/g, "\\'")}')">${cat.label}</span>`).join(''); return ` <div class="inference-card ${quadrantClass}"> <div class="inference-card-header"> ${iconSvg} <h4>${title}</h4> </div> <p>${description}</p> <div class="inference-tag-container">${items}</div> </div> `; }; inferenceContainer.innerHTML = ` <h3>Inferência Estatística e Plano de Ação</h3> <div class="inference-grid"> ${generateInferenceHTML('Pontos Críticos', 'Alto volume e alta demora. Atenção prioritária.', quadrants.criticos, ICON_CRITICO, 'criticos')} ${generateInferenceHTML('Pontos de Ineficiência', 'Baixo volume, alta demora. Revisar processo.', quadrants.ineficientes, ICON_INEFICIENTE, 'ineficientes')} ${generateInferenceHTML('Pontos Eficientes', 'Alto volume e baixa demora. Modelo de boas práticas.', quadrants.eficientes, ICON_EFICIENTE, 'eficientes')} </div> `; }
+        };
 
         const updateSlaByCategoryChart = (data) => {
-            const ctx = document.getElementById('slaByCategoryChart').getContext('2d');
-            const slaByCategory = {};
-            // Inicializa com todas as categorias presentes nos dados filtrados
-            [...new Set(data.map(item => item.categoria))].filter(Boolean).forEach(cat => {
-                slaByCategory[cat] = { total: 0, withinSla: 0 };
-            });
-
-            data.forEach(item => {
-                // Conta apenas itens que TÊM uma avaliação de SLA (withinSla não é nulo)
-                if (item.withinSla !== null && item.categoria && slaByCategory[item.categoria]) {
-                    slaByCategory[item.categoria].total++;
-                    if (item.withinSla === true) { // Verifica explicitamente por true
-                        slaByCategory[item.categoria].withinSla++;
-                    }
-                }
-            });
-
-            const labels = Object.keys(slaByCategory).sort();
-            const complianceData = labels.map(cat => {
-                const item = slaByCategory[cat];
-                return item.total > 0 ? ((item.withinSla / item.total) * 100) : 0;
-            });
-
-            if (slaByCategoryChart) slaByCategoryChart.destroy();
-            if (labels.length === 0) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                slaByCategoryChart = null;
-                return;
-            }
-
-            slaByCategoryChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: '% Dentro do SLA',
-                        data: complianceData,
-                        backgroundColor: 'rgba(159, 196, 25, 0.7)'
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { x: { beginAtZero: true, max: 100, ticks: { callback: value => `${value}%` } } }, // Adiciona % no eixo X
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: context => ` ${context.dataset.label}: ${context.raw.toFixed(1)}%` } } // Tooltip com %
-                    }
-                }
-            });
+            const ctx = document.getElementById('slaByCategoryChart').getContext('2d'); const slaByCategory = {};
+            [...new Set(data.map(item => item.categoria))].filter(Boolean).forEach(cat => { slaByCategory[cat] = { total: 0, withinSla: 0 }; });
+            data.forEach(item => { if (item.withinSla !== null && item.categoria && slaByCategory[item.categoria]) { slaByCategory[item.categoria].total++; if (item.withinSla === true) { slaByCategory[item.categoria].withinSla++; } } });
+            const labels = Object.keys(slaByCategory).sort(); const complianceData = labels.map(cat => { const item = slaByCategory[cat]; return item.total > 0 ? ((item.withinSla / item.total) * 100) : 0; });
+            if (slaByCategoryChart) slaByCategoryChart.destroy(); if (labels.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); slaByCategoryChart = null; return; }
+            slaByCategoryChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: '% Dentro do SLA', data: complianceData, backgroundColor: 'rgba(159, 196, 25, 0.7)' }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, max: 100, ticks: { callback: value => `${value}%` } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` ${context.dataset.label}: ${context.raw.toFixed(1)}%` } } } } });
         };
-
-        const updateGroupingVolumeChart = (data) => {
-            const ctx = document.getElementById('groupingVolumeChart').getContext('2d');
-            const groupingCounts = data.reduce((acc, item) => {
-                // Usa Agrupamento (ex: 'Torre 01', 'Setor 02') como chave
-                const key = item.Agrupamento;
-                if (key && key !== "N/A") { // Ignora nulos e "N/A"
-                    if (!acc[key]) {
-                        // Armazena o tipo (Torre/Setor) para a cor
-                        acc[key] = { count: 0, type: item.TipoAgrupamento };
-                    }
-                    acc[key].count++;
-                }
-                return acc;
-            }, {});
-
-            const sortedData = Object.entries(groupingCounts).sort(([, a], [, b]) => b.count - a.count);
-            const labels = sortedData.map(item => item[0]);
-            const values = sortedData.map(item => item[1].count);
-
-            const backgroundColors = sortedData.map(item => {
-                const type = item[1].type;
-                if (type === 'Torre') return 'rgba(1, 70, 92, 0.8)'; // Cor Primária
-                if (type === 'Setor') return 'rgba(159, 196, 25, 0.8)'; // Cor Secundária
-                return 'rgba(128, 128, 128, 0.8)'; // Cinza para 'Outro' ou indefinido
-            });
-
-            if (groupingVolumeChart) groupingVolumeChart.destroy();
-            if (labels.length === 0) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                groupingVolumeChart = null;
-                return;
-            }
-
-            groupingVolumeChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Volume por Agrupamento',
-                        data: values,
-                        backgroundColor: backgroundColors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        };
-
 
         const updateLocationRankingChart = (data) => {
-            const ctx = document.getElementById('locationRankingChart').getContext('2d');
-
-            const locationCounts = data.reduce((acc, item) => {
-                const key = item.Location || "Não definido"; // Usa o campo Location original
-                acc[key] = (acc[key] || 0) + 1;
-                return acc;
-            }, {});
-
-            const sortedData = Object.entries(locationCounts).sort(([, a], [, b]) => b - a).slice(0, 15); // Top 15
-            const labels = sortedData.map(item => item[0]);
-            const values = sortedData.map(item => item[1]);
-
-            if (locationRankingChart) locationRankingChart.destroy();
-            if (labels.length === 0) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                locationRankingChart = null;
-                return;
-            }
-
-            locationRankingChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Nº de Apontamentos',
-                        data: values,
-                        backgroundColor: 'rgba(239, 68, 68, 0.7)', // Cor de Alerta
-                        borderColor: 'rgba(239, 68, 68, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y', // Barras horizontais para melhor leitura de locais longos
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
-                    plugins: { legend: { display: false } }
-                }
-            });
+            const ctx = document.getElementById('locationRankingChart').getContext('2d'); const locationCounts = data.reduce((acc, item) => { const key = item.Location || "Não definido"; acc[key] = (acc[key] || 0) + 1; return acc; }, {});
+            const sortedData = Object.entries(locationCounts).sort(([, a], [, b]) => b - a).slice(0, 15); const labels = sortedData.map(item => item[0]); const values = sortedData.map(item => item[1]);
+            if (locationRankingChart) locationRankingChart.destroy(); if (labels.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); locationRankingChart = null; return; }
+            locationRankingChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Nº Apontamentos', data: values, backgroundColor: 'rgba(239, 68, 68, 0.7)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false } } } });
         };
-
 
         const updateLocationCategoryHeatmap = (data) => {
-            const ctx = document.getElementById('locationCategoryHeatmap').getContext('2d');
-
-            const counts = {};
-            data.forEach(item => {
-                if (item.Location && item.categoria) { // Usa Location e Categoria
-                    if (!counts[item.Location]) counts[item.Location] = {};
-                    counts[item.Location][item.categoria] = (counts[item.Location][item.categoria] || 0) + 1;
-                }
-            });
-
-            // Considera apenas os top 20 locais com mais apontamentos para o heatmap
-            const locationTotals = Object.keys(counts).map(loc => ({
-                name: loc,
-                total: Object.values(counts[loc]).reduce((a, b) => a + b, 0)
-            })).sort((a, b) => b.total - a.total).slice(0, 20); // Top 20 Locais
-
-            const locationLabels = locationTotals.map(l => l.name);
-            // Pega todas as categorias presentes nos dados filtrados
-            const categoryLabels = [...new Set(data.map(item => item.categoria).filter(Boolean))].sort();
-
-            const heatmapData = [];
-            let maxValue = 0;
-            locationLabels.forEach(loc => {
-                categoryLabels.forEach(cat => {
-                    const value = counts[loc]?.[cat] || 0;
-                    if (value > 0) heatmapData.push({ x: cat, y: loc, v: value }); // x=Categoria, y=Local
-                    if (value > maxValue) maxValue = value;
-                });
-            });
-
-            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
-            if (locationLabels.length === 0 || categoryLabels.length === 0 || heatmapData.length === 0) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                locationCategoryHeatmap = null;
-                return;
-            }
-
-            // Ajuste na altura dinâmica pode ser necessário se houver muitos locais/categorias
-            const estimatedHeight = Math.max(600, locationLabels.length * 30); // Exemplo: 30px por local
-            ctx.canvas.parentElement.style.height = `${estimatedHeight}px`;
-
-            locationCategoryHeatmap = new Chart(ctx, {
-                type: 'matrix',
-                data: {
-                    datasets: [{
-                        label: 'Concentração',
-                        data: heatmapData,
-                        backgroundColor: (context) => {
-                            const value = context.dataset.data[context.dataIndex]?.v;
-                            if (!value) return 'rgba(245, 245, 245, 0.5)';
-                            // Usar raiz quadrada pode dar melhor contraste visual para valores baixos
-                            const alpha = maxValue > 0 ? Math.sqrt(value / maxValue) : 0;
-                            return `rgba(1, 70, 92, ${alpha})`; // Cor Primária com alpha variável
-                        },
-                        borderColor: 'white',
-                        borderWidth: 1,
-                        // Ajusta tamanho do quadrado baseado no número de itens nos eixos
-                        width: ({ chart }) => (chart.chartArea || {}).width / categoryLabels.length - 1,
-                        height: ({ chart }) => (chart.chartArea || {}).height / locationLabels.length - 1,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Importante para altura dinâmica
-                    scales: {
-                        x: { type: 'category', labels: categoryLabels, ticks: { autoSkip: false } }, // Eixo X = Categorias
-                        y: { type: 'category', labels: locationLabels, offset: true, ticks: { autoSkip: false } } // Eixo Y = Locais
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                title: () => '',
-                                label: (context) => {
-                                    const v = context.dataset.data[context.dataIndex];
-                                    // Formato: Local | Categoria: Valor
-                                    return v ? `${v.y} | ${v.x}: ${v.v} apontamentos` : '';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            const ctx = document.getElementById('locationCategoryHeatmap').getContext('2d'); const counts = {};
+            data.forEach(item => { if (item.Location && item.categoria) { if (!counts[item.Location]) counts[item.Location] = {}; counts[item.Location][item.categoria] = (counts[item.Location][item.categoria] || 0) + 1; } });
+            const locationTotals = Object.keys(counts).map(loc => ({ name: loc, total: Object.values(counts[loc]).reduce((a, b) => a + b, 0) })).sort((a, b) => b.total - a.total).slice(0, 20);
+            const locationLabels = locationTotals.map(l => l.name); const categoryLabels = [...new Set(data.map(item => item.categoria).filter(Boolean))].sort(); const heatmapData = []; let maxValue = 0;
+            locationLabels.forEach(loc => { categoryLabels.forEach(cat => { const value = counts[loc]?.[cat] || 0; if (value > 0) heatmapData.push({ x: cat, y: loc, v: value }); if (value > maxValue) maxValue = value; }); });
+            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy(); if (locationLabels.length === 0 || categoryLabels.length === 0 || heatmapData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); locationCategoryHeatmap = null; return; }
+            const estimatedHeight = Math.max(600, locationLabels.length * 30); ctx.canvas.parentElement.style.height = `${estimatedHeight}px`;
+            locationCategoryHeatmap = new Chart(ctx, { type: 'matrix', data: { datasets: [{ label: 'Concentração', data: heatmapData, backgroundColor: (context) => { const value = context.dataset.data[context.dataIndex]?.v; if (!value) return 'rgba(245, 245, 245, 0.5)'; const alpha = maxValue > 0 ? Math.sqrt(value / maxValue) : 0; return `rgba(1, 70, 92, ${alpha})`; }, borderColor: 'white', borderWidth: 1, width: ({ chart }) => (chart.chartArea || {}).width / categoryLabels.length - 1, height: ({ chart }) => (chart.chartArea || {}).height / locationLabels.length - 1, }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: categoryLabels, ticks: { autoSkip: false } }, y: { type: 'category', labels: locationLabels, offset: true, ticks: { autoSkip: false } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: () => '', label: (context) => { const v = context.dataset.data[context.dataIndex]; return v ? `${v.y} | ${v.x}: ${v.v} apontamentos` : ''; } } } } } });
         };
 
-
-        // --- Funções Auxiliares (showError, openTab, showDefectDetails) ---
         const showError = (message) => {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            // Esconde outros elementos
-            document.getElementById('loading-container').style.display = 'none';
-            document.getElementById('dashboard-content').style.display = 'none';
-            document.getElementById('initial-message').style.display = 'none'; // Esconde msg inicial também
+            const errorElement = document.getElementById('error-message'); errorElement.textContent = message; errorElement.style.display = 'block';
+            document.getElementById('loading-container').style.display = 'none'; document.getElementById('dashboard-content').style.display = 'none'; document.getElementById('initial-message').style.display = 'none';
         };
 
         function openTab(evt, tabName) {
-            let i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
+            let i, tabcontent, tablinks; tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
             tablinks = document.getElementsByClassName("tab-link");
             for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
-            const targetTab = document.getElementById(tabName);
-            if (targetTab) {
-                targetTab.style.display = "block";
-            }
-            // Adiciona a classe 'active' ao botão clicado
-            if (evt && evt.currentTarget) {
-                evt.currentTarget.className += " active";
-            } else {
-                // Caso seja chamado programaticamente (ex: clearDashboardState)
-                // Tenta encontrar o botão correspondente e ativá-lo
-                const defaultTabButton = document.querySelector(`.tab-link[onclick*="'${tabName}'"]`);
-                if (defaultTabButton) defaultTabButton.className += " active";
-            }
-
-
-            // Redimensiona gráficos na aba ativa após um pequeno delay
+            const targetTab = document.getElementById(tabName); if (targetTab) { targetTab.style.display = "block"; }
+            if (evt && evt.currentTarget) { evt.currentTarget.className += " active"; } else { const defaultTabButton = document.querySelector(`.tab-link[onclick*="'${tabName}'"]`); if (defaultTabButton) defaultTabButton.className += " active"; }
             setTimeout(() => {
-                const activeCharts = {
-                    'visaoGeral': [histogramChart, monthlyResolutionRateChart, statusHistoryChart, detailsChart, heatmapChart],
-                    'eficiencia': [resolutionScatterChart, slaByCategoryChart],
-                    'localizacao': [groupingVolumeChart, locationRankingChart, locationCategoryHeatmap]
-                }[tabName] || [];
-
-                activeCharts.forEach(chart => {
-                    // Verifica se o gráfico existe e tem o método resize
-                    if (chart && typeof chart.resize === 'function') {
-                        try {
-                            chart.resize();
-                        } catch (e) {
-                            console.warn("Erro ao redimensionar gráfico:", e, chart);
-                        }
-                    }
-                });
-            }, 50); // Aumentado ligeiramente o delay
+                const activeCharts = { 'visaoGeral': [histogramChart, monthlyResolutionRateChart, statusHistoryChart, detailsChart, heatmapChart], 'eficiencia': [resolutionScatterChart, slaByCategoryChart], 'localizacao': [locationRankingChart, locationCategoryHeatmap] }[tabName] || [];
+                activeCharts.forEach(chart => { if (chart && typeof chart.resize === 'function') { try { chart.resize(); } catch (e) { console.warn("Erro resize:", e, chart); } } });
+            }, 50);
         }
 
         function showDefectDetails(categoryName) {
-            // Garante que currentFinalData tenha dados
-            if (!currentFinalData || currentFinalData.length === 0) {
-                console.warn("showDefectDetails chamado sem dados em currentFinalData.");
-                return;
-            }
-
+            if (!currentFinalData || currentFinalData.length === 0) { console.warn("showDefectDetails sem dados."); return; }
             const categoryData = currentFinalData.filter(item => item.categoria === categoryName);
-            const defectCounts = categoryData.reduce((acc, item) => {
-                const defect = item.descricao || 'Não especificado';
-                acc[defect] = (acc[defect] || 0) + 1;
-                return acc;
-            }, {});
-            const sortedDefects = Object.entries(defectCounts)
-                .sort(([, a], [, b]) => b - a)
-                .slice(0, 5); // Top 5
-
-            const modalTitle = document.getElementById('modal-title');
-            const modalBody = document.getElementById('modal-body');
+            const defectCounts = categoryData.reduce((acc, item) => { const defect = item.descricao || 'Não especificado'; acc[defect] = (acc[defect] || 0) + 1; return acc; }, {});
+            const sortedDefects = Object.entries(defectCounts).sort(([, a], [, b]) => b - a).slice(0, 5);
+            const modalTitle = document.getElementById('modal-title'); const modalBody = document.getElementById('modal-body');
             modalTitle.textContent = `Top 5 Defeitos para: ${categoryName}`;
-            if (sortedDefects.length === 0) {
-                modalBody.innerHTML = '<p>Nenhum defeito específico encontrado para esta categoria nos filtros atuais.</p>';
-            } else {
-                const listItems = sortedDefects.map(([defect, count]) => `<li><strong>${defect}</strong>: ${count} ocorrência(s)</li>`).join('');
-                modalBody.innerHTML = `<ol>${listItems}</ol>`;
-            }
+            if (sortedDefects.length === 0) { modalBody.innerHTML = '<p>Nenhum defeito encontrado.</p>'; } else { const listItems = sortedDefects.map(([defect, count]) => `<li><strong>${defect}</strong>: ${count} ocorrência(s)</li>`).join(''); modalBody.innerHTML = `<ol>${listItems}</ol>`; }
             document.getElementById('modal-container').style.display = 'flex';
         }
 
-        // --- INICIALIZAÇÃO E EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', () => {
-
             const projectSelector = document.getElementById('project-selector');
             const fileInput = document.getElementById('json-file-input');
-            const printButton = document.getElementById('print-button');
-            const body = document.body;
-            const overlay = document.getElementById('drag-drop-overlay');
+            const body = document.body; const overlay = document.getElementById('drag-drop-overlay');
             const modalContainer = document.getElementById('modal-container');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-            const modalContent = document.getElementById('modal-content');
+            const modalCloseBtn = document.getElementById('modal-close-btn'); const modalContent = document.getElementById('modal-content');
 
-            // *** MODIFICADO: Carrega o projeto padrão ao iniciar ***
-            const defaultProjectName = projectSelector.options[projectSelector.selectedIndex].text;
-            loadProjectData(defaultProjectName);
-            // ####################################################
+            // *** JAVASCRIPT ALTERADO AQUI (Carga Inicial) ***
+            const defaultProjectValue = projectSelector.value;
+            // Garante que o valor padrão selecionado no HTML é carregado corretamente
+            if (PROJECT_FILES[defaultProjectValue]) {
+                loadProjectData(defaultProjectValue);
+            } else {
+                console.error("Projeto padrão inválido no HTML:", defaultProjectValue);
+                showError(`Projeto padrão "${defaultProjectValue}" inválido ou não configurado.`);
+                // Opcional: Carregar o primeiro projeto da lista como fallback
+                // const firstProject = Object.keys(PROJECT_FILES)[0];
+                // if (firstProject) loadProjectData(firstProject);
+            }
 
-            // Listener para o seletor de projeto
+            // *** JAVASCRIPT ALTERADO AQUI (Listener do Seletor) ***
             projectSelector.addEventListener('change', (event) => {
-                const selectedOption = event.target.selectedOptions[0];
-                const projectName = selectedOption.text; // Pega o nome visível (Hotel, Centro Medico, etc.)
-                loadProjectData(projectName);
-            });
-
-            // Listeners para os filtros de data/detalhe
-            const filterIds = [
-                'spotted-filter', 'year-filter', 'month-filter', 'groupname-filter',
-                'categoria-filter', 'tipo-filter', 'descricao-filter',
-                'heatmap-year-filter', 'grouping-filter'
-            ];
-            filterIds.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener('change', runUpdate);
-                }
-            });
-
-            // Listener para upload manual de arquivo
-            fileInput.addEventListener('change', handleFileUpload);
-
-            // Listener para botão de imprimir
-            printButton.addEventListener('click', () => { window.print(); });
-
-            // Listeners para Drag and Drop
-            let dragCounter = 0;
-            body.addEventListener('dragenter', (e) => { e.preventDefault(); e.stopPropagation(); dragCounter++; overlay.style.display = 'flex'; });
-            body.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); }); // Necessário para o drop funcionar
-            body.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                dragCounter--;
-                if (dragCounter === 0) {
-                    overlay.style.display = 'none';
-                }
-            });
-            body.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                overlay.style.display = 'none';
-                dragCounter = 0;
-                const files = e.dataTransfer.files;
-                if (files && files.length > 0) {
-                    processFile(files[0]); // Processa o primeiro arquivo solto
-                }
-            });
-
-            // Listeners para o Modal
-            const closeModal = () => modalContainer.style.display = 'none';
-            modalCloseBtn.addEventListener('click', closeModal);
-            modalContainer.addEventListener('click', (event) => {
-                // Fecha se clicar fora do conteúdo do modal
-                if (!modalContent.contains(event.target)) {
-                    closeModal();
-                }
-            });
-
-            // Listeners para Impressão (antes/depois)
-            let activeTabBeforePrint = 'visaoGeral';
-            window.addEventListener('beforeprint', () => {
-                // Guarda a aba ativa
-                const activeTabLink = document.querySelector('.tab-link.active');
-                if (activeTabLink && activeTabLink.onclick) {
-                    // Extrai o nome da aba da função onclick
-                    const match = activeTabLink.onclick.toString().match(/'([^']+)'/);
-                    if (match && match[1]) {
-                        activeTabBeforePrint = match[1];
-                    }
-                }
-                // Mostra todas as abas para impressão
-                document.querySelectorAll('.tab-content').forEach(tab => { tab.style.display = 'block'; });
-                // Tenta redimensionar todos os gráficos (pode ser pesado)
-                const allCharts = [
-                    histogramChart, monthlyResolutionRateChart, statusHistoryChart, detailsChart, heatmapChart,
-                    resolutionScatterChart, slaByCategoryChart,
-                    groupingVolumeChart, locationRankingChart, locationCategoryHeatmap
-                ];
-                allCharts.forEach(chart => { if (chart && typeof chart.resize === 'function') chart.resize(); });
-            });
-
-            window.addEventListener('afterprint', () => {
-                // Restaura a visualização da aba que estava ativa
-                const activeLink = document.querySelector(`.tab-link[onclick*="'${activeTabBeforePrint}'"]`);
-                if (activeLink) {
-                    openTab({ currentTarget: activeLink }, activeTabBeforePrint);
+                const selectedValue = event.target.value;
+                // Agora apenas chama loadProjectData para qualquer seleção válida
+                if (PROJECT_FILES[selectedValue]) {
+                    loadProjectData(selectedValue);
                 } else {
-                    // Fallback para a primeira aba se algo der errado
-                    openTab({ currentTarget: document.querySelector('.tab-link') }, 'visaoGeral');
+                    console.error("Projeto selecionado inválido:", selectedValue);
+                    showError(`Projeto "${selectedValue}" não configurado.`);
                 }
-                // Redimensiona novamente após impressão pode ser necessário
-                const allCharts = [
-                    histogramChart, monthlyResolutionRateChart, statusHistoryChart, detailsChart, heatmapChart,
-                    resolutionScatterChart, slaByCategoryChart,
-                    groupingVolumeChart, locationRankingChart, locationCategoryHeatmap
-                ];
-                allCharts.forEach(chart => { if (chart && typeof chart.resize === 'function') chart.resize(); });
             });
+
+            const filterIds = ['spotted-filter', 'year-filter', 'month-filter', 'groupname-filter', 'categoria-filter', 'tipo-filter', 'descricao-filter', 'heatmap-year-filter', 'grouping-filter'];
+            filterIds.forEach(id => { const element = document.getElementById(id); if (element) { element.addEventListener('change', runUpdate); } });
+            fileInput.addEventListener('change', handleFileUpload);
+            let dragCounter = 0; body.addEventListener('dragenter', (e) => { e.preventDefault(); e.stopPropagation(); dragCounter++; overlay.style.display = 'flex'; }); body.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); }); body.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dragCounter--; if (dragCounter === 0) { overlay.style.display = 'none'; } }); body.addEventListener('drop', (e) => { e.preventDefault(); e.stopPropagation(); overlay.style.display = 'none'; dragCounter = 0; const files = e.dataTransfer.files; if (files && files.length > 0) { processFile(files[0]); } });
+            const closeModal = () => modalContainer.style.display = 'none'; modalCloseBtn.addEventListener('click', closeModal); modalContainer.addEventListener('click', (event) => { if (!modalContent.contains(event.target)) { closeModal(); } });
         });
     </script>
 </body>
