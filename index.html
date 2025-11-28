@@ -139,6 +139,23 @@
             margin-bottom: 20px;
         }
 
+        /* Estilo para a caixa de explicação */
+        .chart-explanation {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--cor-info);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.5;
+        }
+        .chart-explanation strong {
+            color: var(--cor-primaria);
+            display: block;
+            margin-bottom: 5px;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -417,11 +434,17 @@
                 <div class="card">
                     <div class="card-header">Histórico de Taxa de Resolução (Mensal)</div>
                     <div class="chart-container" style="height: 400px;"><canvas id="monthlyResolutionRateChart"></canvas></div>
+                    <div class="chart-explanation">
+                        <strong>O que este gráfico mede:</strong> Representa a eficiência da equipe mês a mês. Indica a porcentagem de problemas que foram resolvidos em relação ao total acumulado para aquele período. Uma curva ascendente demonstra que a equipe está entregando mais soluções do que encontrando novos problemas.
+                    </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">Histórico de Apontamentos por Mês (Criados vs. Resolvidos)</div>
                     <div class="chart-container" style="height: 400px;"><canvas id="statusHistoryChart"></canvas></div>
+                    <div class="chart-explanation">
+                        <strong>O que este gráfico mede:</strong> Compara o volume de trabalho que entra (Criados/Vermelho) contra o volume de trabalho que é concluído (Resolvidos/Verde) em cada mês. Se as barras vermelhas forem consistentemente maiores que as verdes, indica que o passivo de obras está acumulando.
+                    </div>
                 </div>
 
                 <div class="card">
@@ -1040,98 +1063,12 @@
         };
 
         const updateMonthlyResolutionRateChart = (data) => {
-            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d');
-            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            
-            // Usamos 'allData' para garantir que resoluções de itens antigos sejam contabilizadas
-            const globalData = getUniqueRecords(allData); 
-            const selectedYear = document.getElementById('year-filter').value;
-
-            const monthlyCreated = Array(12).fill(0);
-            const monthlyResolved = Array(12).fill(0);
-
-            globalData.forEach(item => {
-                // 1. Contagem de CRIADOS (Baseado na data de criação 'Spotted')
-                if (item.data) {
-                    try {
-                        const recordDate = new Date(item.data);
-                        // Verifica filtro de ano para criação
-                        const isYearMatch = selectedYear === 'all' || recordDate.getFullYear() == selectedYear;
-                        
-                        if (isYearMatch && !isNaN(recordDate.getTime())) {
-                            const month = recordDate.getMonth();
-                            if (month >= 0 && month < 12) {
-                                monthlyCreated[month]++;
-                            }
-                        }
-                    } catch(e) {}
-                }
-
-                // 2. Contagem de RESOLVIDOS (Baseado na data de correção 'lastChangedDate')
-                const status = item.situacao?.toLowerCase();
-                if (item.lastChangedDate && (status === 'closed' || status === 'signedoff')) {
-                    try {
-                        const resolvedDate = new Date(item.lastChangedDate);
-                        // Verifica filtro de ano para resolução
-                        const isYearMatch = selectedYear === 'all' || resolvedDate.getFullYear() == selectedYear;
-
-                        if (isYearMatch && !isNaN(resolvedDate.getTime())) {
-                            const month = resolvedDate.getMonth();
-                            if (month >= 0 && month < 12) {
-                                monthlyResolved[month]++;
-                            }
-                        }
-                    } catch(e) {}
-                }
-            });
-
-            // CÁLCULO DA TAXA: (Resolvidos / Criados) * 100
-            const resolutionRates = monthlyCreated.map((createdTotal, index) => {
-                const resolvedTotal = monthlyResolved[index];
-                return createdTotal > 0 ? (resolvedTotal / createdTotal) * 100 : 0;
-            });
-
+            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d'); const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const monthlyTotals = Array(12).fill(0); const monthlyResolved = Array(12).fill(0);
+            data.forEach(item => { if (item.data) { try { const date = new Date(item.data); if(!isNaN(date)) { const month = date.getMonth(); if (month >= 0 && month < 12) { monthlyTotals[month]++; if (['closed', 'signedoff'].includes(item.situacao?.toLowerCase())) { monthlyResolved[month]++; } } } } catch(e) {} } });
+            const resolutionRates = monthlyTotals.map((total, index) => total > 0 ? (monthlyResolved[index] / total) * 100 : 0);
             if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
-
-            monthlyResolutionRateChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Taxa de Resolução (Resolvidos / Criados)',
-                        data: resolutionRates,
-                        backgroundColor: 'rgba(159, 196, 25, 0.2)',
-                        borderColor: 'rgba(159, 196, 25, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            // max: 100 removido pois pode passar de 100%
-                            ticks: { callback: (value) => `${value}%` }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const index = context.dataIndex;
-                                    const created = monthlyCreated[index];
-                                    const resolved = monthlyResolved[index];
-                                    return ` Taxa: ${context.raw.toFixed(1)}% (${resolved} resolvidos / ${created} criados)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            monthlyResolutionRateChart = new Chart(ctx, { type: 'line', data: { labels: months, datasets: [{ label: 'Taxa de Resolução', data: resolutionRates, backgroundColor: 'rgba(159, 196, 25, 0.2)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 2, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: (value) => `${value}%` } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => ` Taxa: ${context.raw.toFixed(2)}%` } } } } });
         };
 
         const updateStatusHistoryChart = (data, selectedYear, selectedMonth) => {
