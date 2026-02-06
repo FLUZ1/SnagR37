@@ -20,6 +20,10 @@
             --cor-alerta: #ef4444;
             --cor-aviso: #f59e0b;
             --cor-info: #3b82f6;
+            /* Cores da Galeria */
+            --gal-bg: #1e1e1e;
+            --gal-accent: #3b82f6;
+            --gal-border: #333;
         }
 
         body {
@@ -27,15 +31,6 @@
             background-color: var(--cor-fundo);
             color: var(--cor-texto);
             overflow-x: hidden;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
         }
 
         header {
@@ -49,27 +44,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .glass-card:hover {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        select, input[type="date"] {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 1rem;
-            padding-right: 2.5rem;
-            transition: all 0.2s;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            ring: 2px solid var(--cor-secundaria);
-            border-color: var(--cor-secundaria);
         }
 
         .tab-link {
@@ -89,26 +63,14 @@
             transform: translateX(-50%);
         }
 
-        .tab-link.active {
-            color: var(--cor-secundaria) !important;
-        }
-
-        .tab-link.active::after {
-            width: 100%;
-        }
+        .tab-link.active { color: var(--cor-secundaria) !important; }
+        .tab-link.active::after { width: 100%; }
 
         .stat-card {
             border-radius: 12px;
             padding: 1.5rem;
             border-left: 6px solid var(--cor-primaria);
         }
-        .stat-card.alerta { border-left-color: var(--cor-alerta); }
-        .stat-card.sucesso { border-left-color: var(--cor-secundaria); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         .loader-overlay {
             background: rgba(1, 69, 92, 0.9);
@@ -132,17 +94,106 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        .chart-explanation {
-            border-left: 4px solid var(--cor-info);
-            background: #f1f5f9;
+        /* --- ESTILOS ESPECÍFICOS DA GALERIA --- */
+        .galeria-container {
+            background: #121212;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            height: 800px;
         }
+
+        .gal-header {
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 30, 30, 0.95);
+            border-bottom: 1px solid var(--gal-border);
+        }
+
+        .view-switcher {
+            display: flex;
+            background: #000;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--gal-border);
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            color: #a1a1aa;
+            border: none;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        .view-pane {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .view-pane.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #mainImage {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            transition: opacity 0.4s;
+        }
+
+        .grid-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .grid-item {
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 1px solid #333;
+            cursor: pointer;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        .data-sidebar { width: 350px; background: #181818; border-right: 1px solid #333; overflow-y: auto; }
+        .data-item-card { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
+        .data-item-card:hover { background: #252525; }
+        .data-item-card.selected { border-left: 4px solid var(--gal-accent); background: #2a2a2a; }
+
+        .status-badge-gal { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #333; }
+        .status-badge-gal.success { background: #065f46; color: #34d399; }
     </style>
 </head>
 <body>
 
     <div id="loading-container" class="loader-overlay fixed inset-0" style="display: none;">
         <div class="pulse-loader mb-6"></div>
-        <h2 id="loading-status" class="text-white text-xl font-semibold tracking-wide">Iniciando...</h2>
+        <h2 id="loading-status" class="text-white text-xl font-semibold tracking-wide">Processando...</h2>
         <div class="w-64 bg-white/20 rounded-full h-1.5 mt-4 overflow-hidden">
             <div id="progress-bar" class="bg-[--cor-secundaria] h-full transition-all duration-300" style="width: 0%"></div>
         </div>
@@ -177,6 +228,7 @@
             <button onclick="openTab(event, 'visaoGeral')" class="tab-link active text-white font-bold py-3 text-sm uppercase tracking-widest">Visão Geral</button>
             <button onclick="openTab(event, 'eficiencia')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Eficiência (SLA)</button>
             <button onclick="openTab(event, 'localizacao')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Localização</button>
+            <button onclick="openTab(event, 'galeriaRelatorios')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Galeria & Fotos</button>
         </div>
     </header>
 
@@ -188,6 +240,7 @@
 
         <div id="dashboard-content" style="display: none;" class="space-y-8">
             
+            <!-- Visão Geral -->
             <div id="visaoGeral" class="tab-content space-y-8">
                 <section class="glass-card rounded-2xl p-6 flex flex-wrap gap-6 items-end">
                     <div class="flex-1 min-w-[200px]">
@@ -243,91 +296,109 @@
                     <article class="glass-card rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                             <span class="w-2 h-6 bg-[--cor-primaria] rounded-full"></span>
-                            Volume de Apontamentos Mensais
+                            Volume Mensal
                         </h3>
                         <div class="h-[350px]"><canvas id="histogramChart"></canvas></div>
                     </article>
-
                     <article class="glass-card rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                             <span class="w-2 h-6 bg-[--cor-secundaria] rounded-full"></span>
-                            Histórico de Taxa de Resolução
+                            Taxa de Resolução
                         </h3>
                         <div class="h-[350px]"><canvas id="monthlyResolutionRateChart"></canvas></div>
-                        <div class="chart-explanation p-4 rounded-lg mt-6 text-sm text-slate-600">
-                            <strong>Insight:</strong> Uma curva ascendente indica que a equipe está resolvendo passivos acumulados de forma eficiente.
-                        </div>
                     </article>
                 </div>
-
-                <article class="glass-card rounded-2xl p-6">
-                    <h3 class="text-lg font-bold text-slate-800 mb-6">Criados vs. Resolvidos (Entrada/Saída)</h3>
-                    <div class="h-[400px]"><canvas id="statusHistoryChart"></canvas></div>
-                </article>
-
-                <section class="glass-card rounded-2xl p-6 space-y-6">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                        <h3 class="text-xl font-bold text-slate-800">Detalhamento por Categoria</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
-                            <select id="groupname-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Groupname</option></select>
-                            <select id="categoria-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Categoria</option></select>
-                            <select id="tipo-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Tipo</option></select>
-                            <select id="descricao-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Descrição</option></select>
-                        </div>
-                    </div>
-                    <div class="h-[500px]"><canvas id="detailsChart"></canvas></div>
-                </section>
-
-                <!-- Mapa de Calor Desativado Temporariamente -->
-                <!-- 
-                <article class="glass-card rounded-2xl p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-bold text-slate-800">Mapa de Calor: Concentração Temporal</h3>
-                        <select id="heatmap-year-filter" class="bg-slate-100 text-xs font-bold rounded-lg px-4 py-2 border-none">
-                            <option value="all">Todos os Anos</option>
-                        </select>
-                    </div>
-                    <div class="h-[500px]"><canvas id="heatmapChart"></canvas></div>
-                    <div id="heatmap-legend" class="mt-8 flex items-center justify-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest"></div>
-                </article>
-                -->
             </div>
 
+            <!-- Eficiência -->
             <div id="eficiencia" class="tab-content space-y-8" style="display: none;">
                 <div class="grid grid-cols-1 gap-8">
                     <article class="glass-card rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-slate-800 mb-2">Matriz de Desempenho</h3>
-                        <p class="text-sm text-slate-400 mb-6">Correlação entre Volume de Ocorrências e Tempo Médio de Resolução (Dias)</p>
                         <div class="h-[500px]"><canvas id="resolutionScatterChart"></canvas></div>
-                        <div id="scatter-legend-table" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-100 pt-8"></div>
+                        <div id="scatter-legend-table" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8"></div>
                         <div id="inference-section" class="mt-8"></div>
                     </article>
                     <article class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Aderência ao SLA por Categoria</h3>
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Aderência ao SLA</h3>
                         <div class="h-[450px]"><canvas id="slaByCategoryChart"></canvas></div>
                     </article>
                 </div>
             </div>
 
+            <!-- Localização -->
             <div id="localizacao" class="tab-content space-y-8" style="display: none;">
-                <section class="glass-card rounded-2xl p-6 flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-slate-800">Filtro Geográfico</h3>
+                <section class="glass-card rounded-2xl p-6">
                     <select id="grouping-filter" class="bg-slate-100 text-sm font-bold rounded-xl px-6 py-3 border-none w-72">
                         <option value="all">Todas as Torres/Setores</option>
                     </select>
                 </section>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <article class="glass-card rounded-2xl p-6 lg:col-span-1">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Top 15 Locais Críticos</h3>
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Top 15 Locais</h3>
                         <div class="h-[600px]"><canvas id="locationRankingChart"></canvas></div>
                     </article>
                     <article class="glass-card rounded-2xl p-6 lg:col-span-2">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Concentração de Defeitos por Local</h3>
-                        <div class="h-[600px] bg-slate-50 flex items-center justify-center rounded-xl border border-dashed border-slate-200">
-                             <!-- <canvas id="locationCategoryHeatmap"></canvas> -->
-                             <p class="text-slate-400 font-medium">Análise Geográfica Detalhada Desativada Temporariamente</p>
+                        <div class="h-[600px] flex items-center justify-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                            <p class="text-slate-400 font-medium italic">Análise de Mapa de Calor desativada.</p>
                         </div>
                     </article>
+                </div>
+            </div>
+
+            <!-- NOVA ABA: GALERIA & FOTOS -->
+            <div id="galeriaRelatorios" class="tab-content space-y-8" style="display: none;">
+                <div class="galeria-container shadow-2xl">
+                    <div class="gal-header">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-lg font-bold">Galeria SnagR PG37</h2>
+                            <div id="statusBadgeGal" class="status-badge-gal">Pronto</div>
+                        </div>
+                        <div class="view-switcher">
+                            <button class="view-btn active" onclick="switchGalView('carousel')">
+                                Foco
+                            </button>
+                            <button class="view-btn" onclick="switchGalView('grid')">
+                                Grade
+                            </button>
+                            <button class="view-btn" onclick="switchGalView('data')">
+                                Dados
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo Galeria -->
+                    <div class="flex-1 relative overflow-hidden bg-black">
+                        <!-- Modo Foco -->
+                        <div id="gal-carousel" class="view-pane active items-center justify-center p-4">
+                            <img id="mainImage" src="" alt="Imagem do Defeito" onerror="tratarErroImagemGal()">
+                            <div class="absolute bottom-6 flex items-center gap-6 bg-black/60 backdrop-blur p-3 rounded-full border border-white/10">
+                                <button onclick="mudarFotoGal(-1)" class="p-2 hover:bg-white/10 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                                </button>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-white/50">ID</span>
+                                    <input type="number" id="jumpInputGal" class="bg-white/10 border-none text-white text-center w-20 rounded p-1 font-bold">
+                                </div>
+                                <button onclick="mudarFotoGal(1)" class="p-2 hover:bg-white/10 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Modo Grade -->
+                        <div id="gal-grid" class="view-pane">
+                            <div id="gridContentGal" class="grid-content"></div>
+                        </div>
+
+                        <!-- Modo Dados -->
+                        <div id="gal-data" class="view-pane flex-row">
+                            <div class="data-sidebar" id="dataListGal"></div>
+                            <div class="flex-1 p-8 overflow-y-auto" id="dataDetailGal">
+                                <p class="text-center text-gray-500 mt-20">Selecione um item para ver detalhes.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -338,33 +409,31 @@
         <div class="max-w-[1600px] mx-auto px-6 text-center">
             <input type="file" id="json-file-input" accept=".jsonl,.txt,.json" class="hidden" />
             <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 Carregar Arquivo Manual
             </button>
             <p id="file-name" class="mt-4 text-xs font-bold text-[--cor-primaria] tracking-wide uppercase"></p>
         </div>
     </footer>
 
-    <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeModal()">
-        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-                <h3 id="modal-title" class="text-xl font-bold text-slate-800">Detalhes</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <div id="modal-body" class="p-8 text-slate-600 space-y-4 max-h-[70vh] overflow-y-auto"></div>
-        </div>
-    </div>
-
-    <div id="drag-drop-overlay" class="fixed inset-0 bg-[--cor-primaria]/90 z-[100] hidden items-center justify-center border-8 border-dashed border-[--cor-secundaria] m-4 rounded-3xl pointer-events-none">
-        <h2 class="text-4xl font-black text-white">Solte para Processar</h2>
-    </div>
-
     <script>
-        // REDUNDÂNCIA: Variáveis globais para os gráficos
-        let histogramChart, detailsChart, heatmapChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart, locationCategoryHeatmap;
+        // --- VARIÁVEIS GRÁFICOS (Redundância Original) ---
+        let histogramChart, detailsChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart;
 
+        // --- ESTADO GALERIA ---
+        const BASE_DOMAIN = "https://bnengenharia.snagrweb.com/Config/bnengenharia.snagrweb.com/Projects";
+        const URL_SUFIXO = "?v=Invalid%20date";
+        const PROJECTS_GAL = {
+            "Centro Medico": { path: 'pg37ctmedico', idStart: 9, jsonl: 'pg37ctmedico.jsonl' },
+            "Residencial": { path: 'pg37residencial', idStart: 567, jsonl: 'pg37residencial.jsonl' },
+            "Embasamento": { path: 'pg37embasa', idStart: 333, jsonl: 'pg37embasa.jsonl' },
+            "Hotel": { path: 'pg37hotel', idStart: 60, jsonl: 'pg37hotel.jsonl' },
+            "Ensino": { path: 'pg37ensino', idStart: 63, jsonl: 'pg37ensino.jsonl' },
+            "Unificado": { path: 'pg37ctmedico', idStart: 1, jsonl: 'pg37ctmedico.jsonl' }
+        };
+        let galIdAtual = 1;
+        let galJsonData = [];
+
+        // --- LÓGICA DASHBOARD ---
         let allData = [];
         let currentFinalData = [];
         const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
@@ -378,7 +447,6 @@
         };
 
         Chart.defaults.font.family = "'Inter', sans-serif";
-        Chart.defaults.color = '#64748b';
 
         function parseDateString(dateStr) {
             if (!dateStr || typeof dateStr !== 'string') return null;
@@ -388,10 +456,6 @@
                 const [d, m, y] = datePart.split('/');
                 return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
             }
-            try {
-                const d = new Date(dateStr.replace(' ', 'T'));
-                if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
-            } catch(e) {}
             return null;
         }
 
@@ -403,446 +467,271 @@
                     cleanItem[cleanKey] = item[key];
                 }
                 if (!cleanItem.SnagID) return null;
-
                 const spottedDate = parseDateString(cleanItem.Spotted);
-                const fixDateField = cleanItem['Data alteração'] || cleanItem['LastChanged'];
-                const fixDate = parseDateString(fixDateField);
-                
+                const fixDate = parseDateString(cleanItem['Data alteração'] || cleanItem['LastChanged']);
                 let finalStatus = cleanItem.Status;
                 if (cleanItem.FixStatus?.toLowerCase() === 'signedoff') finalStatus = 'SignedOff';
-                if (cleanItem.FixStatus?.toLowerCase() === 'notadefect') finalStatus = 'NotADefect';
-
-                let daysToResolve = null;
+                let days = null;
                 if (['Closed', 'SignedOff'].includes(finalStatus) && spottedDate && fixDate) {
-                    const start = new Date(spottedDate + "T12:00:00");
-                    const end = new Date(fixDate + "T12:00:00");
-                    daysToResolve = (end - start) / (1000 * 60 * 60 * 24);
+                    days = (new Date(fixDate + "T12:00:00") - new Date(spottedDate + "T12:00:00")) / (86400000);
                 }
-
                 const sla = SLA_RULES[cleanItem.Priority];
-                const withinSla = (daysToResolve !== null && sla) ? (daysToResolve <= sla) : null;
-
-                const loc = cleanItem.Location || "Não definido";
-                let agrupamento = "N/A", tipoAgrupamento = "Outro";
-                const match = loc.match(/^(T|S)0?([1-5])/i);
-                if (match) {
-                    tipoAgrupamento = match[1].toUpperCase() === 'T' ? "Torre" : "Setor";
-                    agrupamento = `${tipoAgrupamento} 0${match[2]}`;
-                }
-
                 return {
                     id: cleanItem.SnagID,
-                    responsavel: cleanItem.Fullname || "Não atribuído",
                     data: spottedDate,
                     lastChangedDate: fixDate,
-                    tipo: cleanItem.Description || "Não definido",
                     categoria: cleanItem.Category || "Não definida",
                     descricao: cleanItem.Defect || "Não definido",
                     situacao: finalStatus || "Pendente",
-                    groupname: cleanItem.Groupname || "Não definido",
-                    priority: cleanItem.Priority,
-                    daysToResolve,
-                    withinSla,
-                    Location: loc,
-                    Agrupamento: agrupamento,
-                    TipoAgrupamento: tipoAgrupamento
+                    daysToResolve: days,
+                    withinSla: (days !== null && sla) ? (days <= sla) : null,
+                    Location: cleanItem.Location || "Não definido",
+                    Agrupamento: cleanItem.Location?.match(/^(T|S)0?([1-5])/i) ? cleanItem.Location.match(/^(T|S)0?([1-5])/i)[0] : "N/A"
                 };
             }).filter(i => i !== null && i.data);
         };
 
         const clearCharts = () => {
-            // REDUNDÂNCIA: Destruição explícita via variável global
             if (histogramChart) histogramChart.destroy();
             if (detailsChart) detailsChart.destroy();
-            // if (heatmapChart) heatmapChart.destroy(); // Desativado
             if (slaByCategoryChart) slaByCategoryChart.destroy();
             if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
             if (resolutionScatterChart) resolutionScatterChart.destroy();
             if (statusHistoryChart) statusHistoryChart.destroy();
             if (locationRankingChart) locationRankingChart.destroy();
-            // if (locationCategoryHeatmap) locationCategoryHeatmap.destroy(); // Desativado
-            
-            histogramChart = detailsChart = /* heatmapChart = */ slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = /* locationCategoryHeatmap = */ null;
+            histogramChart = detailsChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = null;
         };
 
-        const processContentAndInitialize = (content, label) => {
+        const loadProjectData = async (projectName) => {
             const loader = document.getElementById('loading-container');
-            const progress = document.getElementById('progress-bar');
-            const status = document.getElementById('loading-status');
-            
-            try {
-                status.textContent = "Processando dados...";
-                progress.style.width = '60%';
-                
-                clearCharts();
+            const file = PROJECT_FILES[projectName];
+            if (!file) return;
 
+            loader.style.display = 'flex';
+            clearCharts();
+
+            try {
+                const response = await fetch(file);
+                const content = await response.text();
                 const rawLines = content.split('\n').filter(l => l.trim());
-                const rawJson = rawLines.map(l => {
-                    try { return JSON.parse(l.replace(/:\s*NaN/g, ': null')); } catch(e) { return null; }
-                }).filter(j => j !== null);
+                const rawJson = rawLines.map(l => JSON.parse(l.replace(/:\s*NaN/g, ': null')));
                 
                 allData = processAndNormalizeData(rawJson);
                 allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                if (allData.length === 0) throw new Error("Sem dados válidos.");
+                // Sincronizar Galeria
+                galIdAtual = PROJECTS_GAL[projectName]?.idStart || 1;
+                galJsonData = rawJson; // Usa os dados brutos carregados para a galeria
+                atualizarImagemGal();
+                renderGradeGal();
+                renderListaGal();
 
                 initFilters();
                 runUpdate();
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
-                document.getElementById('file-name').textContent = `Projeto: ${label}`;
-                
+                document.getElementById('file-name').textContent = `Projeto: ${projectName}`;
                 loader.style.display = 'none';
             } catch (err) {
                 loader.style.display = 'none';
-                alert("Erro: " + err.message);
+                console.error(err);
             }
-        };
-
-        const loadProjectData = async (projectName) => {
-            const file = PROJECT_FILES[projectName];
-            if (!file) return;
-
-            const loader = document.getElementById('loading-container');
-            const progress = document.getElementById('progress-bar');
-            const status = document.getElementById('loading-status');
-            
-            loader.style.display = 'flex';
-            progress.style.width = '10%';
-            status.textContent = `Buscando ${projectName}...`;
-
-            try {
-                const response = await fetch(file);
-                if (!response.ok) throw new Error(`Falha no fetch: ${file}`);
-                progress.style.width = '40%';
-                const content = await response.text();
-                processContentAndInitialize(content, projectName);
-            } catch (err) {
-                loader.style.display = 'none';
-                alert("Erro ao carregar: " + err.message);
-            }
-        };
-
-        const initFilters = () => {
-            const years = [...new Set(allData.map(d => d.data.substring(0, 4)))].sort((a,b) => b-a);
-            const yFilter = document.getElementById('year-filter');
-            yFilter.innerHTML = '<option value="all">Todos os Anos</option>';
-            years.forEach(y => yFilter.add(new Option(y, y)));
-
-            // const hyFilter = document.getElementById('heatmap-year-filter');
-            // hyFilter.innerHTML = '<option value="all">Todos os Anos</option>';
-            // years.forEach(y => hyFilter.add(new Option(y, y)));
         };
 
         const runUpdate = () => {
             const year = document.getElementById('year-filter').value;
             const month = document.getElementById('month-filter').value;
-            const spotted = document.getElementById('spotted-filter').value;
-
             let filtered = allData;
-            if (spotted) filtered = filtered.filter(d => d.data === spotted);
             if (year !== 'all') filtered = filtered.filter(d => d.data.startsWith(year));
             if (month !== 'all') filtered = filtered.filter(d => new Date(d.data + "T12:00:00").getMonth() == month);
-
+            
             const seen = new Set();
             currentFinalData = filtered.filter(d => seen.has(d.id) ? false : seen.add(d.id));
 
             updateKPIs();
-            updateCharts();
-            updateDetailFilters();
-        };
-
-        const updateKPIs = () => {
-            const total = currentFinalData.length;
-            const open = currentFinalData.filter(d => d.situacao.toLowerCase() === 'open').length;
-            const closed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'closed').length;
-            const signed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'signedoff').length;
-            const rate = total > 0 ? ((closed + signed) / total * 100).toFixed(1) : 0;
-
-            document.getElementById('total-records').textContent = total;
-            document.getElementById('open-records').textContent = open;
-            document.getElementById('closed-records').textContent = closed;
-            document.getElementById('signed-off-records').textContent = signed;
-            document.getElementById('not-accepted-records').textContent = currentFinalData.filter(d => d.situacao.toLowerCase() === 'notadefect').length;
-            document.getElementById('resolution-rate').textContent = `${rate}%`;
-        };
-
-        const updateCharts = () => {
             renderHistogram();
             renderResolutionRate();
-            renderStatusHistory();
-            renderCategoryDetails();
-            // renderHeatmap(); // Desativado
             renderScatter();
             renderSLA();
-            renderLocationCharts();
+            renderLocationRanking();
         };
 
+        function updateKPIs() {
+            const total = currentFinalData.length;
+            const closed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'closed').length;
+            const signed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'signedoff').length;
+            document.getElementById('total-records').textContent = total;
+            document.getElementById('open-records').textContent = currentFinalData.filter(d => d.situacao.toLowerCase() === 'open').length;
+            document.getElementById('closed-records').textContent = closed;
+            document.getElementById('signed-off-records').textContent = signed;
+            document.getElementById('resolution-rate').textContent = `${total > 0 ? ((closed+signed)/total*100).toFixed(1) : 0}%`;
+        }
+
+        // --- RENDERS GRÁFICOS ---
         function renderHistogram() {
             if (histogramChart) histogramChart.destroy();
-            const ctx = document.getElementById('histogramChart').getContext('2d');
             const counts = Array(12).fill(0);
             currentFinalData.forEach(d => { counts[new Date(d.data + "T12:00:00").getMonth()]++; });
-            histogramChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    datasets: [{ label: 'Apontamentos', data: counts, backgroundColor: '#01455C', borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            histogramChart = new Chart(document.getElementById('histogramChart').getContext('2d'), {
+                type: 'bar', data: { labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'], datasets: [{ data: counts, backgroundColor: '#01455C' }]},
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
         function renderResolutionRate() {
             if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
-            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d');
-            const totals = Array(12).fill(0);
-            const solved = Array(12).fill(0);
+            const totals = Array(12).fill(0), solved = Array(12).fill(0);
             currentFinalData.forEach(d => {
                 const m = new Date(d.data + "T12:00:00").getMonth();
-                totals[m]++;
-                if (['closed', 'signedoff'].includes(d.situacao.toLowerCase())) solved[m]++;
+                totals[m]++; if (['closed', 'signedoff'].includes(d.situacao.toLowerCase())) solved[m]++;
             });
-            const rates = totals.map((t, i) => t > 0 ? (solved[i] / t * 100) : 0);
-            monthlyResolutionRateChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    datasets: [{ data: rates, borderColor: '#9FC419', backgroundColor: 'rgba(159, 196, 25, 0.1)', fill: true, tension: 0.4, borderWidth: 4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, beginAtZero: true } } }
+            monthlyResolutionRateChart = new Chart(document.getElementById('monthlyResolutionRateChart').getContext('2d'), {
+                type: 'line', data: { labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'], datasets: [{ data: totals.map((t,i) => t > 0 ? (solved[i]/t*100) : 0), borderColor: '#9FC419', fill: false }]},
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } }, plugins: { legend: { display: false } } }
             });
         }
 
-        function renderStatusHistory() {
-            if (statusHistoryChart) statusHistoryChart.destroy();
-            const ctx = document.getElementById('statusHistoryChart').getContext('2d');
-            const created = Array(12).fill(0);
-            const resolved = Array(12).fill(0);
+        function renderScatter() {
+            if (resolutionScatterChart) resolutionScatterChart.destroy();
+            const stats = {};
             currentFinalData.forEach(d => {
-                created[new Date(d.data + "T12:00:00").getMonth()]++;
-                if (d.lastChangedDate) resolved[new Date(d.lastChangedDate + "T12:00:00").getMonth()]++;
+                if (d.daysToResolve !== null) {
+                    if (!stats[d.categoria]) stats[d.categoria] = { t: 0, c: 0 };
+                    stats[d.categoria].t += d.daysToResolve; stats[d.categoria].c++;
+                }
             });
-            statusHistoryChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    datasets: [
-                        { label: 'Entrada', data: created, backgroundColor: '#ef4444', borderRadius: 4 },
-                        { label: 'Saída', data: resolved, backgroundColor: '#9FC419', borderRadius: 4 }
-                    ]
-                },
+            const points = Object.entries(stats).map(([n, s]) => ({ x: s.t/s.c, y: s.c, label: n }));
+            resolutionScatterChart = new Chart(document.getElementById('resolutionScatterChart').getContext('2d'), {
+                type: 'scatter', data: { datasets: [{ data: points, backgroundColor: '#9FC419' }]},
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
 
-        function renderCategoryDetails() {
-            if (detailsChart) detailsChart.destroy();
-            const ctx = document.getElementById('detailsChart').getContext('2d');
-            const cat = document.getElementById('categoria-filter').value;
-            let data = currentFinalData;
-            if (cat !== 'all') data = data.filter(d => d.categoria === cat);
-            const counts = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
-            detailsChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: sorted.map(s => s[0]),
-                    datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#01455C', borderRadius: 4 }]
-                },
+        function renderSLA() {
+            if (slaByCategoryChart) slaByCategoryChart.destroy();
+            const stats = {};
+            currentFinalData.forEach(d => {
+                if (d.withinSla !== null) {
+                    if (!stats[d.categoria]) stats[d.categoria] = { ok: 0, tot: 0 };
+                    stats[d.categoria].tot++; if (d.withinSla) stats[d.categoria].ok++;
+                }
+            });
+            const labels = Object.keys(stats).sort();
+            slaByCategoryChart = new Chart(document.getElementById('slaByCategoryChart').getContext('2d'), {
+                type: 'bar', data: { labels, datasets: [{ data: labels.map(l => (stats[l].ok/stats[l].tot*100)), backgroundColor: '#9FC419' }]},
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        /* function renderHeatmap() {
-            if (heatmapChart) heatmapChart.destroy();
-            const ctx = document.getElementById('heatmapChart').getContext('2d');
-            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
-            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const matrixData = [];
-            let max = 0;
-            cats.forEach(c => {
-                months.forEach((m, i) => {
-                    const v = currentFinalData.filter(d => d.categoria === c && new Date(d.data + "T12:00:00").getMonth() === i).length;
-                    if (v > 0) { matrixData.push({ x: m, y: c, v: v }); if (v > max) max = v; }
-                });
-            });
-            heatmapChart = new Chart(ctx, {
-                type: 'matrix',
-                data: {
-                    datasets: [{
-                        data: matrixData,
-                        backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex]?.v / (max || 1)})`,
-                        width: ({chart}) => chart.chartArea.width / 12 - 2,
-                        height: ({chart}) => chart.chartArea.height / (cats.length || 1) - 2
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { x: { type: 'category', labels: months }, y: { type: 'category', labels: cats, offset: true } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-            document.getElementById('heatmap-legend').innerHTML = `<span>Baixa (1)</span><div class="h-4 w-48 rounded bg-gradient-to-r from-blue-50 to-[--cor-primaria]"></div><span>Alta (${max})</span>`;
-        }
-        */
-
-        function renderScatter() {
-            if (resolutionScatterChart) resolutionScatterChart.destroy();
-            const ctx = document.getElementById('resolutionScatterChart').getContext('2d');
-            const stats = {};
-            currentFinalData.forEach(d => {
-                if (d.daysToResolve !== null) {
-                    if (!stats[d.categoria]) stats[d.categoria] = { time: 0, count: 0 };
-                    stats[d.categoria].time += d.daysToResolve; stats[d.categoria].count++;
-                }
-            });
-            const points = Object.entries(stats).map(([name, s]) => ({ x: s.time / s.count, y: s.count, label: name }));
-            resolutionScatterChart = new Chart(ctx, {
-                type: 'scatter',
-                data: { datasets: [{ data: points, backgroundColor: '#9FC419', pointRadius: 10, pointHoverRadius: 15 }] },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { x: { title: { display: true, text: 'Dias Médios' } }, y: { title: { display: true, text: 'Volume' } } },
-                    plugins: { tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } } }
-                }
-            });
-            updateScatterInsights(points);
-        }
-
-        function updateScatterInsights(points) {
-            const container = document.getElementById('inference-section');
-            if (points.length < 2) return;
-            const avgX = points.reduce((a,b) => a + b.x, 0) / points.length;
-            const avgY = points.reduce((a,b) => a + b.y, 0) / points.length;
-            const critical = points.filter(p => p.x > avgX && p.y > avgY);
-            container.innerHTML = `
-                <div class="p-6 bg-red-50 rounded-2xl border-l-4 border-red-400">
-                    <h4 class="font-bold text-red-800 mb-2">Atenção Prioritária (Críticos)</h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${critical.map(c => `<span onclick="showDefectDetails('${c.label}')" class="px-3 py-1 bg-red-200 text-red-800 text-xs font-bold rounded-full cursor-pointer hover:scale-105 transition-transform">${c.label}</span>`).join('')}
-                    </div>
-                </div>`;
-        }
-
-        function renderSLA() {
-            if (slaByCategoryChart) slaByCategoryChart.destroy();
-            const ctx = document.getElementById('slaByCategoryChart').getContext('2d');
-            const stats = {};
-            currentFinalData.forEach(d => {
-                if (d.withinSla !== null) {
-                    if (!stats[d.categoria]) stats[d.categoria] = { ok: 0, total: 0 };
-                    stats[d.categoria].total++; if (d.withinSla) stats[d.categoria].ok++;
-                }
-            });
-            const sorted = Object.entries(stats).map(([name, s]) => ({ name, rate: (s.ok / s.total * 100) })).sort((a,b) => b.rate - a.rate);
-            slaByCategoryChart = new Chart(ctx, {
-                type: 'bar',
-                data: { labels: sorted.map(s => s.name), datasets: [{ data: sorted.map(s => s.rate), backgroundColor: '#9FC419', borderRadius: 4 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } }
-            });
-        }
-
-        function renderLocationCharts() {
+        function renderLocationRanking() {
             if (locationRankingChart) locationRankingChart.destroy();
-            const ctxRank = document.getElementById('locationRankingChart').getContext('2d');
             const counts = currentFinalData.reduce((acc, d) => { acc[d.Location] = (acc[d.Location] || 0) + 1; return acc; }, {});
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
-            locationRankingChart = new Chart(ctxRank, {
-                type: 'bar',
-                data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', borderRadius: 4 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+            const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 15);
+            locationRankingChart = new Chart(document.getElementById('locationRankingChart').getContext('2d'), {
+                type: 'bar', data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444' }]},
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
-            
-            /*
-            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
-            const ctxMap = document.getElementById('locationCategoryHeatmap').getContext('2d');
-            const topLocs = sorted.map(s => s[0]);
-            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort().slice(0, 10);
-            const matrixData = []; let max = 0;
-            topLocs.forEach(l => {
-                cats.forEach(c => {
-                    const v = currentFinalData.filter(d => d.Location === l && d.categoria === c).length;
-                    if (v > 0) { matrixData.push({ x: c, y: l, v: v }); if (v > max) max = v; }
-                });
+        }
+
+        // --- LÓGICA GALERIA ---
+        function getGalUrl() {
+            const proj = PROJECTS_GAL[document.getElementById('project-selector').value];
+            return `${BASE_DOMAIN}/${proj.path}/images/tsnags/`;
+        }
+
+        function switchGalView(mode) {
+            document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`gal-${mode}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function atualizarImagemGal() {
+            const img = document.getElementById('mainImage');
+            img.src = `${getGalUrl()}${galIdAtual}.jpg${URL_SUFIXO}`;
+            document.getElementById('jumpInputGal').value = galIdAtual;
+            document.getElementById('statusBadgeGal').textContent = `Carregando ID #${galIdAtual}`;
+        }
+
+        function mudarFotoGal(dir) { galIdAtual += dir; atualizarImagemGal(); }
+        
+        function tratarErroImagemGal() {
+            document.getElementById('mainImage').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23111' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23444'%3EImagem n%C3%A3o encontrada%3C/text%3E%3C/svg%3E";
+        }
+
+        function renderGradeGal() {
+            const grid = document.getElementById('gridContentGal');
+            grid.innerHTML = '';
+            const proj = PROJECTS_GAL[document.getElementById('project-selector').value];
+            for(let i=proj.idStart; i < proj.idStart + 40; i++) {
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+                div.onclick = () => { galIdAtual = i; switchGalView('carousel'); atualizarImagemGal(); };
+                div.innerHTML = `<img src="${getGalUrl()}${i}.jpg${URL_SUFIXO}" loading="lazy" onerror="this.parentElement.style.display='none'">`;
+                grid.appendChild(div);
+            }
+        }
+
+        function renderListaGal() {
+            const list = document.getElementById('dataListGal');
+            list.innerHTML = '';
+            galJsonData.slice(0, 50).forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'data-item-card';
+                div.onclick = () => verDetalheGal(item, div);
+                div.innerHTML = `<div class="font-bold text-blue-400">#${item.SnagID}</div><div class="text-xs opacity-70 truncate">${item.Defect || 'Sem descrição'}</div>`;
+                list.appendChild(div);
             });
-            locationCategoryHeatmap = new Chart(ctxMap, {
-                type: 'matrix',
-                data: { datasets: [{ data: matrixData, backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex].v / (max || 1)})`, width: ({chart}) => chart.chartArea.width / (cats.length || 1) - 2, height: ({chart}) => chart.chartArea.height / (topLocs.length || 1) - 2 }] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: cats }, y: { type: 'category', labels: topLocs, offset: true } } }
-            });
-            */
+        }
+
+        function verDetalheGal(item, el) {
+            document.querySelectorAll('.data-item-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            const detail = document.getElementById('dataDetailGal');
+            detail.innerHTML = `
+                <div class="space-y-6">
+                    <img src="${getGalUrl()}${item.SnagID}.jpg${URL_SUFIXO}" class="w-full h-80 object-contain bg-black rounded-lg">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-white/5 rounded">
+                            <label class="text-[10px] uppercase opacity-50 block">ID</label>
+                            <span class="font-bold">#${item.SnagID}</span>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded">
+                            <label class="text-[10px] uppercase opacity-50 block">Status</label>
+                            <span class="font-bold">${item.Status}</span>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded col-span-2">
+                            <label class="text-[10px] uppercase opacity-50 block">Defeito</label>
+                            <span class="font-bold">${item.Defect || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- AUXILIARES ---
+        function initFilters() {
+            const years = [...new Set(allData.map(d => d.data.substring(0, 4)))].sort((a,b) => b-a);
+            const yFilter = document.getElementById('year-filter');
+            yFilter.innerHTML = '<option value="all">Todos os Anos</option>';
+            years.forEach(y => yFilter.add(new Option(y, y)));
         }
 
         function openTab(evt, tabName) {
-            const contents = document.getElementsByClassName("tab-content");
-            for (let c of contents) c.style.display = "none";
-            const links = document.getElementsByClassName("tab-link");
-            for (let l of links) l.classList.remove("active");
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.classList.add("active");
-            
-            setTimeout(() => {
-                if (histogramChart) histogramChart.resize();
-                if (monthlyResolutionRateChart) monthlyResolutionRateChart.resize();
-                if (statusHistoryChart) statusHistoryChart.resize();
-                if (detailsChart) detailsChart.resize();
-                // if (heatmapChart) heatmapChart.resize();
-                if (resolutionScatterChart) resolutionScatterChart.resize();
-                if (slaByCategoryChart) slaByCategoryChart.resize();
-                if (locationRankingChart) locationRankingChart.resize();
-                // if (locationCategoryHeatmap) locationCategoryHeatmap.resize();
-            }, 50);
-        }
-
-        function showDefectDetails(category) {
-            const data = currentFinalData.filter(d => d.categoria === category);
-            const defects = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
-            const sorted = Object.entries(defects).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            document.getElementById('modal-title').textContent = category;
-            document.getElementById('modal-body').innerHTML = `
-                <div class="space-y-4">
-                    ${sorted.map(([name, count]) => `
-                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
-                            <span class="font-semibold text-slate-700">${name}</span>
-                            <span class="font-black text-[--cor-primaria]">${count}</span>
-                        </div>`).join('')}
-                </div>`;
-            document.getElementById('modal-container').style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('modal-container').style.display = 'none'; }
-
-        function updateDetailFilters() {
-            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
-            const catSelect = document.getElementById('categoria-filter');
-            const current = catSelect.value;
-            catSelect.innerHTML = '<option value="all">Categoria</option>';
-            cats.forEach(c => catSelect.add(new Option(c, c)));
-            catSelect.value = cats.includes(current) ? current : 'all';
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(tabName).style.display = 'block';
+            evt.currentTarget.classList.add('active');
+            setTimeout(() => { if (histogramChart) histogramChart.resize(); }, 50);
         }
 
         document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
         document.getElementById('year-filter').addEventListener('change', runUpdate);
         document.getElementById('month-filter').addEventListener('change', runUpdate);
-        document.getElementById('categoria-filter').addEventListener('change', runUpdate);
+        document.getElementById('jumpInputGal').addEventListener('change', (e) => { galIdAtual = parseInt(e.target.value); atualizarImagemGal(); });
 
-        document.getElementById('json-file-input').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const loader = document.getElementById('loading-container');
-                loader.style.display = 'flex';
-                document.getElementById('loading-status').textContent = "Lendo arquivo...";
-                const reader = new FileReader();
-                reader.onload = (ev) => processContentAndInitialize(ev.target.result, file.name);
-                reader.readAsText(file);
-            }
-        });
-
-        window.onload = () => {
-            loadProjectData(document.getElementById('project-selector').value);
-        };
+        window.onload = () => loadProjectData(document.getElementById('project-selector').value);
     </script>
 </body>
 </html>
