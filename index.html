@@ -278,6 +278,8 @@
                     <div class="h-[500px]"><canvas id="detailsChart"></canvas></div>
                 </section>
 
+                <!-- Mapa de Calor Desativado Temporariamente -->
+                <!-- 
                 <article class="glass-card rounded-2xl p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-bold text-slate-800">Mapa de Calor: Concentração Temporal</h3>
@@ -288,6 +290,7 @@
                     <div class="h-[500px]"><canvas id="heatmapChart"></canvas></div>
                     <div id="heatmap-legend" class="mt-8 flex items-center justify-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest"></div>
                 </article>
+                -->
             </div>
 
             <div id="eficiencia" class="tab-content space-y-8" style="display: none;">
@@ -319,8 +322,11 @@
                         <div class="h-[600px]"><canvas id="locationRankingChart"></canvas></div>
                     </article>
                     <article class="glass-card rounded-2xl p-6 lg:col-span-2">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Mapa de Localização vs. Defeitos</h3>
-                        <div class="h-[600px]"><canvas id="locationCategoryHeatmap"></canvas></div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Concentração de Defeitos por Local</h3>
+                        <div class="h-[600px] bg-slate-50 flex items-center justify-center rounded-xl border border-dashed border-slate-200">
+                             <!-- <canvas id="locationCategoryHeatmap"></canvas> -->
+                             <p class="text-slate-400 font-medium">Análise Geográfica Detalhada Desativada Temporariamente</p>
+                        </div>
                     </article>
                 </div>
             </div>
@@ -448,15 +454,15 @@
             // REDUNDÂNCIA: Destruição explícita via variável global
             if (histogramChart) histogramChart.destroy();
             if (detailsChart) detailsChart.destroy();
-            if (heatmapChart) heatmapChart.destroy();
+            // if (heatmapChart) heatmapChart.destroy(); // Desativado
             if (slaByCategoryChart) slaByCategoryChart.destroy();
             if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
             if (resolutionScatterChart) resolutionScatterChart.destroy();
             if (statusHistoryChart) statusHistoryChart.destroy();
             if (locationRankingChart) locationRankingChart.destroy();
-            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
+            // if (locationCategoryHeatmap) locationCategoryHeatmap.destroy(); // Desativado
             
-            histogramChart = detailsChart = heatmapChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = locationCategoryHeatmap = null;
+            histogramChart = detailsChart = /* heatmapChart = */ slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = /* locationCategoryHeatmap = */ null;
         };
 
         const processContentAndInitialize = (content, label) => {
@@ -524,9 +530,9 @@
             yFilter.innerHTML = '<option value="all">Todos os Anos</option>';
             years.forEach(y => yFilter.add(new Option(y, y)));
 
-            const hyFilter = document.getElementById('heatmap-year-filter');
-            hyFilter.innerHTML = '<option value="all">Todos os Anos</option>';
-            years.forEach(y => hyFilter.add(new Option(y, y)));
+            // const hyFilter = document.getElementById('heatmap-year-filter');
+            // hyFilter.innerHTML = '<option value="all">Todos os Anos</option>';
+            // years.forEach(y => hyFilter.add(new Option(y, y)));
         };
 
         const runUpdate = () => {
@@ -567,7 +573,7 @@
             renderResolutionRate();
             renderStatusHistory();
             renderCategoryDetails();
-            renderHeatmap();
+            // renderHeatmap(); // Desativado
             renderScatter();
             renderSLA();
             renderLocationCharts();
@@ -649,7 +655,7 @@
             });
         }
 
-        function renderHeatmap() {
+        /* function renderHeatmap() {
             if (heatmapChart) heatmapChart.destroy();
             const ctx = document.getElementById('heatmapChart').getContext('2d');
             const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
@@ -680,6 +686,7 @@
             });
             document.getElementById('heatmap-legend').innerHTML = `<span>Baixa (1)</span><div class="h-4 w-48 rounded bg-gradient-to-r from-blue-50 to-[--cor-primaria]"></div><span>Alta (${max})</span>`;
         }
+        */
 
         function renderScatter() {
             if (resolutionScatterChart) resolutionScatterChart.destroy();
@@ -748,6 +755,7 @@
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
             });
             
+            /*
             if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
             const ctxMap = document.getElementById('locationCategoryHeatmap').getContext('2d');
             const topLocs = sorted.map(s => s[0]);
@@ -764,6 +772,7 @@
                 data: { datasets: [{ data: matrixData, backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex].v / (max || 1)})`, width: ({chart}) => chart.chartArea.width / (cats.length || 1) - 2, height: ({chart}) => chart.chartArea.height / (topLocs.length || 1) - 2 }] },
                 options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: cats }, y: { type: 'category', labels: topLocs, offset: true } } }
             });
+            */
         }
 
         function openTab(evt, tabName) {
@@ -779,11 +788,11 @@
                 if (monthlyResolutionRateChart) monthlyResolutionRateChart.resize();
                 if (statusHistoryChart) statusHistoryChart.resize();
                 if (detailsChart) detailsChart.resize();
-                if (heatmapChart) heatmapChart.resize();
+                // if (heatmapChart) heatmapChart.resize();
                 if (resolutionScatterChart) resolutionScatterChart.resize();
                 if (slaByCategoryChart) slaByCategoryChart.resize();
                 if (locationRankingChart) locationRankingChart.resize();
-                if (locationCategoryHeatmap) locationCategoryHeatmap.resize();
+                // if (locationCategoryHeatmap) locationCategoryHeatmap.resize();
             }, 50);
         }
 
