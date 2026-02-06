@@ -118,7 +118,7 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        /* Estilos Galeria Integrada */
+        /* Estilos Galeria Integrada (Apenas Dados) */
         .galeria-wrapper {
             background: var(--gal-bg);
             border-radius: 1.5rem;
@@ -129,51 +129,62 @@
             border: 1px solid var(--gal-border);
         }
 
-        .view-switcher {
+        .gal-header {
+            padding: 15px 30px;
             display: flex;
-            background: #000;
-            padding: 4px;
-            border-radius: 8px;
-            border: 1px solid var(--gal-border);
-            gap: 4px;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 30, 30, 0.95);
+            border-bottom: 1px solid var(--gal-border);
         }
 
-        .view-btn {
-            background: transparent;
-            color: #a1a1aa;
-            border: none;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .view-btn.active { background: #2a2a2a; color: white; }
-
-        .view-pane { display: none; flex: 1; overflow: hidden; position: relative; }
-        .view-pane.active { display: flex; }
-
-        #mainImageGal { max-width: 100%; max-height: 85%; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-
-        .data-sidebar { width: 320px; background: #181818; border-right: 1px solid #333; display: flex; flex-direction: column; }
-        .data-item-card { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; transition: background 0.2s; }
-        .data-item-card:hover { background: #252525; }
-        .data-item-card.selected { border-left: 4px solid var(--cor-secundaria); background: #2a2a2a; }
-
-        .grid-content-gal {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            padding: 20px;
+        .data-sidebar { 
+            width: 350px; 
+            background: #181818; 
+            border-right: 1px solid #333; 
+            display: flex; 
+            flex-direction: column; 
             overflow-y: auto;
-            width: 100%;
         }
-        .grid-item-gal { background: #1e1e1e; border-radius: 8px; cursor: pointer; overflow: hidden; aspect-ratio: 1; border: 1px solid #333; position: relative; }
-        .grid-item-gal img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.3s; }
-        .grid-item-gal:hover img { opacity: 1; transform: scale(1.05); }
-        .grid-label-gal { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 4px; font-size: 10px; color: #fff; }
+        
+        .data-item-card { 
+            padding: 16px; 
+            border-bottom: 1px solid #222; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        
+        .data-item-card:hover { background: #252525; }
+        .data-item-card.selected { 
+            border-left: 4px solid var(--cor-secundaria); 
+            background: #2a2a2a; 
+        }
+
+        .detail-panel {
+            flex: 1;
+            overflow-y: auto;
+            background: #0a0a0a;
+            padding: 2.5rem;
+        }
+
+        .image-preview-box {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .image-preview-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -313,52 +324,28 @@
                 </section>
             </div>
 
-            <!-- ABA: GALERIA E RELATÓRIOS -->
+            <!-- ABA: GALERIA E RELATÓRIOS (APENAS DADOS) -->
             <div id="galeriaRelatorios" class="tab-content space-y-8" style="display: none;">
                 <div class="galeria-wrapper shadow-2xl">
                     <div class="gal-header">
                         <div class="flex items-center gap-4">
-                            <span class="bg-[--cor-secundaria] text-black text-[10px] font-black px-2 py-1 rounded">GALERIA PRO</span>
-                            <div id="statusBadgeGal" class="text-xs text-white/40 font-medium">Sincronizado</div>
-                        </div>
-                        <div class="view-switcher">
-                            <button class="view-btn active" onclick="switchGalView('carousel')">FOCO</button>
-                            <button class="view-btn" onclick="switchGalView('grid')">GRADE</button>
-                            <button class="view-btn" onclick="switchGalView('data')">DADOS</button>
+                            <span class="bg-[--cor-secundaria] text-black text-[10px] font-black px-2 py-1 rounded tracking-tighter">RELATÓRIO TÉCNICO</span>
+                            <div id="statusBadgeGal" class="text-xs text-white/30 font-bold uppercase tracking-widest">Sincronizado via SnagID</div>
                         </div>
                     </div>
 
-                    <div class="flex-1 relative overflow-hidden bg-black">
-                        <!-- MODO FOCO -->
-                        <div id="gal-carousel" class="view-pane active flex flex-col items-center justify-center p-6">
-                            <img id="mainImageGal" src="" alt="Defeito" onerror="tratarErroImagemGal()">
-                            <div class="mt-8 flex items-center gap-6 bg-white/5 backdrop-blur-xl p-4 rounded-2xl border border-white/10">
-                                <button onclick="mudarFotoGal(-1)" class="p-2 hover:bg-white/10 rounded-xl transition-all">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
-                                </button>
-                                <div class="flex flex-col items-center">
-                                    <span class="text-[10px] font-black text-white/30 uppercase mb-1">Registro SnagR</span>
-                                    <input type="number" id="jumpInputGal" class="bg-transparent border-b border-white/20 text-white text-center w-24 text-lg font-black focus:outline-none">
-                                </div>
-                                <button onclick="mudarFotoGal(1)" class="p-2 hover:bg-white/10 rounded-xl transition-all">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="flex-1 flex overflow-hidden">
+                        <!-- LISTA LATERAL -->
+                        <div class="data-sidebar" id="dataListGal"></div>
 
-                        <!-- MODO GRADE -->
-                        <div id="gal-grid" class="view-pane">
-                            <div id="gridContentGal" class="grid-content-gal"></div>
-                        </div>
-
-                        <!-- MODO DADOS (Sincronizado SnagID) -->
-                        <div id="gal-data" class="view-pane flex-row">
-                            <div class="data-sidebar" id="dataListGal"></div>
-                            <div class="flex-1 p-10 overflow-y-auto bg-[#0a0a0a]" id="dataDetailGal">
-                                <div class="h-full flex flex-col items-center justify-center text-white/20">
-                                    <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
-                                    <p class="font-bold uppercase text-xs tracking-widest">Selecione um registro na lista lateral</p>
-                                </div>
+                        <!-- PAINEL DE DETALHES -->
+                        <div class="detail-panel" id="dataDetailGal">
+                            <div class="h-full flex flex-col items-center justify-center text-white/10 text-center">
+                                <svg class="w-20 h-20 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <h3 class="text-lg font-black uppercase tracking-[0.2em]">Inspeção de Itens</h3>
+                                <p class="text-sm font-medium mt-2 max-w-xs">Selecione um registro na lista lateral para carregar a evidência fotográfica e os metadados do projeto.</p>
                             </div>
                         </div>
                     </div>
@@ -397,13 +384,11 @@
             "Unificado": { path: 'pg37ctmedico', idStart: 1, file: './Snags_Unificado_CM.jsonl' }
         };
 
-        let galIdAtual = 1;
         let allData = [];
         let currentFinalData = [];
         let rawJsonData = [];
         const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
 
-        // Ajustes globais do Chart.js
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.color = '#94a3b8';
 
@@ -476,10 +461,7 @@
                 allData = processAndNormalizeData(rawJsonData);
                 allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                // Sincronização Automática Galeria
-                galIdAtual = config.idStart;
-                atualizarImagemGal();
-                renderGradeGal();
+                // Sincronização Automática Relatório
                 renderListaGal();
 
                 initFilters();
@@ -625,92 +607,68 @@
             });
         }
 
-        // --- LÓGICA GALERIA (Sincronizada SnagID) ---
+        // --- LÓGICA RELATÓRIO TÉCNICO (Sincronizada via SnagID) ---
         function getGalUrlBase() {
             const proj = PROJECTS_CONFIG[document.getElementById('project-selector').value];
             return `${BASE_DOMAIN}/${proj.path}/images/tsnags/`;
         }
 
-        function switchGalView(mode) {
-            document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`gal-${mode}`).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        function atualizarImagemGal() {
-            const img = document.getElementById('mainImageGal');
-            img.src = `${getGalUrlBase()}${galIdAtual}.jpg${URL_SUFIXO}`;
-            document.getElementById('jumpInputGal').value = galIdAtual;
-        }
-
-        function mudarFotoGal(dir) { galIdAtual += dir; atualizarImagemGal(); }
-        function tratarErroImagemGal() {
-            document.getElementById('mainImageGal').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23111' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23444'%3EImagem n%C3%A3o encontrada%3C/text%3E%3C/svg%3E";
-        }
-
-        function renderGradeGal() {
-            const grid = document.getElementById('gridContentGal');
-            grid.innerHTML = '';
-            const config = PROJECTS_CONFIG[document.getElementById('project-selector').value];
-            // Renderiza um lote inicial de 40 fotos baseadas no range do projeto
-            for(let i=config.idStart; i < config.idStart + 40; i++) {
-                const div = document.createElement('div');
-                div.className = 'grid-item-gal';
-                div.onclick = () => { galIdAtual = i; switchGalView('carousel'); atualizarImagemGal(); };
-                div.innerHTML = `<img src="${getGalUrlBase()}${i}.jpg${URL_SUFIXO}" loading="lazy" onerror="this.parentElement.style.display='none'"><div class="grid-label-gal">#${i}</div>`;
-                grid.appendChild(div);
-            }
-        }
-
         function renderListaGal() {
             const list = document.getElementById('dataListGal');
             list.innerHTML = '';
-            // Lista os primeiros 100 itens da base JSON para referência rápida
-            rawJsonData.slice(0, 100).forEach((item) => {
+            // Lista os primeiros 150 itens para navegação fluida
+            rawJsonData.slice(0, 150).forEach((item) => {
                 const div = document.createElement('div');
                 div.className = 'data-item-card';
                 div.onclick = () => verDetalheGal(item, div);
                 div.innerHTML = `
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-[10px] font-black text-blue-400">#${item.SnagID}</span>
-                        <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-white/50 uppercase">${item.Status}</span>
+                        <span class="text-[10px] font-black text-blue-400 tracking-tighter">SNAG #${item.SnagID}</span>
+                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-white/10 text-white/50 uppercase font-black">${item.Status}</span>
                     </div>
-                    <div class="text-[11px] text-white/80 font-bold truncate">${item.Defect || 'S/ Descrição'}</div>
+                    <div class="text-[11px] text-white/70 font-bold truncate">${item.Defect || 'Sem Descrição'}</div>
                 `;
                 list.appendChild(div);
             });
         }
 
-        // VÍNCULO DIRETO: SNAG ID -> IMAGEM
         function verDetalheGal(item, el) {
             document.querySelectorAll('.data-item-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             const detail = document.getElementById('dataDetailGal');
             
             detail.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-8 animate-fade-in">
-                    <div class="relative group">
-                        <img src="${getGalUrlBase()}${item.SnagID}.jpg${URL_SUFIXO}" class="w-full h-[400px] object-contain bg-black rounded-3xl border border-white/5 shadow-2xl" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23111%22/%3E%3C/svg%3E'">
-                        <div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black text-white/50">VÍNCULO DIRETO SNAGID: ${item.SnagID}</div>
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <div class="image-preview-box">
+                        <img src="${getGalUrlBase()}${item.SnagID}.jpg${URL_SUFIXO}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23111%22/%3E%3C/svg%3E'">
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Categoria</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Identificador</label>
+                            <span class="text-white text-base font-black">#${item.SnagID}</span>
+                        </div>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Status Atual</label>
+                            <span class="text-white text-base font-black uppercase">${item.Status}</span>
+                        </div>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Prioridade</label>
+                            <span class="text-white text-base font-black">Nível ${item.Priority || 'N/A'}</span>
+                        </div>
+                        
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 md:col-span-1">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Categoria</label>
                             <span class="text-white text-sm font-bold">${item.Category || 'N/A'}</span>
                         </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Localização</label>
-                            <span class="text-white text-sm font-bold">${item.Location || 'N/A'}</span>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 md:col-span-2">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Localização</label>
+                            <span class="text-white text-sm font-bold">${item.Location || 'Não especificada'}</span>
                         </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Prioridade</label>
-                            <span class="text-white text-sm font-bold">Nível ${item.Priority || 'N/A'}</span>
-                        </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10 col-span-full">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Descrição do Defeito</label>
-                            <span class="text-white text-sm font-bold">${item.Defect || 'Nenhum detalhe adicional fornecido.'}</span>
+
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 col-span-full">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Descrição Técnica do Defeito</label>
+                            <p class="text-white text-sm leading-relaxed font-medium">${item.Defect || 'Nenhum detalhe adicional registrado para este item.'}</p>
                         </div>
                     </div>
                 </div>
@@ -731,7 +689,6 @@
             document.getElementById(tabName).style.display = 'block';
             evt.currentTarget.classList.add('active');
             
-            // Forçar redimensionamento dos gráficos ativos
             setTimeout(() => {
                 [histogramChart, monthlyResolutionRateChart, resolutionScatterChart, slaByCategoryChart, locationRankingChart].forEach(c => {
                     if (c) c.resize();
@@ -742,10 +699,6 @@
         document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
         document.getElementById('year-filter').addEventListener('change', runUpdate);
         document.getElementById('month-filter').addEventListener('change', runUpdate);
-        document.getElementById('jumpInputGal').addEventListener('change', (e) => { 
-            galIdAtual = parseInt(e.target.value); 
-            atualizarImagemGal(); 
-        });
 
         window.onload = () => loadProjectData(document.getElementById('project-selector').value);
     </script>
