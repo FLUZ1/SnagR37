@@ -20,8 +20,9 @@
             --cor-alerta: #ef4444;
             --cor-aviso: #f59e0b;
             --cor-info: #3b82f6;
-            /* Cores da Galeria */
-            --gal-bg: #1e1e1e;
+            /* Cores da Galeria Dark */
+            --gal-bg: #121212;
+            --gal-card: #1e1e1e;
             --gal-accent: #3b82f6;
             --gal-border: #333;
         }
@@ -33,22 +34,35 @@
             overflow-x: hidden;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-light) 100%);
-            border-bottom: 4px solid var(--cor-secundaria);
-        }
-
+        /* Design de Cartão Premium */
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1rem;
         }
 
+        .glass-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-light) 100%);
+            border-bottom: 4px solid var(--cor-secundaria);
+        }
+
+        /* Tabs Personalizadas */
         .tab-link {
             position: relative;
             transition: color 0.3s ease;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
         }
 
         .tab-link::after {
@@ -63,17 +77,27 @@
             transform: translateX(-50%);
         }
 
-        .tab-link.active { color: var(--cor-secundaria) !important; }
+        .tab-link.active { color: white !important; }
         .tab-link.active::after { width: 100%; }
 
         .stat-card {
-            border-radius: 12px;
             padding: 1.5rem;
             border-left: 6px solid var(--cor-primaria);
         }
+        .stat-card.alerta { border-left-color: var(--cor-alerta); }
+        .stat-card.sucesso { border-left-color: var(--cor-secundaria); }
 
+        .chart-explanation {
+            border-left: 4px solid var(--cor-info);
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Loader Overlay */
         .loader-overlay {
-            background: rgba(1, 69, 92, 0.9);
+            background: rgba(1, 69, 92, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -82,8 +106,8 @@
         }
 
         .pulse-loader {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             background-color: var(--cor-secundaria);
             border-radius: 100%;
             animation: pulse 1.2s infinite ease-in-out;
@@ -94,24 +118,15 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        /* --- ESTILOS ESPECÍFICOS DA GALERIA --- */
-        .galeria-container {
-            background: #121212;
+        /* Estilos Galeria Integrada */
+        .galeria-wrapper {
+            background: var(--gal-bg);
             border-radius: 1.5rem;
             overflow: hidden;
-            color: #fff;
             display: flex;
             flex-direction: column;
-            height: 800px;
-        }
-
-        .gal-header {
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(30, 30, 30, 0.95);
-            border-bottom: 1px solid var(--gal-border);
+            height: 750px;
+            border: 1px solid var(--gal-border);
         }
 
         .view-switcher {
@@ -127,135 +142,109 @@
             background: transparent;
             color: #a1a1aa;
             border: none;
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             transition: all 0.2s;
         }
 
-        .view-btn.active {
-            background: #1e1e1e;
-            color: white;
-        }
+        .view-btn.active { background: #2a2a2a; color: white; }
 
-        .view-pane {
-            display: none;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
+        .view-pane { display: none; flex: 1; overflow: hidden; position: relative; }
+        .view-pane.active { display: flex; }
 
-        .view-pane.active {
-            display: flex;
-            flex-direction: column;
-        }
+        #mainImageGal { max-width: 100%; max-height: 85%; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
-        #mainImage {
-            max-width: 100%;
-            max-height: 600px;
-            object-fit: contain;
-            transition: opacity 0.4s;
-        }
+        .data-sidebar { width: 320px; background: #181818; border-right: 1px solid #333; display: flex; flex-direction: column; }
+        .data-item-card { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; transition: background 0.2s; }
+        .data-item-card:hover { background: #252525; }
+        .data-item-card.selected { border-left: 4px solid var(--cor-secundaria); background: #2a2a2a; }
 
-        .grid-content {
+        .grid-content-gal {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
             padding: 20px;
             overflow-y: auto;
+            width: 100%;
         }
-
-        .grid-item {
-            background: #1e1e1e;
-            border-radius: 8px;
-            border: 1px solid #333;
-            cursor: pointer;
-            overflow: hidden;
-            aspect-ratio: 1;
-        }
-
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        .data-sidebar { width: 350px; background: #181818; border-right: 1px solid #333; overflow-y: auto; }
-        .data-item-card { padding: 12px; border-bottom: 1px solid #222; cursor: pointer; }
-        .data-item-card:hover { background: #252525; }
-        .data-item-card.selected { border-left: 4px solid var(--gal-accent); background: #2a2a2a; }
-
-        .status-badge-gal { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #333; }
-        .status-badge-gal.success { background: #065f46; color: #34d399; }
+        .grid-item-gal { background: #1e1e1e; border-radius: 8px; cursor: pointer; overflow: hidden; aspect-ratio: 1; border: 1px solid #333; position: relative; }
+        .grid-item-gal img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.3s; }
+        .grid-item-gal:hover img { opacity: 1; transform: scale(1.05); }
+        .grid-label-gal { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 4px; font-size: 10px; color: #fff; }
     </style>
 </head>
 <body>
 
+    <!-- Overlay de Carregamento -->
     <div id="loading-container" class="loader-overlay fixed inset-0" style="display: none;">
         <div class="pulse-loader mb-6"></div>
-        <h2 id="loading-status" class="text-white text-xl font-semibold tracking-wide">Processando...</h2>
+        <h2 id="loading-status" class="text-white text-xl font-bold tracking-tight">Sincronizando Dados...</h2>
         <div class="w-64 bg-white/20 rounded-full h-1.5 mt-4 overflow-hidden">
             <div id="progress-bar" class="bg-[--cor-secundaria] h-full transition-all duration-300" style="width: 0%"></div>
         </div>
     </div>
 
-    <header class="sticky top-0 z-40 shadow-lg">
+    <!-- Cabeçalho Principal -->
+    <header class="sticky top-0 z-40 shadow-xl">
         <div class="max-w-[1600px] mx-auto px-6 py-4 flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <div class="bg-white/10 p-2 rounded-lg">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <div class="bg-white/10 p-2.5 rounded-xl">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-extrabold text-white tracking-tight">Dashboard de Qualidade</h1>
-                    <p class="text-white/70 text-sm font-medium">Controle Interativo SnagR</p>
+                    <h1 class="text-xl font-extrabold text-white tracking-tight">Dashboard de Qualidade</h1>
+                    <p class="text-white/60 text-xs font-bold uppercase tracking-wider">Gestão SnagR PG37</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 bg-black/10 p-2 rounded-xl border border-white/10">
-                <label for="project-selector" class="text-white/80 text-xs font-bold uppercase tracking-wider ml-2">Projeto:</label>
-                <select id="project-selector" class="bg-transparent text-white font-bold text-sm cursor-pointer border-none focus:ring-0">
-                    <option class="text-gray-900" value="Unificado">Geral Unificado</option>
-                    <option class="text-gray-900" value="Hotel" selected>Hotel</option>
-                    <option class="text-gray-900" value="Centro Medico">Centro Médico</option>
-                    <option class="text-gray-900" value="Ensino">Ensino</option>
-                    <option class="text-gray-900" value="Residencial">Residencial</option>
-                    <option class="text-gray-900" value="Embasamento">Embasamento</option>
+            <div class="flex items-center gap-4 bg-black/20 p-2 rounded-xl border border-white/10">
+                <label class="text-white/50 text-[10px] font-black uppercase ml-2">Projeto Ativo:</label>
+                <select id="project-selector" class="bg-transparent text-white font-bold text-sm cursor-pointer border-none focus:ring-0 pr-8">
+                    <option class="text-slate-900" value="Unificado">Geral Unificado</option>
+                    <option class="text-slate-900" value="Hotel" selected>Hotel</option>
+                    <option class="text-slate-900" value="Centro Medico">Centro Médico</option>
+                    <option class="text-slate-900" value="Ensino">Ensino</option>
+                    <option class="text-slate-900" value="Residencial">Residencial</option>
+                    <option class="text-slate-900" value="Embasamento">Embasamento</option>
                 </select>
             </div>
         </div>
 
-        <div class="max-w-[1600px] mx-auto px-6 flex gap-8">
-            <button onclick="openTab(event, 'visaoGeral')" class="tab-link active text-white font-bold py-3 text-sm uppercase tracking-widest">Visão Geral</button>
-            <button onclick="openTab(event, 'eficiencia')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Eficiência (SLA)</button>
-            <button onclick="openTab(event, 'localizacao')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Localização</button>
-            <button onclick="openTab(event, 'galeriaRelatorios')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Galeria & Fotos</button>
-        </div>
+        <nav class="max-w-[1600px] mx-auto px-6 flex gap-10">
+            <button onclick="openTab(event, 'visaoGeral')" class="tab-link active py-4">Visão Geral</button>
+            <button onclick="openTab(event, 'eficiencia')" class="tab-link py-4">Eficiência (SLA)</button>
+            <button onclick="openTab(event, 'localizacao')" class="tab-link py-4">Localização</button>
+            <button onclick="openTab(event, 'galeriaRelatorios')" class="tab-link py-4">Galeria & Relatórios</button>
+        </nav>
     </header>
 
     <main class="max-w-[1600px] mx-auto p-6">
         
-        <div id="initial-message" class="text-center py-20 animate-pulse">
-            <p class="text-slate-400 text-xl font-medium">Selecione um projeto ou carregue um arquivo para iniciar a análise.</p>
+        <div id="initial-message" class="text-center py-24 opacity-50">
+            <p class="text-slate-400 text-xl font-medium italic">Aguardando seleção de projeto para análise...</p>
         </div>
 
         <div id="dashboard-content" style="display: none;" class="space-y-8">
             
-            <!-- Visão Geral -->
+            <!-- ABA: VISÃO GERAL -->
             <div id="visaoGeral" class="tab-content space-y-8">
-                <section class="glass-card rounded-2xl p-6 flex flex-wrap gap-6 items-end">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Filtrar por Data</label>
-                        <input type="date" id="spotted-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm">
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 flex flex-col gap-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Data Spotted</label>
+                        <input type="date" id="spotted-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-sm font-bold text-slate-700">
                     </div>
-                    <div class="flex-1 min-w-[150px]">
-                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Ano</label>
-                        <select id="year-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm">
+                    <div class="glass-card p-6 flex flex-col gap-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Ano de Referência</label>
+                        <select id="year-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-sm font-bold text-slate-700">
                             <option value="all">Todos os Anos</option>
                         </select>
                     </div>
-                    <div class="flex-1 min-w-[150px]">
-                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Mês</label>
-                        <select id="month-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm text-gray-900">
+                    <div class="glass-card p-6 flex flex-col gap-1">
+                        <label class="text-[10px] font-black uppercase text-slate-400">Mês</label>
+                        <select id="month-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-sm font-bold text-slate-700">
                             <option value="all">Todos os Meses</option>
                             <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
                             <option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option>
@@ -265,137 +254,111 @@
                     </div>
                 </section>
 
-                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-                    <div class="glass-card stat-card">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Total</span>
-                        <div id="total-records" class="text-4xl font-extrabold text-[--cor-primaria] mt-2">0</div>
-                    </div>
-                    <div class="glass-card stat-card alerta">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Em Aberto</span>
-                        <div id="open-records" class="text-4xl font-extrabold text-red-500 mt-2">0</div>
-                    </div>
-                    <div class="glass-card stat-card sucesso">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Fechados</span>
-                        <div id="closed-records" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0</div>
-                    </div>
-                    <div class="glass-card stat-card sucesso">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Assinados</span>
-                        <div id="signed-off-records" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0</div>
-                    </div>
-                    <div class="glass-card stat-card">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Não Aceitos</span>
-                        <div id="not-accepted-records" class="text-4xl font-extrabold text-slate-600 mt-2">0</div>
-                    </div>
-                    <div class="glass-card stat-card sucesso">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Resolução</span>
-                        <div id="resolution-rate" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0%</div>
-                    </div>
+                <section class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div class="glass-card stat-card"><span class="text-[10px] font-bold text-slate-400 uppercase">Total</span><div id="total-records" class="text-3xl font-extrabold text-[--cor-primaria] mt-1">0</div></div>
+                    <div class="glass-card stat-card alerta"><span class="text-[10px] font-bold text-slate-400 uppercase">Abertos</span><div id="open-records" class="text-3xl font-extrabold text-red-500 mt-1">0</div></div>
+                    <div class="glass-card stat-card sucesso"><span class="text-[10px] font-bold text-slate-400 uppercase">Fechados</span><div id="closed-records" class="text-3xl font-extrabold text-[--cor-secundaria] mt-1">0</div></div>
+                    <div class="glass-card stat-card sucesso"><span class="text-[10px] font-bold text-slate-400 uppercase">Assinados</span><div id="signed-off-records" class="text-3xl font-extrabold text-[--cor-secundaria] mt-1">0</div></div>
+                    <div class="glass-card stat-card"><span class="text-[10px] font-bold text-slate-400 uppercase">Recusados</span><div id="not-accepted-records" class="text-3xl font-extrabold text-slate-400 mt-1">0</div></div>
+                    <div class="glass-card stat-card sucesso"><span class="text-[10px] font-bold text-slate-400 uppercase">Resolução</span><div id="resolution-rate" class="text-3xl font-extrabold text-[--cor-secundaria] mt-1">0%</div></div>
                 </section>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <article class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                            <span class="w-2 h-6 bg-[--cor-primaria] rounded-full"></span>
-                            Volume Mensal
+                    <article class="glass-card p-6">
+                        <h3 class="text-sm font-black text-slate-700 uppercase tracking-widest mb-6 flex items-center gap-2">
+                            <span class="w-1.5 h-4 bg-[--cor-primaria] rounded-full"></span>
+                            Volume de Apontamentos
                         </h3>
                         <div class="h-[350px]"><canvas id="histogramChart"></canvas></div>
                     </article>
-                    <article class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                            <span class="w-2 h-6 bg-[--cor-secundaria] rounded-full"></span>
-                            Taxa de Resolução
+                    <article class="glass-card p-6">
+                        <h3 class="text-sm font-black text-slate-700 uppercase tracking-widest mb-6 flex items-center gap-2">
+                            <span class="w-1.5 h-4 bg-[--cor-secundaria] rounded-full"></span>
+                            Evolução da Taxa de Resolução
                         </h3>
                         <div class="h-[350px]"><canvas id="monthlyResolutionRateChart"></canvas></div>
                     </article>
                 </div>
             </div>
 
-            <!-- Eficiência -->
+            <!-- ABA: EFICIÊNCIA -->
             <div id="eficiencia" class="tab-content space-y-8" style="display: none;">
-                <div class="grid grid-cols-1 gap-8">
-                    <article class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-2">Matriz de Desempenho</h3>
-                        <div class="h-[500px]"><canvas id="resolutionScatterChart"></canvas></div>
-                        <div id="scatter-legend-table" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8"></div>
-                        <div id="inference-section" class="mt-8"></div>
-                    </article>
-                    <article class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Aderência ao SLA</h3>
-                        <div class="h-[450px]"><canvas id="slaByCategoryChart"></canvas></div>
-                    </article>
-                </div>
+                <article class="glass-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">Matriz de Produtividade</h3>
+                    <p class="text-xs text-slate-400 mb-8 uppercase font-bold tracking-wider">Correlação: Volume vs. Tempo Médio de Resolução</p>
+                    <div class="h-[500px]"><canvas id="resolutionScatterChart"></canvas></div>
+                    <div id="inference-section" class="mt-8 border-t border-slate-100 pt-8"></div>
+                </article>
+                <article class="glass-card p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6">Aderência ao SLA por Categoria</h3>
+                    <div class="h-[400px]"><canvas id="slaByCategoryChart"></canvas></div>
+                </article>
             </div>
 
-            <!-- Localização -->
+            <!-- ABA: LOCALIZAÇÃO -->
             <div id="localizacao" class="tab-content space-y-8" style="display: none;">
-                <section class="glass-card rounded-2xl p-6">
-                    <select id="grouping-filter" class="bg-slate-100 text-sm font-bold rounded-xl px-6 py-3 border-none w-72">
-                        <option value="all">Todas as Torres/Setores</option>
-                    </select>
-                </section>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <article class="glass-card rounded-2xl p-6 lg:col-span-1">
-                        <h3 class="text-lg font-bold text-slate-800 mb-6">Top 15 Locais</h3>
+                <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <article class="glass-card p-6 lg:col-span-1">
+                        <h3 class="text-sm font-black text-slate-700 uppercase tracking-widest mb-6">Ranking de Locais Críticos</h3>
                         <div class="h-[600px]"><canvas id="locationRankingChart"></canvas></div>
                     </article>
-                    <article class="glass-card rounded-2xl p-6 lg:col-span-2">
-                        <div class="h-[600px] flex items-center justify-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                            <p class="text-slate-400 font-medium italic">Análise de Mapa de Calor desativada.</p>
+                    <article class="glass-card p-6 lg:col-span-2 flex items-center justify-center bg-slate-50/50">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <p class="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Mapa de Calor desativado para otimização</p>
                         </div>
                     </article>
-                </div>
+                </section>
             </div>
 
-            <!-- NOVA ABA: GALERIA & FOTOS -->
+            <!-- ABA: GALERIA E RELATÓRIOS -->
             <div id="galeriaRelatorios" class="tab-content space-y-8" style="display: none;">
-                <div class="galeria-container shadow-2xl">
+                <div class="galeria-wrapper shadow-2xl">
                     <div class="gal-header">
                         <div class="flex items-center gap-4">
-                            <h2 class="text-lg font-bold">Galeria SnagR PG37</h2>
-                            <div id="statusBadgeGal" class="status-badge-gal">Pronto</div>
+                            <span class="bg-[--cor-secundaria] text-black text-[10px] font-black px-2 py-1 rounded">GALERIA PRO</span>
+                            <div id="statusBadgeGal" class="text-xs text-white/40 font-medium">Sincronizado</div>
                         </div>
                         <div class="view-switcher">
-                            <button class="view-btn active" onclick="switchGalView('carousel')">
-                                Foco
-                            </button>
-                            <button class="view-btn" onclick="switchGalView('grid')">
-                                Grade
-                            </button>
-                            <button class="view-btn" onclick="switchGalView('data')">
-                                Dados
-                            </button>
+                            <button class="view-btn active" onclick="switchGalView('carousel')">FOCO</button>
+                            <button class="view-btn" onclick="switchGalView('grid')">GRADE</button>
+                            <button class="view-btn" onclick="switchGalView('data')">DADOS</button>
                         </div>
                     </div>
 
-                    <!-- Conteúdo Galeria -->
                     <div class="flex-1 relative overflow-hidden bg-black">
-                        <!-- Modo Foco -->
-                        <div id="gal-carousel" class="view-pane active items-center justify-center p-4">
-                            <img id="mainImage" src="" alt="Imagem do Defeito" onerror="tratarErroImagemGal()">
-                            <div class="absolute bottom-6 flex items-center gap-6 bg-black/60 backdrop-blur p-3 rounded-full border border-white/10">
-                                <button onclick="mudarFotoGal(-1)" class="p-2 hover:bg-white/10 rounded-full">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                        <!-- MODO FOCO -->
+                        <div id="gal-carousel" class="view-pane active flex flex-col items-center justify-center p-6">
+                            <img id="mainImageGal" src="" alt="Defeito" onerror="tratarErroImagemGal()">
+                            <div class="mt-8 flex items-center gap-6 bg-white/5 backdrop-blur-xl p-4 rounded-2xl border border-white/10">
+                                <button onclick="mudarFotoGal(-1)" class="p-2 hover:bg-white/10 rounded-xl transition-all">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
                                 </button>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-white/50">ID</span>
-                                    <input type="number" id="jumpInputGal" class="bg-white/10 border-none text-white text-center w-20 rounded p-1 font-bold">
+                                <div class="flex flex-col items-center">
+                                    <span class="text-[10px] font-black text-white/30 uppercase mb-1">Registro SnagR</span>
+                                    <input type="number" id="jumpInputGal" class="bg-transparent border-b border-white/20 text-white text-center w-24 text-lg font-black focus:outline-none">
                                 </div>
-                                <button onclick="mudarFotoGal(1)" class="p-2 hover:bg-white/10 rounded-full">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                                <button onclick="mudarFotoGal(1)" class="p-2 hover:bg-white/10 rounded-xl transition-all">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Modo Grade -->
+                        <!-- MODO GRADE -->
                         <div id="gal-grid" class="view-pane">
-                            <div id="gridContentGal" class="grid-content"></div>
+                            <div id="gridContentGal" class="grid-content-gal"></div>
                         </div>
 
-                        <!-- Modo Dados -->
+                        <!-- MODO DADOS (Sincronizado SnagID) -->
                         <div id="gal-data" class="view-pane flex-row">
                             <div class="data-sidebar" id="dataListGal"></div>
-                            <div class="flex-1 p-8 overflow-y-auto" id="dataDetailGal">
-                                <p class="text-center text-gray-500 mt-20">Selecione um item para ver detalhes.</p>
+                            <div class="flex-1 p-10 overflow-y-auto bg-[#0a0a0a]" id="dataDetailGal">
+                                <div class="h-full flex flex-col items-center justify-center text-white/20">
+                                    <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                                    <p class="font-bold uppercase text-xs tracking-widest">Selecione um registro na lista lateral</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -405,48 +368,44 @@
         </div>
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-10">
+    <footer class="bg-white border-t border-slate-200 py-10 mt-12">
         <div class="max-w-[1600px] mx-auto px-6 text-center">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Ferramentas de Análise Offline</p>
             <input type="file" id="json-file-input" accept=".jsonl,.txt,.json" class="hidden" />
-            <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto">
-                Carregar Arquivo Manual
+            <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-10 py-4 rounded-2xl font-black text-sm transition-all shadow-lg hover:shadow-2xl flex items-center gap-3 mx-auto uppercase tracking-tighter">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Importar Relatório .JSONL
             </button>
-            <p id="file-name" class="mt-4 text-xs font-bold text-[--cor-primaria] tracking-wide uppercase"></p>
+            <p id="file-name" class="mt-4 text-[10px] font-black text-[--cor-primaria] tracking-widest uppercase"></p>
         </div>
     </footer>
 
     <script>
-        // --- VARIÁVEIS GRÁFICOS (Redundância Original) ---
+        // REDUNDÂNCIA: Gerenciamento Global de Gráficos
         let histogramChart, detailsChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart;
 
-        // --- ESTADO GALERIA ---
+        // CONFIGURAÇÃO CENTRALIZADA
         const BASE_DOMAIN = "https://bnengenharia.snagrweb.com/Config/bnengenharia.snagrweb.com/Projects";
         const URL_SUFIXO = "?v=Invalid%20date";
-        const PROJECTS_GAL = {
-            "Centro Medico": { path: 'pg37ctmedico', idStart: 9, jsonl: 'pg37ctmedico.jsonl' },
-            "Residencial": { path: 'pg37residencial', idStart: 567, jsonl: 'pg37residencial.jsonl' },
-            "Embasamento": { path: 'pg37embasa', idStart: 333, jsonl: 'pg37embasa.jsonl' },
-            "Hotel": { path: 'pg37hotel', idStart: 60, jsonl: 'pg37hotel.jsonl' },
-            "Ensino": { path: 'pg37ensino', idStart: 63, jsonl: 'pg37ensino.jsonl' },
-            "Unificado": { path: 'pg37ctmedico', idStart: 1, jsonl: 'pg37ctmedico.jsonl' }
+        
+        const PROJECTS_CONFIG = {
+            "Centro Medico": { path: 'pg37ctmedico', idStart: 9, file: './Centro medico.jsonl' },
+            "Residencial": { path: 'pg37residencial', idStart: 567, file: './Residencial.jsonl' },
+            "Embasamento": { path: 'pg37embasa', idStart: 333, file: './Embasamento.jsonl' },
+            "Hotel": { path: 'pg37hotel', idStart: 60, file: './Hotel.jsonl' },
+            "Ensino": { path: 'pg37ensino', idStart: 63, file: './Ensino.jsonl' },
+            "Unificado": { path: 'pg37ctmedico', idStart: 1, file: './Snags_Unificado_CM.jsonl' }
         };
-        let galIdAtual = 1;
-        let galJsonData = [];
 
-        // --- LÓGICA DASHBOARD ---
+        let galIdAtual = 1;
         let allData = [];
         let currentFinalData = [];
+        let rawJsonData = [];
         const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
-        const PROJECT_FILES = {
-            "Unificado": "./Snags_Unificado_CM.jsonl",
-            "Hotel": "./Hotel.jsonl",
-            "Centro Medico": "./Centro medico.jsonl",
-            "Ensino": "./Ensino.jsonl",
-            "Residencial": "./Residencial.jsonl",
-            "Embasamento": "./Embasamento.jsonl"
-        };
 
+        // Ajustes globais do Chart.js
         Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#94a3b8';
 
         function parseDateString(dateStr) {
             if (!dateStr || typeof dateStr !== 'string') return null;
@@ -471,11 +430,13 @@
                 const fixDate = parseDateString(cleanItem['Data alteração'] || cleanItem['LastChanged']);
                 let finalStatus = cleanItem.Status;
                 if (cleanItem.FixStatus?.toLowerCase() === 'signedoff') finalStatus = 'SignedOff';
+                
                 let days = null;
                 if (['Closed', 'SignedOff'].includes(finalStatus) && spottedDate && fixDate) {
-                    days = (new Date(fixDate + "T12:00:00") - new Date(spottedDate + "T12:00:00")) / (86400000);
+                    days = (new Date(fixDate + "T12:00:00") - new Date(spottedDate + "T12:00:00")) / 86400000;
                 }
                 const sla = SLA_RULES[cleanItem.Priority];
+
                 return {
                     id: cleanItem.SnagID,
                     data: spottedDate,
@@ -483,45 +444,40 @@
                     categoria: cleanItem.Category || "Não definida",
                     descricao: cleanItem.Defect || "Não definido",
                     situacao: finalStatus || "Pendente",
+                    priority: cleanItem.Priority,
                     daysToResolve: days,
                     withinSla: (days !== null && sla) ? (days <= sla) : null,
-                    Location: cleanItem.Location || "Não definido",
-                    Agrupamento: cleanItem.Location?.match(/^(T|S)0?([1-5])/i) ? cleanItem.Location.match(/^(T|S)0?([1-5])/i)[0] : "N/A"
+                    Location: cleanItem.Location || "Não definido"
                 };
             }).filter(i => i !== null && i.data);
         };
 
         const clearCharts = () => {
-            if (histogramChart) histogramChart.destroy();
-            if (detailsChart) detailsChart.destroy();
-            if (slaByCategoryChart) slaByCategoryChart.destroy();
-            if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
-            if (resolutionScatterChart) resolutionScatterChart.destroy();
-            if (statusHistoryChart) statusHistoryChart.destroy();
-            if (locationRankingChart) locationRankingChart.destroy();
+            [histogramChart, detailsChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart].forEach(c => {
+                if (c) c.destroy();
+            });
             histogramChart = detailsChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = null;
         };
 
         const loadProjectData = async (projectName) => {
             const loader = document.getElementById('loading-container');
-            const file = PROJECT_FILES[projectName];
-            if (!file) return;
+            const config = PROJECTS_CONFIG[projectName];
+            if (!config) return;
 
             loader.style.display = 'flex';
             clearCharts();
 
             try {
-                const response = await fetch(file);
+                const response = await fetch(config.file);
                 const content = await response.text();
                 const rawLines = content.split('\n').filter(l => l.trim());
-                const rawJson = rawLines.map(l => JSON.parse(l.replace(/:\s*NaN/g, ': null')));
+                rawJsonData = rawLines.map(l => JSON.parse(l.replace(/:\s*NaN/g, ': null')));
                 
-                allData = processAndNormalizeData(rawJson);
+                allData = processAndNormalizeData(rawJsonData);
                 allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                // Sincronizar Galeria
-                galIdAtual = PROJECTS_GAL[projectName]?.idStart || 1;
-                galJsonData = rawJson; // Usa os dados brutos carregados para a galeria
+                // Sincronização Automática Galeria
+                galIdAtual = config.idStart;
                 atualizarImagemGal();
                 renderGradeGal();
                 renderListaGal();
@@ -531,18 +487,21 @@
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
-                document.getElementById('file-name').textContent = `Projeto: ${projectName}`;
+                document.getElementById('file-name').textContent = `Fonte: ${config.file}`;
                 loader.style.display = 'none';
             } catch (err) {
                 loader.style.display = 'none';
-                console.error(err);
+                console.error("Erro no carregamento:", err);
             }
         };
 
         const runUpdate = () => {
             const year = document.getElementById('year-filter').value;
             const month = document.getElementById('month-filter').value;
+            const spotted = document.getElementById('spotted-filter').value;
+
             let filtered = allData;
+            if (spotted) filtered = filtered.filter(d => d.data === spotted);
             if (year !== 'all') filtered = filtered.filter(d => d.data.startsWith(year));
             if (month !== 'all') filtered = filtered.filter(d => new Date(d.data + "T12:00:00").getMonth() == month);
             
@@ -559,41 +518,62 @@
 
         function updateKPIs() {
             const total = currentFinalData.length;
+            const open = currentFinalData.filter(d => d.situacao.toLowerCase() === 'open').length;
             const closed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'closed').length;
             const signed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'signedoff').length;
+            const rate = total > 0 ? ((closed + signed) / total * 100).toFixed(1) : 0;
+
             document.getElementById('total-records').textContent = total;
-            document.getElementById('open-records').textContent = currentFinalData.filter(d => d.situacao.toLowerCase() === 'open').length;
+            document.getElementById('open-records').textContent = open;
             document.getElementById('closed-records').textContent = closed;
             document.getElementById('signed-off-records').textContent = signed;
-            document.getElementById('resolution-rate').textContent = `${total > 0 ? ((closed+signed)/total*100).toFixed(1) : 0}%`;
+            document.getElementById('not-accepted-records').textContent = currentFinalData.filter(d => d.situacao.toLowerCase() === 'notadefect').length;
+            document.getElementById('resolution-rate').textContent = `${rate}%`;
         }
 
-        // --- RENDERS GRÁFICOS ---
+        // --- RENDERIZADORES DE GRÁFICOS REFINADOS ---
         function renderHistogram() {
-            if (histogramChart) histogramChart.destroy();
+            const ctx = document.getElementById('histogramChart').getContext('2d');
             const counts = Array(12).fill(0);
             currentFinalData.forEach(d => { counts[new Date(d.data + "T12:00:00").getMonth()]++; });
-            histogramChart = new Chart(document.getElementById('histogramChart').getContext('2d'), {
-                type: 'bar', data: { labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'], datasets: [{ data: counts, backgroundColor: '#01455C' }]},
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            histogramChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                    datasets: [{ data: counts, backgroundColor: '#01455C', borderRadius: 8 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } } } }
             });
         }
 
         function renderResolutionRate() {
-            if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
+            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d');
             const totals = Array(12).fill(0), solved = Array(12).fill(0);
             currentFinalData.forEach(d => {
                 const m = new Date(d.data + "T12:00:00").getMonth();
                 totals[m]++; if (['closed', 'signedoff'].includes(d.situacao.toLowerCase())) solved[m]++;
             });
-            monthlyResolutionRateChart = new Chart(document.getElementById('monthlyResolutionRateChart').getContext('2d'), {
-                type: 'line', data: { labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'], datasets: [{ data: totals.map((t,i) => t > 0 ? (solved[i]/t*100) : 0), borderColor: '#9FC419', fill: false }]},
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } }, plugins: { legend: { display: false } } }
+            const rates = totals.map((t, i) => t > 0 ? (solved[i] / t * 100) : 0);
+            monthlyResolutionRateChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                    datasets: [{ 
+                        data: rates, 
+                        borderColor: '#9FC419', 
+                        backgroundColor: 'rgba(159, 196, 25, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 4,
+                        pointRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100, beginAtZero: true } }, plugins: { legend: { display: false } } }
             });
         }
 
         function renderScatter() {
-            if (resolutionScatterChart) resolutionScatterChart.destroy();
+            const ctx = document.getElementById('resolutionScatterChart').getContext('2d');
             const stats = {};
             currentFinalData.forEach(d => {
                 if (d.daysToResolve !== null) {
@@ -602,14 +582,23 @@
                 }
             });
             const points = Object.entries(stats).map(([n, s]) => ({ x: s.t/s.c, y: s.c, label: n }));
-            resolutionScatterChart = new Chart(document.getElementById('resolutionScatterChart').getContext('2d'), {
-                type: 'scatter', data: { datasets: [{ data: points, backgroundColor: '#9FC419' }]},
-                options: { responsive: true, maintainAspectRatio: false }
+            resolutionScatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: [{ data: points, backgroundColor: '#9FC419', pointRadius: 10, pointHoverRadius: 15 }]},
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: { 
+                        x: { title: { display: true, text: 'Dias Médios de Resolução', font: { weight: 'bold' } } },
+                        y: { title: { display: true, text: 'Volume de Itens', font: { weight: 'bold' } } }
+                    },
+                    plugins: { tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } } }
+                }
             });
         }
 
         function renderSLA() {
-            if (slaByCategoryChart) slaByCategoryChart.destroy();
+            const ctx = document.getElementById('slaByCategoryChart').getContext('2d');
             const stats = {};
             currentFinalData.forEach(d => {
                 if (d.withinSla !== null) {
@@ -618,25 +607,27 @@
                 }
             });
             const labels = Object.keys(stats).sort();
-            slaByCategoryChart = new Chart(document.getElementById('slaByCategoryChart').getContext('2d'), {
-                type: 'bar', data: { labels, datasets: [{ data: labels.map(l => (stats[l].ok/stats[l].tot*100)), backgroundColor: '#9FC419' }]},
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            slaByCategoryChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels, datasets: [{ data: labels.map(l => (stats[l].ok/stats[l].tot*100)), backgroundColor: '#9FC419', borderRadius: 4 }]},
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
             });
         }
 
         function renderLocationRanking() {
-            if (locationRankingChart) locationRankingChart.destroy();
+            const ctx = document.getElementById('locationRankingChart').getContext('2d');
             const counts = currentFinalData.reduce((acc, d) => { acc[d.Location] = (acc[d.Location] || 0) + 1; return acc; }, {});
             const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 15);
-            locationRankingChart = new Chart(document.getElementById('locationRankingChart').getContext('2d'), {
-                type: 'bar', data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444' }]},
+            locationRankingChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', borderRadius: 4 }]},
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        // --- LÓGICA GALERIA ---
-        function getGalUrl() {
-            const proj = PROJECTS_GAL[document.getElementById('project-selector').value];
+        // --- LÓGICA GALERIA (Sincronizada SnagID) ---
+        function getGalUrlBase() {
+            const proj = PROJECTS_CONFIG[document.getElementById('project-selector').value];
             return `${BASE_DOMAIN}/${proj.path}/images/tsnags/`;
         }
 
@@ -648,27 +639,26 @@
         }
 
         function atualizarImagemGal() {
-            const img = document.getElementById('mainImage');
-            img.src = `${getGalUrl()}${galIdAtual}.jpg${URL_SUFIXO}`;
+            const img = document.getElementById('mainImageGal');
+            img.src = `${getGalUrlBase()}${galIdAtual}.jpg${URL_SUFIXO}`;
             document.getElementById('jumpInputGal').value = galIdAtual;
-            document.getElementById('statusBadgeGal').textContent = `Carregando ID #${galIdAtual}`;
         }
 
         function mudarFotoGal(dir) { galIdAtual += dir; atualizarImagemGal(); }
-        
         function tratarErroImagemGal() {
-            document.getElementById('mainImage').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23111' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23444'%3EImagem n%C3%A3o encontrada%3C/text%3E%3C/svg%3E";
+            document.getElementById('mainImageGal').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Crect fill='%23111' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23444'%3EImagem n%C3%A3o encontrada%3C/text%3E%3C/svg%3E";
         }
 
         function renderGradeGal() {
             const grid = document.getElementById('gridContentGal');
             grid.innerHTML = '';
-            const proj = PROJECTS_GAL[document.getElementById('project-selector').value];
-            for(let i=proj.idStart; i < proj.idStart + 40; i++) {
+            const config = PROJECTS_CONFIG[document.getElementById('project-selector').value];
+            // Renderiza um lote inicial de 40 fotos baseadas no range do projeto
+            for(let i=config.idStart; i < config.idStart + 40; i++) {
                 const div = document.createElement('div');
-                div.className = 'grid-item';
+                div.className = 'grid-item-gal';
                 div.onclick = () => { galIdAtual = i; switchGalView('carousel'); atualizarImagemGal(); };
-                div.innerHTML = `<img src="${getGalUrl()}${i}.jpg${URL_SUFIXO}" loading="lazy" onerror="this.parentElement.style.display='none'">`;
+                div.innerHTML = `<img src="${getGalUrlBase()}${i}.jpg${URL_SUFIXO}" loading="lazy" onerror="this.parentElement.style.display='none'"><div class="grid-label-gal">#${i}</div>`;
                 grid.appendChild(div);
             }
         }
@@ -676,41 +666,58 @@
         function renderListaGal() {
             const list = document.getElementById('dataListGal');
             list.innerHTML = '';
-            galJsonData.slice(0, 50).forEach((item, idx) => {
+            // Lista os primeiros 100 itens da base JSON para referência rápida
+            rawJsonData.slice(0, 100).forEach((item) => {
                 const div = document.createElement('div');
                 div.className = 'data-item-card';
                 div.onclick = () => verDetalheGal(item, div);
-                div.innerHTML = `<div class="font-bold text-blue-400">#${item.SnagID}</div><div class="text-xs opacity-70 truncate">${item.Defect || 'Sem descrição'}</div>`;
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-black text-blue-400">#${item.SnagID}</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-white/50 uppercase">${item.Status}</span>
+                    </div>
+                    <div class="text-[11px] text-white/80 font-bold truncate">${item.Defect || 'S/ Descrição'}</div>
+                `;
                 list.appendChild(div);
             });
         }
 
+        // VÍNCULO DIRETO: SNAG ID -> IMAGEM
         function verDetalheGal(item, el) {
             document.querySelectorAll('.data-item-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             const detail = document.getElementById('dataDetailGal');
+            
             detail.innerHTML = `
-                <div class="space-y-6">
-                    <img src="${getGalUrl()}${item.SnagID}.jpg${URL_SUFIXO}" class="w-full h-80 object-contain bg-black rounded-lg">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-white/5 rounded">
-                            <label class="text-[10px] uppercase opacity-50 block">ID</label>
-                            <span class="font-bold">#${item.SnagID}</span>
+                <div class="max-w-4xl mx-auto space-y-8 animate-fade-in">
+                    <div class="relative group">
+                        <img src="${getGalUrlBase()}${item.SnagID}.jpg${URL_SUFIXO}" class="w-full h-[400px] object-contain bg-black rounded-3xl border border-white/5 shadow-2xl" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23111%22/%3E%3C/svg%3E'">
+                        <div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black text-white/50">VÍNCULO DIRETO SNAGID: ${item.SnagID}</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Categoria</label>
+                            <span class="text-white text-sm font-bold">${item.Category || 'N/A'}</span>
                         </div>
-                        <div class="p-4 bg-white/5 rounded">
-                            <label class="text-[10px] uppercase opacity-50 block">Status</label>
-                            <span class="font-bold">${item.Status}</span>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Localização</label>
+                            <span class="text-white text-sm font-bold">${item.Location || 'N/A'}</span>
                         </div>
-                        <div class="p-4 bg-white/5 rounded col-span-2">
-                            <label class="text-[10px] uppercase opacity-50 block">Defeito</label>
-                            <span class="font-bold">${item.Defect || 'N/A'}</span>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Prioridade</label>
+                            <span class="text-white text-sm font-bold">Nível ${item.Priority || 'N/A'}</span>
+                        </div>
+                        <div class="p-5 bg-white/5 rounded-2xl border border-white/10 col-span-full">
+                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-tighter">Descrição do Defeito</label>
+                            <span class="text-white text-sm font-bold">${item.Defect || 'Nenhum detalhe adicional fornecido.'}</span>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        // --- AUXILIARES ---
+        // --- AUXILIARES E EVENTOS ---
         function initFilters() {
             const years = [...new Set(allData.map(d => d.data.substring(0, 4)))].sort((a,b) => b-a);
             const yFilter = document.getElementById('year-filter');
@@ -723,13 +730,22 @@
             document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
             document.getElementById(tabName).style.display = 'block';
             evt.currentTarget.classList.add('active');
-            setTimeout(() => { if (histogramChart) histogramChart.resize(); }, 50);
+            
+            // Forçar redimensionamento dos gráficos ativos
+            setTimeout(() => {
+                [histogramChart, monthlyResolutionRateChart, resolutionScatterChart, slaByCategoryChart, locationRankingChart].forEach(c => {
+                    if (c) c.resize();
+                });
+            }, 50);
         }
 
         document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
         document.getElementById('year-filter').addEventListener('change', runUpdate);
         document.getElementById('month-filter').addEventListener('change', runUpdate);
-        document.getElementById('jumpInputGal').addEventListener('change', (e) => { galIdAtual = parseInt(e.target.value); atualizarImagemGal(); });
+        document.getElementById('jumpInputGal').addEventListener('change', (e) => { 
+            galIdAtual = parseInt(e.target.value); 
+            atualizarImagemGal(); 
+        });
 
         window.onload = () => loadProjectData(document.getElementById('project-selector').value);
     </script>
