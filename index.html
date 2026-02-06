@@ -136,14 +136,6 @@
             border-left: 4px solid var(--cor-info);
             background: #f1f5f9;
         }
-
-        .inference-category-tag {
-            transition: all 0.2s;
-        }
-        .inference-category-tag:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
     </style>
 </head>
 <body>
@@ -196,7 +188,6 @@
 
         <div id="dashboard-content" style="display: none;" class="space-y-8">
             
-            <!-- Visão Geral Tab -->
             <div id="visaoGeral" class="tab-content space-y-8">
                 <section class="glass-card rounded-2xl p-6 flex flex-wrap gap-6 items-end">
                     <div class="flex-1 min-w-[200px]">
@@ -299,7 +290,6 @@
                 </article>
             </div>
 
-            <!-- Eficiência Tab -->
             <div id="eficiencia" class="tab-content space-y-8" style="display: none;">
                 <div class="grid grid-cols-1 gap-8">
                     <article class="glass-card rounded-2xl p-6">
@@ -316,7 +306,6 @@
                 </div>
             </div>
 
-            <!-- Localização Tab -->
             <div id="localizacao" class="tab-content space-y-8" style="display: none;">
                 <section class="glass-card rounded-2xl p-6 flex items-center justify-between">
                     <h3 class="text-lg font-bold text-slate-800">Filtro Geográfico</h3>
@@ -341,9 +330,8 @@
 
     <footer class="bg-white border-t border-slate-200 py-10">
         <div class="max-w-[1600px] mx-auto px-6 text-center">
-            <p class="text-slate-500 text-sm mb-6">Análise offline disponível: carregue seu arquivo <code class="bg-slate-100 px-2 py-1 rounded">.jsonl</code> extraído do SnagR.</p>
             <input type="file" id="json-file-input" accept=".jsonl,.txt,.json" class="hidden" />
-            <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3 mx-auto">
+            <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 Carregar Arquivo Manual
             </button>
@@ -351,35 +339,29 @@
         </div>
     </footer>
 
-    <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in">
+    <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4" onclick="closeModal()">
+        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-                <h3 id="modal-title" class="text-xl font-bold text-slate-800">Detalhes do Item</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-800">Detalhes</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
             <div id="modal-body" class="p-8 text-slate-600 space-y-4 max-h-[70vh] overflow-y-auto"></div>
-            <div class="p-6 bg-slate-50 text-right">
-                <button onclick="closeModal()" class="bg-slate-800 text-white px-6 py-2 rounded-lg font-bold">Entendido</button>
-            </div>
         </div>
     </div>
 
     <div id="drag-drop-overlay" class="fixed inset-0 bg-[--cor-primaria]/90 z-[100] hidden items-center justify-center border-8 border-dashed border-[--cor-secundaria] m-4 rounded-3xl pointer-events-none">
-        <div class="text-center text-white">
-            <svg class="w-24 h-24 mx-auto mb-6 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-            <h2 class="text-4xl font-black">Solte para Processar</h2>
-            <p class="text-white/60 mt-2">Analise seus dados SnagR instantaneamente</p>
-        </div>
+        <h2 class="text-4xl font-black text-white">Solte para Processar</h2>
     </div>
 
     <script>
+        // REDUNDÂNCIA: Variáveis globais para os gráficos
+        let histogramChart, detailsChart, heatmapChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart, locationCategoryHeatmap;
+
         let allData = [];
         let currentFinalData = [];
         const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
-        
-        // Mapeamento exato baseado na estrutura de pastas/arquivos mostrada
         const PROJECT_FILES = {
             "Unificado": "./Snags_Unificado_CM.jsonl",
             "Hotel": "./Hotel.jsonl",
@@ -391,14 +373,6 @@
 
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.color = '#64748b';
-
-        // Função utilitária para limpar instâncias de gráficos de forma segura
-        function destroyChart(id) {
-            const chart = Chart.getChart(id);
-            if (chart) {
-                chart.destroy();
-            }
-        }
 
         function parseDateString(dateStr) {
             if (!dateStr || typeof dateStr !== 'string') return null;
@@ -470,6 +444,21 @@
             }).filter(i => i !== null && i.data);
         };
 
+        const clearCharts = () => {
+            // REDUNDÂNCIA: Destruição explícita via variável global
+            if (histogramChart) histogramChart.destroy();
+            if (detailsChart) detailsChart.destroy();
+            if (heatmapChart) heatmapChart.destroy();
+            if (slaByCategoryChart) slaByCategoryChart.destroy();
+            if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
+            if (resolutionScatterChart) resolutionScatterChart.destroy();
+            if (statusHistoryChart) statusHistoryChart.destroy();
+            if (locationRankingChart) locationRankingChart.destroy();
+            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
+            
+            histogramChart = detailsChart = heatmapChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = locationCategoryHeatmap = null;
+        };
+
         const processContentAndInitialize = (content, label) => {
             const loader = document.getElementById('loading-container');
             const progress = document.getElementById('progress-bar');
@@ -478,6 +467,8 @@
             try {
                 status.textContent = "Processando dados...";
                 progress.style.width = '60%';
+                
+                clearCharts();
 
                 const rawLines = content.split('\n').filter(l => l.trim());
                 const rawJson = rawLines.map(l => {
@@ -487,20 +478,19 @@
                 allData = processAndNormalizeData(rawJson);
                 allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                if (allData.length === 0) throw new Error("Nenhum dado válido encontrado no arquivo.");
+                if (allData.length === 0) throw new Error("Sem dados válidos.");
 
                 initFilters();
                 runUpdate();
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
-                document.getElementById('file-name').textContent = `Fonte: ${label}`;
+                document.getElementById('file-name').textContent = `Projeto: ${label}`;
                 
                 loader.style.display = 'none';
             } catch (err) {
-                console.error(err);
                 loader.style.display = 'none';
-                alert("Falha ao processar arquivo: " + err.message);
+                alert("Erro: " + err.message);
             }
         };
 
@@ -518,13 +508,13 @@
 
             try {
                 const response = await fetch(file);
-                if (!response.ok) throw new Error(`Não foi possível carregar o arquivo: ${file}`);
+                if (!response.ok) throw new Error(`Falha no fetch: ${file}`);
                 progress.style.width = '40%';
                 const content = await response.text();
                 processContentAndInitialize(content, projectName);
             } catch (err) {
                 loader.style.display = 'none';
-                alert("Erro ao carregar projeto: " + err.message);
+                alert("Erro ao carregar: " + err.message);
             }
         };
 
@@ -584,12 +574,11 @@
         };
 
         function renderHistogram() {
-            const id = 'histogramChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (histogramChart) histogramChart.destroy();
+            const ctx = document.getElementById('histogramChart').getContext('2d');
             const counts = Array(12).fill(0);
             currentFinalData.forEach(d => { counts[new Date(d.data + "T12:00:00").getMonth()]++; });
-            new Chart(ctx, {
+            histogramChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -600,9 +589,8 @@
         }
 
         function renderResolutionRate() {
-            const id = 'monthlyResolutionRateChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
+            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d');
             const totals = Array(12).fill(0);
             const solved = Array(12).fill(0);
             currentFinalData.forEach(d => {
@@ -611,7 +599,7 @@
                 if (['closed', 'signedoff'].includes(d.situacao.toLowerCase())) solved[m]++;
             });
             const rates = totals.map((t, i) => t > 0 ? (solved[i] / t * 100) : 0);
-            new Chart(ctx, {
+            monthlyResolutionRateChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -622,16 +610,15 @@
         }
 
         function renderStatusHistory() {
-            const id = 'statusHistoryChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (statusHistoryChart) statusHistoryChart.destroy();
+            const ctx = document.getElementById('statusHistoryChart').getContext('2d');
             const created = Array(12).fill(0);
             const resolved = Array(12).fill(0);
             currentFinalData.forEach(d => {
                 created[new Date(d.data + "T12:00:00").getMonth()]++;
                 if (d.lastChangedDate) resolved[new Date(d.lastChangedDate + "T12:00:00").getMonth()]++;
             });
-            new Chart(ctx, {
+            statusHistoryChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -645,15 +632,14 @@
         }
 
         function renderCategoryDetails() {
-            const id = 'detailsChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (detailsChart) detailsChart.destroy();
+            const ctx = document.getElementById('detailsChart').getContext('2d');
             const cat = document.getElementById('categoria-filter').value;
             let data = currentFinalData;
             if (cat !== 'all') data = data.filter(d => d.categoria === cat);
             const counts = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
-            new Chart(ctx, {
+            detailsChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: sorted.map(s => s[0]),
@@ -664,9 +650,8 @@
         }
 
         function renderHeatmap() {
-            const id = 'heatmapChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (heatmapChart) heatmapChart.destroy();
+            const ctx = document.getElementById('heatmapChart').getContext('2d');
             const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
             const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
             const matrixData = [];
@@ -677,7 +662,7 @@
                     if (v > 0) { matrixData.push({ x: m, y: c, v: v }); if (v > max) max = v; }
                 });
             });
-            new Chart(ctx, {
+            heatmapChart = new Chart(ctx, {
                 type: 'matrix',
                 data: {
                     datasets: [{
@@ -697,9 +682,8 @@
         }
 
         function renderScatter() {
-            const id = 'resolutionScatterChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (resolutionScatterChart) resolutionScatterChart.destroy();
+            const ctx = document.getElementById('resolutionScatterChart').getContext('2d');
             const stats = {};
             currentFinalData.forEach(d => {
                 if (d.daysToResolve !== null) {
@@ -708,7 +692,7 @@
                 }
             });
             const points = Object.entries(stats).map(([name, s]) => ({ x: s.time / s.count, y: s.count, label: name }));
-            new Chart(ctx, {
+            resolutionScatterChart = new Chart(ctx, {
                 type: 'scatter',
                 data: { datasets: [{ data: points, backgroundColor: '#9FC419', pointRadius: 10, pointHoverRadius: 15 }] },
                 options: {
@@ -736,9 +720,8 @@
         }
 
         function renderSLA() {
-            const id = 'slaByCategoryChart';
-            destroyChart(id);
-            const ctx = document.getElementById(id).getContext('2d');
+            if (slaByCategoryChart) slaByCategoryChart.destroy();
+            const ctx = document.getElementById('slaByCategoryChart').getContext('2d');
             const stats = {};
             currentFinalData.forEach(d => {
                 if (d.withinSla !== null) {
@@ -747,7 +730,7 @@
                 }
             });
             const sorted = Object.entries(stats).map(([name, s]) => ({ name, rate: (s.ok / s.total * 100) })).sort((a,b) => b.rate - a.rate);
-            new Chart(ctx, {
+            slaByCategoryChart = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: sorted.map(s => s.name), datasets: [{ data: sorted.map(s => s.rate), backgroundColor: '#9FC419', borderRadius: 4 }] },
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } }
@@ -755,20 +738,18 @@
         }
 
         function renderLocationCharts() {
-            const idRank = 'locationRankingChart';
-            destroyChart(idRank);
-            const ctxRank = document.getElementById(idRank).getContext('2d');
+            if (locationRankingChart) locationRankingChart.destroy();
+            const ctxRank = document.getElementById('locationRankingChart').getContext('2d');
             const counts = currentFinalData.reduce((acc, d) => { acc[d.Location] = (acc[d.Location] || 0) + 1; return acc; }, {});
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
-            new Chart(ctxRank, {
+            locationRankingChart = new Chart(ctxRank, {
                 type: 'bar',
                 data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', borderRadius: 4 }] },
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
             });
             
-            const idHeat = 'locationCategoryHeatmap';
-            destroyChart(idHeat);
-            const ctxMap = document.getElementById(idHeat).getContext('2d');
+            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy();
+            const ctxMap = document.getElementById('locationCategoryHeatmap').getContext('2d');
             const topLocs = sorted.map(s => s[0]);
             const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort().slice(0, 10);
             const matrixData = []; let max = 0;
@@ -778,7 +759,7 @@
                     if (v > 0) { matrixData.push({ x: c, y: l, v: v }); if (v > max) max = v; }
                 });
             });
-            new Chart(ctxMap, {
+            locationCategoryHeatmap = new Chart(ctxMap, {
                 type: 'matrix',
                 data: { datasets: [{ data: matrixData, backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex].v / (max || 1)})`, width: ({chart}) => chart.chartArea.width / (cats.length || 1) - 2, height: ({chart}) => chart.chartArea.height / (topLocs.length || 1) - 2 }] },
                 options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: cats }, y: { type: 'category', labels: topLocs, offset: true } } }
@@ -792,12 +773,17 @@
             for (let l of links) l.classList.remove("active");
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.classList.add("active");
-            setTimeout(() => { 
-                // Redimensionar gráficos para caber no novo layout visível
-                const activeCharts = Chart.instances;
-                for (let key in activeCharts) {
-                    activeCharts[key].resize();
-                }
+            
+            setTimeout(() => {
+                if (histogramChart) histogramChart.resize();
+                if (monthlyResolutionRateChart) monthlyResolutionRateChart.resize();
+                if (statusHistoryChart) statusHistoryChart.resize();
+                if (detailsChart) detailsChart.resize();
+                if (heatmapChart) heatmapChart.resize();
+                if (resolutionScatterChart) resolutionScatterChart.resize();
+                if (slaByCategoryChart) slaByCategoryChart.resize();
+                if (locationRankingChart) locationRankingChart.resize();
+                if (locationCategoryHeatmap) locationCategoryHeatmap.resize();
             }, 50);
         }
 
@@ -805,10 +791,10 @@
             const data = currentFinalData.filter(d => d.categoria === category);
             const defects = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
             const sorted = Object.entries(defects).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            document.getElementById('modal-title').textContent = `Top 5 Defeitos: ${category}`;
+            document.getElementById('modal-title').textContent = category;
             document.getElementById('modal-body').innerHTML = `
                 <div class="space-y-4">
-                    ${sorted.map(([name, count], i) => `
+                    ${sorted.map(([name, count]) => `
                         <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
                             <span class="font-semibold text-slate-700">${name}</span>
                             <span class="font-black text-[--cor-primaria]">${count}</span>
@@ -838,38 +824,15 @@
             if (file) {
                 const loader = document.getElementById('loading-container');
                 loader.style.display = 'flex';
-                document.getElementById('loading-status').textContent = "Lendo arquivo local...";
-                
+                document.getElementById('loading-status').textContent = "Lendo arquivo...";
                 const reader = new FileReader();
-                reader.onload = (ev) => {
-                    processContentAndInitialize(ev.target.result, file.name);
-                };
-                reader.onerror = () => {
-                    loader.style.display = 'none';
-                    alert("Erro ao ler o arquivo selecionado.");
-                };
+                reader.onload = (ev) => processContentAndInitialize(ev.target.result, file.name);
                 reader.readAsText(file);
             }
         });
 
-        document.addEventListener('dragenter', (e) => { e.preventDefault(); document.getElementById('drag-drop-overlay').style.display = 'flex'; });
-        document.getElementById('drag-drop-overlay').addEventListener('dragleave', (e) => { document.getElementById('drag-drop-overlay').style.display = 'none'; });
-        document.addEventListener('dragover', e => e.preventDefault());
-        document.addEventListener('drop', (e) => {
-            e.preventDefault();
-            document.getElementById('drag-drop-overlay').style.display = 'none';
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                const input = document.getElementById('json-file-input');
-                const dt = new DataTransfer(); dt.items.add(file);
-                input.files = dt.files;
-                input.dispatchEvent(new Event('change'));
-            }
-        });
-
         window.onload = () => {
-            const initialProject = document.getElementById('project-selector').value;
-            loadProjectData(initialProject);
+            loadProjectData(document.getElementById('project-selector').value);
         };
     </script>
 </body>
