@@ -3,527 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Qualidade e Segurança</title>
+    <title>Dashboard Pro - Qualidade e Segurança</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --cor-primaria: #01455C;
+            --cor-primaria-light: #025d7c;
             --cor-secundaria: #9FC419;
+            --cor-secundaria-dark: #86a615;
+            --cor-fundo: #f8fafc;
+            --cor-texto: #1e293b;
             --cor-alerta: #ef4444;
-            --cor-aviso: #f39c12;
-            --cor-info: #3498db;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
+            --cor-aviso: #f59e0b;
+            --cor-info: #3b82f6;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--cor-primaria);
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
 
         header {
-            background-color: var(--cor-primaria);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-light) 100%);
+            border-bottom: 4px solid var(--cor-secundaria);
         }
 
-        .project-selector-group {
-            min-width: 200px;
-            margin-left: 20px;
-        }
-        .project-selector-group label {
-            color: white;
-            margin-bottom: 5px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .project-selector-group select {
-             width: 100%;
-            padding: 8px 10px;
-            border: 1.5px solid white;
-            border-radius: 5px;
-            background-color: var(--cor-primaria);
-            font-size: 14px;
-            box-sizing: border-box;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-        }
-         .project-selector-group select {
-             appearance: none;
-             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-             background-repeat: no-repeat;
-             background-position: right 0.7rem center;
-             background-size: 1.2em 1.2em;
-             padding-right: 2.5rem;
-         }
-
-
-        .filters {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: flex-end;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark-color);
-            font-size: 14px;
+        .glass-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
         }
 
         select, input[type="date"] {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+            transition: all 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            ring: 2px solid var(--cor-secundaria);
+            border-color: var(--cor-secundaria);
+        }
+
+        .tab-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--cor-secundaria);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .tab-link.active {
+            color: var(--cor-secundaria) !important;
+        }
+
+        .tab-link.active::after {
             width: 100%;
-            padding: 10px;
-            border: 1.5px solid var(--cor-primaria);
-            border-radius: 5px;
-            background-color: var(--cor-primaria);
-            font-size: 14px;
-            box-sizing: border-box;
-            color: white;
-            font-weight: 700;
-        }
-
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            cursor: pointer;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            padding: 20px;
-            margin-bottom: 20px;
-            color: black;
-        }
-
-        .card-header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--cor-primaria);
-        }
-
-        .card-subheader {
-            font-size: 14px;
-            color: #777;
-            margin-top: -15px;
-            margin-bottom: 20px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
         }
 
         .stat-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            padding: 20px;
-            text-align: center;
-            border-left: 5px solid var(--cor-primaria);
-            color: black;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 6px solid var(--cor-primaria);
         }
-
         .stat-card.alerta { border-left-color: var(--cor-alerta); }
         .stat-card.sucesso { border-left-color: var(--cor-secundaria); }
 
-        .stat-value {
-            font-size: 32px;
-            font-weight: 900;
-            margin: 10px 0 5px 0;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        .stat-value.primaria { color: var(--cor-primaria); }
-        .stat-value.alerta { color: var(--cor-alerta); }
-        .stat-value.sucesso { color: var(--cor-secundaria); }
-
-        .stat-label {
-            color: #777;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .tabs {
-            border-bottom: 2px solid #dee2e6;
-            margin-bottom: 20px;
-        }
-        .tab-link {
-            padding: 10px 20px; cursor: pointer; border: none; background-color: transparent;
-            color: white; font-size: 18px; font-weight: 600;
-            border-bottom: 3px solid transparent; transition: all 0.3s ease;
-        }
-        .tab-link.active {
-            color: var(--cor-secundaria);
-            border-bottom-color: var(--cor-secundaria);
-        }
-        #scatter-legend-table {
-            display: flex; justify-content: space-around; width: 100%;
-            margin-top: 20px; font-size: 12px; color: black;
-        }
-        #scatter-legend-table h3 {
-            font-weight: bold; color: var(--cor-primaria); border-bottom: 2px solid var(--cor-primaria);
-            padding-bottom: 5px; margin-bottom: 10px;
-        }
-        #scatter-legend-table ol { list-style-position: inside; padding-left: 0; }
-        #scatter-legend-table li { margin-bottom: 5px; display: flex; align-items: center; }
-        #scatter-legend-table .legend-color-box {
-            width: 12px; height: 12px; margin-right: 8px; border: 1px solid #ccc;
-        }
-
-        #inference-section {
-            margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; color: black;
-        }
-        #inference-section > h3 {
-            font-size: 1.5em; font-weight: 700; color: var(--cor-primaria);
-            margin-bottom: 20px; text-align: center;
-        }
-        #inference-section .inference-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        #inference-section .inference-card {
-            padding: 20px; border-radius: 8px; background-color: #f8f9fa;
-            border-left: 5px solid #ccc;
-        }
-        #inference-section .inference-card.criticos { border-left-color: var(--cor-alerta); }
-        #inference-section .inference-card.eficientes { border-left-color: var(--cor-secundaria); }
-        #inference-section .inference-card.ineficientes { border-left-color: var(--cor-aviso); }
-
-        #inference-section .inference-card-header {
-            display: flex; align-items: center; margin-bottom: 12px;
-        }
-        #inference-section .inference-card-header svg {
-            width: 32px; height: 32px; margin-right: 12px;
-        }
-        #inference-section .inference-card-header h4 {
-            font-size: 1.1em; font-weight: 700; color: var(--dark-color);
-        }
-        #inference-section .inference-card p {
-            font-size: 0.9em; color: #555; margin-bottom: 10px;
-        }
-        #inference-section .inference-tag-container {
+        .loader-overlay {
+            background: rgba(1, 69, 92, 0.9);
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .inference-category-tag {
-            padding: 4px 10px; border-radius: 12px;
-            font-size: 0.8em; font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .inference-card.criticos .inference-category-tag {
-            background-color: var(--cor-alerta); color: white;
-        }
-        .inference-card.criticos .inference-category-tag:hover {
-            background-color: #c0392b; transform: scale(1.05);
-        }
-        .inference-card.eficientes .inference-category-tag {
-            background-color: var(--cor-secundaria); color: var(--dark-color);
-        }
-        .inference-card.eficientes .inference-category-tag:hover {
-            background-color: #82a013; color: white; transform: scale(1.05);
-        }
-        .inference-card.ineficientes .inference-category-tag {
-            background-color: var(--cor-aviso); color: white;
-        }
-        .inference-card.ineficientes .inference-category-tag:hover {
-            background-color: #d35400; transform: scale(1.05);
-        }
-
-        #modal-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.6); display: none;
-            justify-content: center; align-items: center; z-index: 1000;
-        }
-        #modal-content {
-            background-color: white; color: black; padding: 25px;
-            border-radius: 8px; width: 90%; max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        #modal-title {
-            font-size: 1.25em; font-weight: 600; color: var(--cor-primaria);
-            margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #eee;
-        }
-        #modal-body ol { list-style-position: inside; }
-        #modal-body li { margin-bottom: 8px; }
-        #modal-close-btn {
-            background-color: var(--cor-primaria); color: white;
-            border: none; padding: 10px 20px; border-radius: 5px;
-            cursor: pointer; margin-top: 20px; float: right;
-        }
-
-        #progress-bar {
-            transition: width 0.3s ease-in-out;
-        }
-
-        header .container {
-            display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 9999;
         }
-         header .header-left {
-             display: flex;
-             align-items: center;
-             flex-grow: 1;
-             margin-right: 20px;
-         }
 
-        @media print {
-            body { background-color: #fff !important; color: #000 !important; }
-            header, footer, .tabs, .filters, #modal-container { display: none !important; }
-            main#dashboard-content, .tab-content { display: block !important; }
-            .card { box-shadow: none !important; border: 1px solid #ddd !important; page-break-inside: avoid !important; }
-            .stat-card { border: 1px solid #ddd !important; }
-            .chart-container { height: 350px !important; width: 100%; }
-            h1.text-3xl { color: black !important; }
-            #inference-section, #scatter-legend-table { color: black !important; }
-            #inference-section .inference-card { background-color: #fff !important; }
+        .pulse-loader {
+            width: 60px;
+            height: 60px;
+            background-color: var(--cor-secundaria);
+            border-radius: 100%;
+            animation: pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .chart-explanation {
+            border-left: 4px solid var(--cor-info);
+            background: #f1f5f9;
+        }
+
+        .inference-category-tag {
+            transition: all 0.2s;
+        }
+        .inference-category-tag:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
         }
     </style>
 </head>
-<body class="text-gray-800 dark:text-gray-200 flex flex-col min-h-screen">
+<body>
 
-    <div class="flex-grow p-4 sm:p-6 lg:p-8">
-        <header class="mb-8">
-            <div class="container mx-auto">
-                <div class="header-left">
-                     <div>
-                         <h1 class="text-3xl font-bold text-white dark:text-white">Dashboard de Apontamentos</h1>
-                         <p class="text-gray-300 dark:text-gray-400">Relatório Interativo do SnagR</p>
-                     </div>
-                     <div class="project-selector-group">
-                         <label for="project-selector">Selecionar Projeto</label>
-                         <select id="project-selector">
-                             <option value="Unificado">Unificado</option>
-                             <option value="Hotel" selected>Hotel</option>
-                             <option value="Centro Medico">Centro Medico</option>
-                             <option value="Ensino">Ensino</option>
-                             <option value="Residencial">Residencial</option>
-                             <option value="Embasamento">Embasamento</option>
-                         </select>
-                     </div>
-                 </div>
-            </div>
-        </header>
-
-        <div id="initial-message" class="initial-message text-center py-10 text-gray-200 text-lg">
-            <p>Carregando dados do projeto...</p>
+    <div id="loading-container" class="loader-overlay fixed inset-0" style="display: none;">
+        <div class="pulse-loader mb-6"></div>
+        <h2 id="loading-status" class="text-white text-xl font-semibold tracking-wide">Iniciando...</h2>
+        <div class="w-64 bg-white/20 rounded-full h-1.5 mt-4 overflow-hidden">
+            <div id="progress-bar" class="bg-[--cor-secundaria] h-full transition-all duration-300" style="width: 0%"></div>
         </div>
-
-        <div id="loading-container" class="text-center py-10" style="display: none;">
-            <p id="loading-status" class="text-gray-200 text-lg mb-4">Iniciando...</p>
-            <div id="progress-bar-container" class="w-full max-w-md mx-auto bg-gray-600 rounded-full h-2.5">
-                <div id="progress-bar" class="bg-[--cor-secundaria] h-2.5 rounded-full" style="width: 0%"></div>
-            </div>
-        </div>
-
-        <div id="error-message" class="error bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" style="display: none;" role="alert"></div>
-
-        <main id="dashboard-content" style="display: none;">
-
-             <div class="tabs">
-                <button class="tab-link active" onclick="openTab(event, 'visaoGeral')">Visão Geral</button>
-                <button class="tab-link" onclick="openTab(event, 'eficiencia')">Eficiência (SLA)</button>
-                <button class="tab-link" onclick="openTab(event, 'localizacao')">Análise por Localização</button>
-            </div>
-
-            <div id="visaoGeral" class="tab-content">
-                <div class="filters">
-                    <div class="filter-group">
-                        <label for="spotted-filter">Data (Spotted)</label>
-                        <input type="date" id="spotted-filter">
-                    </div>
-                    <div class="filter-group">
-                        <label for="year-filter">Ano</label>
-                        <select id="year-filter">
-                            <option value="all">Todos</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="month-filter">Mês</label>
-                        <select id="month-filter">
-                            <option value="all">Todos</option>
-                            <option value="0">Janeiro</option>
-                            <option value="1">Fevereiro</option>
-                            <option value="2">Março</option>
-                            <option value="3">Abril</option>
-                            <option value="4">Maio</option>
-                            <option value="5">Junho</option>
-                            <option value="6">Julho</option>
-                            <option value="7">Agosto</option>
-                            <option value="8">Setembro</option>
-                            <option value="9">Outubro</option>
-                            <option value="10">Novembro</option>
-                            <option value="11">Dezembro</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="stats grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-                    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value primaria" id="total-records">0</div></div>
-                    <div class="stat-card alerta"><div class="stat-label">Em Aberto</div><div class="stat-value alerta" id="open-records">0</div></div>
-                    <div class="stat-card sucesso"><div class="stat-label">Fechados</div><div class="stat-value sucesso" id="closed-records">0</div></div>
-                    <div class="stat-card sucesso"><div class="stat-label">Assinados</div><div class="stat-value sucesso" id="signed-off-records">0</div></div>
-                    <div class="stat-card"><div class="stat-label">Não Aceitos</div><div class="stat-value primaria" id="not-accepted-records">0</div></div>
-                    <div class="stat-card sucesso"><div class="stat-label">Taxa de Resolução</div><div class="stat-value sucesso" id="resolution-rate">0%</div></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Volume de Apontamentos por Mês</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="histogramChart"></canvas></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Histórico de Taxa de Resolução (Mensal)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="monthlyResolutionRateChart"></canvas></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Histórico de Apontamentos por Mês (Criados vs. Resolvidos)</div>
-                    <div class="chart-container" style="height: 400px;"><canvas id="statusHistoryChart"></canvas></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Análise Detalhada por Descrição</div>
-                    <div class="filters" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); display: grid;">
-                        <div class="filter-group"><label for="groupname-filter">Groupname</label><select id="groupname-filter"><option value="all">Todos</option></select></div>
-                        <div class="filter-group"><label for="categoria-filter">Categoria</label><select id="categoria-filter"><option value="all">Todas</option></select></div>
-                        <div class="filter-group"><label for="tipo-filter">Tipo</label><select id="tipo-filter"><option value="all">Todos</option></select></div>
-                        <div class="filter-group"><label for="descricao-filter">Descrição (Defeito)</label><select id="descricao-filter"><option value="all">Todas</option></select></div>
-                    </div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="detailsChart"></canvas></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Mapa de Calor: Concentração por Categoria/Mês</div>
-                     <div class="filters" style="padding: 0; box-shadow: none; margin-bottom: 15px;">
-                         <div class="filter-group" style="min-width: 150px; max-width: 200px;">
-                             <label for="heatmap-year-filter">Ano do Mapa de Calor</label>
-                             <select id="heatmap-year-filter"><option value="all">Todos</option></select>
-                         </div>
-                     </div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="heatmapChart"></canvas></div>
-                    <div id="heatmap-legend" class="mt-4 flex items-center justify-center space-x-2 text-sm text-gray-600"></div>
-                </div>
-            </div>
-
-            <div id="eficiencia" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="card-header">Desempenho de Resolução por Categoria</div>
-                    <div class="card-subheader">(Eixo X = Tempo Médio de Resolução, Eixo Y = Volume de Apontamentos)</div>
-                     <div class="chart-container" style="height: 450px;"><canvas id="resolutionScatterChart"></canvas></div>
-                     <div id="scatter-legend-table"></div>
-                     <div id="inference-section"></div>
-                </div>
-                 <div class="card mt-6">
-                    <div class="card-header">Cumprimento de SLA por Categoria</div>
-                     <div class="chart-container" style="height: 400px;"><canvas id="slaByCategoryChart"></canvas></div>
-                </div>
-            </div>
-
-            <div id="localizacao" class="tab-content" style="display: none;">
-                <div class="filters">
-                    <div class="filter-group">
-                        <label for="grouping-filter">Filtrar por Agrupamento (Torre/Setor)</label>
-                        <select id="grouping-filter">
-                            <option value="all">Todos</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Ranking de Locais por Volume de Apontamentos</div>
-                    <div class="card-subheader">(Top 15 locais com maior incidência no agrupamento selecionado)</div>
-                    <div class="chart-container" style="height: 500px;"><canvas id="locationRankingChart"></canvas></div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Mapa de Calor: Categoria vs. Local</div>
-                    <div class="card-subheader">(Concentração de tipos de problema por local no agrupamento selecionado)</div>
-                    <div class="chart-container" style="height: 600px;"><canvas id="locationCategoryHeatmap"></canvas></div>
-                </div>
-            </div>
-
-        </main>
     </div>
 
-    <footer class="bg-white dark:bg-gray-800 shadow-inner py-6 text-center">
-        <div class="container mx-auto">
-            <p class="text-gray-600 mb-4">Carregue um arquivo <code class="bg-gray-200 p-1 rounded">.jsonl</code> para análise ou use o seletor de projeto.</p>
-            <input type="file" id="json-file-input" accept=".jsonl,.txt,.json" style="display: none;" />
-            <button class="bg-[--cor-primaria] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" onclick="document.getElementById('json-file-input').click()">Carregar Arquivo Manual</button>
-            <p id="file-name" style="margin-top: 10px; font-size: 14px; color: #555;"></p>
+    <header class="sticky top-0 z-40 shadow-lg">
+        <div class="max-w-[1600px] mx-auto px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-white/10 p-2 rounded-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white tracking-tight">Dashboard de Qualidade</h1>
+                    <p class="text-white/70 text-sm font-medium">Controle Interativo SnagR</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 bg-black/10 p-2 rounded-xl border border-white/10">
+                <label for="project-selector" class="text-white/80 text-xs font-bold uppercase tracking-wider ml-2">Projeto:</label>
+                <select id="project-selector" class="bg-transparent text-white font-bold text-sm cursor-pointer border-none focus:ring-0">
+                    <option class="text-gray-900" value="Unificado">Geral Unificado</option>
+                    <option class="text-gray-900" value="Hotel" selected>Hotel</option>
+                    <option class="text-gray-900" value="Centro Medico">Centro Médico</option>
+                    <option class="text-gray-900" value="Ensino">Ensino</option>
+                    <option class="text-gray-900" value="Residencial">Residencial</option>
+                    <option class="text-gray-900" value="Embasamento">Embasamento</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="max-w-[1600px] mx-auto px-6 flex gap-8">
+            <button onclick="openTab(event, 'visaoGeral')" class="tab-link active text-white font-bold py-3 text-sm uppercase tracking-widest">Visão Geral</button>
+            <button onclick="openTab(event, 'eficiencia')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Eficiência (SLA)</button>
+            <button onclick="openTab(event, 'localizacao')" class="tab-link text-white font-bold py-3 text-sm uppercase tracking-widest">Localização</button>
+        </div>
+    </header>
+
+    <main class="max-w-[1600px] mx-auto p-6">
+        
+        <div id="initial-message" class="text-center py-20 animate-pulse">
+            <p class="text-slate-400 text-xl font-medium">Selecione um projeto ou carregue um arquivo para iniciar a análise.</p>
+        </div>
+
+        <div id="dashboard-content" style="display: none;" class="space-y-8">
+            
+            <div id="visaoGeral" class="tab-content space-y-8">
+                <section class="glass-card rounded-2xl p-6 flex flex-wrap gap-6 items-end">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Filtrar por Data</label>
+                        <input type="date" id="spotted-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm">
+                    </div>
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Ano</label>
+                        <select id="year-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm">
+                            <option value="all">Todos os Anos</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 min-w-[150px]">
+                        <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Mês</label>
+                        <select id="month-filter" class="w-full bg-slate-100 border-none rounded-lg p-2.5 text-slate-800 font-semibold text-sm text-gray-900">
+                            <option value="all">Todos os Meses</option>
+                            <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
+                            <option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option>
+                            <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
+                            <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+                    <div class="glass-card stat-card">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Total</span>
+                        <div id="total-records" class="text-4xl font-extrabold text-[--cor-primaria] mt-2">0</div>
+                    </div>
+                    <div class="glass-card stat-card alerta">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Em Aberto</span>
+                        <div id="open-records" class="text-4xl font-extrabold text-red-500 mt-2">0</div>
+                    </div>
+                    <div class="glass-card stat-card sucesso">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Fechados</span>
+                        <div id="closed-records" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0</div>
+                    </div>
+                    <div class="glass-card stat-card sucesso">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Assinados</span>
+                        <div id="signed-off-records" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0</div>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Não Aceitos</span>
+                        <div id="not-accepted-records" class="text-4xl font-extrabold text-slate-600 mt-2">0</div>
+                    </div>
+                    <div class="glass-card stat-card sucesso">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Resolução</span>
+                        <div id="resolution-rate" class="text-4xl font-extrabold text-[--cor-secundaria] mt-2">0%</div>
+                    </div>
+                </section>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <article class="glass-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-[--cor-primaria] rounded-full"></span>
+                            Volume de Apontamentos Mensais
+                        </h3>
+                        <div class="h-[350px]"><canvas id="histogramChart"></canvas></div>
+                    </article>
+
+                    <article class="glass-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-[--cor-secundaria] rounded-full"></span>
+                            Histórico de Taxa de Resolução
+                        </h3>
+                        <div class="h-[350px]"><canvas id="monthlyResolutionRateChart"></canvas></div>
+                        <div class="chart-explanation p-4 rounded-lg mt-6 text-sm text-slate-600">
+                            <strong>Insight:</strong> Uma curva ascendente indica que a equipe está resolvendo passivos acumulados de forma eficiente.
+                        </div>
+                    </article>
+                </div>
+
+                <article class="glass-card rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6">Criados vs. Resolvidos (Entrada/Saída)</h3>
+                    <div class="h-[400px]"><canvas id="statusHistoryChart"></canvas></div>
+                </article>
+
+                <section class="glass-card rounded-2xl p-6 space-y-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                        <h3 class="text-xl font-bold text-slate-800">Detalhamento por Categoria</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
+                            <select id="groupname-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Groupname</option></select>
+                            <select id="categoria-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Categoria</option></select>
+                            <select id="tipo-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Tipo</option></select>
+                            <select id="descricao-filter" class="bg-slate-50 text-xs font-bold rounded-lg p-2 border border-slate-200"><option value="all">Descrição</option></select>
+                        </div>
+                    </div>
+                    <div class="h-[500px]"><canvas id="detailsChart"></canvas></div>
+                </section>
+
+                <article class="glass-card rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-slate-800">Mapa de Calor: Concentração Temporal</h3>
+                        <select id="heatmap-year-filter" class="bg-slate-100 text-xs font-bold rounded-lg px-4 py-2 border-none">
+                            <option value="all">Todos os Anos</option>
+                        </select>
+                    </div>
+                    <div class="h-[500px]"><canvas id="heatmapChart"></canvas></div>
+                    <div id="heatmap-legend" class="mt-8 flex items-center justify-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-widest"></div>
+                </article>
+            </div>
+
+            <div id="eficiencia" class="tab-content space-y-8" style="display: none;">
+                <div class="grid grid-cols-1 gap-8">
+                    <article class="glass-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Matriz de Desempenho</h3>
+                        <p class="text-sm text-slate-400 mb-6">Correlação entre Volume de Ocorrências e Tempo Médio de Resolução (Dias)</p>
+                        <div class="h-[500px]"><canvas id="resolutionScatterChart"></canvas></div>
+                        <div id="scatter-legend-table" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-100 pt-8"></div>
+                        <div id="inference-section" class="mt-8"></div>
+                    </article>
+                    <article class="glass-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Aderência ao SLA por Categoria</h3>
+                        <div class="h-[450px]"><canvas id="slaByCategoryChart"></canvas></div>
+                    </article>
+                </div>
+            </div>
+
+            <div id="localizacao" class="tab-content space-y-8" style="display: none;">
+                <section class="glass-card rounded-2xl p-6 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-800">Filtro Geográfico</h3>
+                    <select id="grouping-filter" class="bg-slate-100 text-sm font-bold rounded-xl px-6 py-3 border-none w-72">
+                        <option value="all">Todas as Torres/Setores</option>
+                    </select>
+                </section>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <article class="glass-card rounded-2xl p-6 lg:col-span-1">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Top 15 Locais Críticos</h3>
+                        <div class="h-[600px]"><canvas id="locationRankingChart"></canvas></div>
+                    </article>
+                    <article class="glass-card rounded-2xl p-6 lg:col-span-2">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Mapa de Localização vs. Defeitos</h3>
+                        <div class="h-[600px]"><canvas id="locationCategoryHeatmap"></canvas></div>
+                    </article>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-10">
+        <div class="max-w-[1600px] mx-auto px-6 text-center">
+            <p class="text-slate-500 text-sm mb-6">Análise offline disponível: carregue seu arquivo <code class="bg-slate-100 px-2 py-1 rounded">.jsonl</code> extraído do SnagR.</p>
+            <input type="file" id="json-file-input" accept=".jsonl,.txt,.json" class="hidden" />
+            <button onclick="document.getElementById('json-file-input').click()" class="bg-slate-800 hover:bg-black text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-3 mx-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Carregar Arquivo Manual
+            </button>
+            <p id="file-name" class="mt-4 text-xs font-bold text-[--cor-primaria] tracking-wide uppercase"></p>
         </div>
     </footer>
 
-    <div id="modal-container">
-        <div id="modal-content">
-            <h3 id="modal-title"></h3>
-            <div id="modal-body"></div>
-            <button id="modal-close-btn">Fechar</button>
+    <div id="modal-container" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div id="modal-content" class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-800">Detalhes do Item</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-8 text-slate-600 space-y-4 max-h-[70vh] overflow-y-auto"></div>
+            <div class="p-6 bg-slate-50 text-right">
+                <button onclick="closeModal()" class="bg-slate-800 text-white px-6 py-2 rounded-lg font-bold">Entendido</button>
+            </div>
         </div>
     </div>
 
-    <div id="drag-drop-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(1, 69, 92, 0.85); z-index: 9999; display: none; justify-content: center; align-items: center; pointer-events: none;">
-        <div style="border: 3px dashed var(--cor-secundaria); border-radius: 15px; padding: 40px 60px; text-align: center;">
-            <h2 style="color: white; font-size: 2em; font-weight: bold;">Solte o arquivo .jsonl aqui</h2>
-            <p style="color: var(--light-color); font-size: 1.1em;">O processamento será iniciado automaticamente.</p>
+    <div id="drag-drop-overlay" class="fixed inset-0 bg-[--cor-primaria]/90 z-[100] hidden items-center justify-center border-8 border-dashed border-[--cor-secundaria] m-4 rounded-3xl pointer-events-none">
+        <div class="text-center text-white">
+            <svg class="w-24 h-24 mx-auto mb-6 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <h2 class="text-4xl font-black">Solte para Processar</h2>
+            <p class="text-white/60 mt-2">Analise seus dados SnagR instantaneamente</p>
         </div>
     </div>
-
 
     <script>
-        // ### VARIÁVEIS GLOBAIS E DE ESTADO ###
         let allData = [];
         let currentFinalData = [];
-        let histogramChart, detailsChart, heatmapChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart;
-        let locationRankingChart, locationCategoryHeatmap;
+        let charts = {};
         const SLA_RULES = { 1: 3, 2: 7, 3: 15, 4: 30 };
-
-        // *** JAVASCRIPT ALTERADO AQUI ***
         const PROJECT_FILES = {
-            "Unificado": "./Snags_Unificado_CM.jsonl", // Adicionado "Unificado"
+            "Unificado": "./Snags_Unificado_CM.jsonl",
             "Hotel": "./Hotel.jsonl",
             "Centro Medico": "./Centro medico.jsonl",
             "Ensino": "./Ensino.jsonl",
@@ -531,665 +385,465 @@
             "Embasamento": "./Embasamento.jsonl"
         };
 
-        // ### FUNÇÃO AUXILIAR PARA PARSE DE DATAS ###
-        /**
-         * Tenta parsear uma string de data em vários formatos e retorna YYYY-MM-DD ou null.
-         * @param {string | null} dateStr A string da data a ser parseada.
-         * @returns {string | null} A data no formato YYYY-MM-DD ou null se inválida/não reconhecida.
-         */
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748b';
+
         function parseDateString(dateStr) {
-            if (!dateStr || typeof dateStr !== 'string') {
-                return null;
-            }
-            // Remove a parte da hora, separada por espaço ou 'T'
+            if (!dateStr || typeof dateStr !== 'string') return null;
             const datePart = dateStr.split(/[ T]/)[0];
-
-            // 1. Tenta formato YYYY-MM-DD (já está correto)
-            if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
-                try {
-                    const [year, month, day] = datePart.split('-').map(Number);
-                    if (year > 1900 && year < 3000 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                         // Validação básica OK, retorna formatado para garantir padding
-                         return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    }
-                } catch (e) { /* ignore */ }
-            }
-
-            // 2. Tenta formato DD/MM/YYYY
+            if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) return datePart;
             if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(datePart)) {
-                try {
-                    const parts = datePart.split('/');
-                    if (parts.length === 3) {
-                        const [day, month, year] = parts.map(Number);
-                        if (year > 1900 && year < 3000 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                            return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        }
-                    }
-                } catch (e) { /* ignore */ }
+                const [d, m, y] = datePart.split('/');
+                return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
             }
-
-            // 3. Fallback: Tenta usar o construtor Date (menos confiável)
             try {
-                // Tenta criar um objeto Date. Adicionar 'Z' pode ajudar a interpretar como UTC.
-                // Usar replace para garantir que T seja usado como separador se houver espaço
-                const d = new Date(dateStr.replace(' ', 'T') + 'Z');
-                if (!isNaN(d.getTime())) { // Verifica se a data é válida
-                     // Extrai ano, mês e dia em UTC para evitar problemas de fuso horário local
-                     const year = d.getUTCFullYear();
-                     const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // Mês é 0-indexed
-                     const day = String(d.getUTCDate()).padStart(2, '0');
-                     if (year > 1900 && year < 3000) { // Verifica o ano novamente
-                         return `${year}-${month}-${day}`;
-                     }
-                }
-            } catch(e) { /* ignore Date constructor errors */ }
-
-
-            console.warn(`Formato de data não reconhecido ou inválido: ${dateStr}`); // Loga formatos não reconhecidos
-            return null; // Retorna null se nenhum formato funcionar
+                const d = new Date(dateStr.replace(' ', 'T'));
+                if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
+            } catch(e) {}
+            return null;
         }
 
-
-        // ### PROCESSAMENTO E NORMALIZAÇÃO DE DADOS ###
         const processAndNormalizeData = (rawData) => {
-             return rawData.map(item => {
-                 const cleanItem = {};
-                 for (const key in item) {
-                     if (Object.hasOwnProperty.call(item, key)) {
-                         const cleanKey = key.replace(/^\uFEFF/, '');
-                         cleanItem[cleanKey] = item[key];
-                     }
-                 }
-                 item = cleanItem;
+            return rawData.map(item => {
+                const cleanItem = {};
+                for (const key in item) {
+                    const cleanKey = key.replace(/^\uFEFF/, '');
+                    cleanItem[cleanKey] = item[key];
+                }
+                if (!cleanItem.SnagID) return null;
 
-                if (!item.SnagID) return null;
+                const spottedDate = parseDateString(cleanItem.Spotted);
+                const fixDateField = cleanItem['Data alteração'] || cleanItem['LastChanged'];
+                const fixDate = parseDateString(fixDateField);
+                
+                let finalStatus = cleanItem.Status;
+                if (cleanItem.FixStatus?.toLowerCase() === 'signedoff') finalStatus = 'SignedOff';
+                if (cleanItem.FixStatus?.toLowerCase() === 'notadefect') finalStatus = 'NotADefect';
 
-                // Usa a nova função parseDateString
-                let spottedDate = parseDateString(item.Spotted);
-                const changeDateField = item['Data alteração'] || item['LastChanged'];
-                let fixDate = parseDateString(changeDateField);
-                let lastChangedDate = fixDate; // Assume que a data de correção é a última alteração relevante
-
-                // Restante da lógica permanece igual...
-                let finalStatus = item.Status;
-                if (item.FixStatus?.toLowerCase() === 'signedoff') finalStatus = 'SignedOff';
-                if (item.FixStatus?.toLowerCase() === 'notadefect') finalStatus = 'NotADefect';
                 let daysToResolve = null;
-                if ((finalStatus === 'Closed' || finalStatus === 'SignedOff') && spottedDate && fixDate) {
-                    try {
-                        // Usa Date.UTC para evitar problemas de fuso horário no cálculo da diferença
-                        const startUTC = Date.UTC(...spottedDate.split('-').map((v, i) => i === 1 ? v - 1 : v)); // month is 0-indexed
-                        const endUTC = Date.UTC(...fixDate.split('-').map((v, i) => i === 1 ? v - 1 : v));
-
-                        if (!isNaN(startUTC) && !isNaN(endUTC) && endUTC >= startUTC) {
-                            daysToResolve = (endUTC - startUTC) / (1000 * 60 * 60 * 24);
-                        } else {
-                             // console.warn(`Datas inválidas ou data final anterior à inicial para ${item.SnagID}: Spotted=${spottedDate}, Fix=${fixDate}`);
-                         }
-                    } catch (e) {
-                         // console.error(`Erro ao calcular dias para resolver ${item.SnagID}:`, e);
-                    }
+                if (['Closed', 'SignedOff'].includes(finalStatus) && spottedDate && fixDate) {
+                    const start = new Date(spottedDate);
+                    const end = new Date(fixDate);
+                    daysToResolve = (end - start) / (1000 * 60 * 60 * 24);
                 }
-                const sla = SLA_RULES[item.Priority];
-                const withinSla = daysToResolve !== null && sla !== undefined ? daysToResolve <= sla : null;
 
-                const location = item.Location || "Não definido";
-                let agrupamento = "N/A";
-                let tipoAgrupamento = "Outro";
-                let pavimento = location;
+                const sla = SLA_RULES[cleanItem.Priority];
+                const withinSla = (daysToResolve !== null && sla) ? (daysToResolve <= sla) : null;
 
-                const match = location.match(/^(T|S)0?([1-5])_?/i);
-
+                const loc = cleanItem.Location || "Não definido";
+                let agrupamento = "N/A", tipoAgrupamento = "Outro";
+                const match = loc.match(/^(T|S)0?([1-5])/i);
                 if (match) {
-                    const typeChar = match[1].toUpperCase();
-                    const number = match[2];
-
-                    if (typeChar === 'T') {
-                        tipoAgrupamento = "Torre";
-                        agrupamento = `Torre 0${number}`;
-                    } else if (typeChar === 'S') {
-                        tipoAgrupamento = "Setor";
-                        agrupamento = `Setor 0${number}`;
-                    }
-                    pavimento = location.substring(match[0].length).trim();
-                } else {
-                    const pavMatch = location.match(/^(?:Est\s)?(?:Pav|Subsolo)\s(\d+)/i);
-                     if (pavMatch && pavMatch[1]) {
-                         pavimento = location;
-                     } else {
-                         pavimento = location;
-                     }
+                    tipoAgrupamento = match[1].toUpperCase() === 'T' ? "Torre" : "Setor";
+                    agrupamento = `${tipoAgrupamento} 0${match[2]}`;
                 }
-
 
                 return {
-                    id: item.SnagID,
-                    responsavel: item.Fullname || "Não atribuído",
+                    id: cleanItem.SnagID,
+                    responsavel: cleanItem.Fullname || "Não atribuído",
                     data: spottedDate,
-                    lastChangedDate: lastChangedDate,
-                    tipo: item.Description || "Não definido",
-                    categoria: item.Category || "Não definida",
-                    descricao: item.Defect || "Não definido",
-                    situacao: finalStatus || "Não definida",
-                    groupname: item.Groupname || "Não definido",
-                    priority: item.Priority,
-                    daysToResolve: daysToResolve,
-                    withinSla: withinSla,
-                    Location: location,
+                    lastChangedDate: fixDate,
+                    tipo: cleanItem.Description || "Não definido",
+                    categoria: cleanItem.Category || "Não definida",
+                    descricao: cleanItem.Defect || "Não definido",
+                    situacao: finalStatus || "Pendente",
+                    groupname: cleanItem.Groupname || "Não definido",
+                    priority: cleanItem.Priority,
+                    daysToResolve,
+                    withinSla,
+                    Location: loc,
                     Agrupamento: agrupamento,
-                    TipoAgrupamento: tipoAgrupamento,
-                    Pavimento: pavimento
+                    TipoAgrupamento: tipoAgrupamento
                 };
-             }).filter(item => item !== null && item.data); // Garante que itens sem data de criação válida sejam removidos
+            }).filter(i => i !== null && i.data);
         };
 
-
-        const processDataInChunks = async (rawData, onProgress) => {
-            const chunkSize = 1000;
-            let processedData = [];
-            for (let i = 0; i < rawData.length; i += chunkSize) {
-                const chunk = rawData.slice(i, i + chunkSize);
-                const processedChunk = processAndNormalizeData(chunk);
-                processedData = processedData.concat(processedChunk);
-                const progress = Math.round(((i + chunk.length) / rawData.length) * 100);
-                onProgress(progress);
-                await new Promise(resolve => setTimeout(resolve, 0));
-            }
-            return processedData;
-        };
-
-        const getUniqueRecords = (data) => {
-             const seenIds = new Set();
-            return data.filter(item => {
-                if (!item || !item.id) return false;
-                if (seenIds.has(item.id)) return false;
-                seenIds.add(item.id);
-                return true;
-            });
-        };
-
-        const processContent = async (content, fileDescription) => {
-             const loadingContainer = document.getElementById('loading-container');
-             const statusText = document.getElementById('loading-status');
-             const progressBar = document.getElementById('progress-bar');
-             const dashboardContent = document.getElementById('dashboard-content');
-             const initialMessage = document.getElementById('initial-message');
-
+        const processContentAndInitialize = (content, label) => {
+            const loader = document.getElementById('loading-container');
+            const progress = document.getElementById('progress-bar');
+            const status = document.getElementById('loading-status');
+            
             try {
-                statusText.textContent = 'Leitura concluída. Processando dados...';
-                progressBar.style.width = '50%';
-                initialMessage.style.display = 'none';
-                 clearDashboardState();
-                 let rawData;
-                 try {
-                     rawData = content.split('\n')
-                                      .filter(line => line.trim().length > 0)
-                                      .map(line => JSON.parse(line.replace(/:\s*NaN/g, ': null')));
-                 } catch (parseErr) {
-                      console.error("Erro de parse JSONL:", parseErr);
-                      content.split('\n').forEach((line, index) => {
-                          if (line.trim().length > 0) {
-                              try { JSON.parse(line.replace(/:\s*NaN/g, ': null')); } catch (e) {
-                                  console.error(`Erro ao parsear linha ${index + 1}: ${line.substring(0, 100)}...`, e);
-                              }
-                          }
-                      });
-                      throw new Error(`Formato JSON inválido no arquivo ${fileDescription}. Verifique o console.`);
-                 }
+                status.textContent = "Processando dados...";
+                progress.style.width = '60%';
 
-                allData = await processDataInChunks(rawData, (progress) => {
-                    const totalProgress = 50 + (progress / 2);
-                    statusText.textContent = `Processando dados de ${fileDescription}... ${progress}%`;
-                    progressBar.style.width = `${totalProgress}%`;
-                });
+                const rawLines = content.split('\n').filter(l => l.trim());
+                const rawJson = rawLines.map(l => {
+                    try { return JSON.parse(l.replace(/:\s*NaN/g, ': null')); } catch(e) { return null; }
+                }).filter(j => j !== null);
+                
+                allData = processAndNormalizeData(rawJson);
+                allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                allData.sort((a, b) => {
-                     if (!a.data) return 1; if (!b.data) return -1;
-                     try {
-                        // Comparação direta de strings YYYY-MM-DD funciona
-                        return a.data.localeCompare(b.data);
-                     } catch (e) { return 0; }
-                 });
+                if (allData.length === 0) throw new Error("Nenhum dado válido encontrado no arquivo.");
 
-                console.log(`Dados processados (${allData.length} registros válidos com data) para ${fileDescription}`);
-
-                if (allData.length === 0) {
-                    showError(`O arquivo ${fileDescription} não contém dados de apontamentos válidos ou com data reconhecida.`);
-                    loadingContainer.style.display = 'none';
-                    return;
-                }
-
-                statusText.textContent = 'Gerando gráficos...';
-                document.getElementById('file-name').textContent = `Projeto: ${fileDescription}`;
-                populateGlobalFilters();
-                populateHeatmapYearFilter(allData);
+                initFilters();
                 runUpdate();
 
-                loadingContainer.style.display = 'none';
-                dashboardContent.style.display = 'block';
-
+                document.getElementById('initial-message').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+                document.getElementById('file-name').textContent = `Fonte: ${label}`;
+                
+                loader.style.display = 'none';
             } catch (err) {
-                console.error(`Erro detalhado ao processar ${fileDescription}:`, err);
-                showError(`Erro ao processar os dados do projeto ${fileDescription}. Detalhe: ${err.message}`);
-                loadingContainer.style.display = 'none';
-                dashboardContent.style.display = 'none';
-                initialMessage.style.display = 'block';
-                initialMessage.textContent = `Falha ao carregar dados do projeto ${fileDescription}.`
+                console.error(err);
+                loader.style.display = 'none';
+                alert("Falha ao processar arquivo: " + err.message);
             }
         };
-
-         function clearDashboardState() {
-             allData = [];
-             currentFinalData = [];
-             const charts = [
-                 histogramChart, detailsChart, heatmapChart, slaByCategoryChart,
-                 monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart,
-                 locationRankingChart, locationCategoryHeatmap
-             ];
-             charts.forEach(chart => {
-                 if (chart && typeof chart.destroy === 'function') {
-                     try { chart.destroy(); } catch (e) { console.error("Erro ao destruir gráfico:", e); }
-                 }
-             });
-             histogramChart = detailsChart = heatmapChart = slaByCategoryChart = monthlyResolutionRateChart = resolutionScatterChart = statusHistoryChart = locationRankingChart = locationCategoryHeatmap = null;
-
-             document.getElementById('scatter-legend-table').innerHTML = '';
-             document.getElementById('inference-section').innerHTML = '';
-             document.getElementById('heatmap-legend').innerHTML = '';
-
-             const filterIdsToReset = ['year-filter', 'month-filter', 'groupname-filter', 'categoria-filter', 'tipo-filter', 'descricao-filter', 'heatmap-year-filter', 'grouping-filter'];
-             filterIdsToReset.forEach(id => {
-                 const select = document.getElementById(id);
-                 if (select) {
-                     while (select.options.length > 1) { select.remove(1); }
-                     select.value = 'all';
-                 }
-             });
-              document.getElementById('spotted-filter').value = '';
-
-             document.getElementById('total-records').textContent = '0';
-             document.getElementById('open-records').textContent = '0';
-             document.getElementById('closed-records').textContent = '0';
-             document.getElementById('signed-off-records').textContent = '0';
-             document.getElementById('not-accepted-records').textContent = '0';
-             document.getElementById('resolution-rate').textContent = '0%';
-
-             openTab({ currentTarget: document.querySelector('.tab-link') }, 'visaoGeral');
-         }
 
         const loadProjectData = async (projectName) => {
-            const fileName = PROJECT_FILES[projectName];
-            if (!fileName) { showError(`Arquivo não definido para "${projectName}".`); return; }
-            const loadingContainer = document.getElementById('loading-container');
-            const statusText = document.getElementById('loading-status');
-            const progressBar = document.getElementById('progress-bar');
-            const dashboardContent = document.getElementById('dashboard-content');
-            const initialMessage = document.getElementById('initial-message');
-             dashboardContent.style.display = 'none'; initialMessage.style.display = 'none';
-             document.getElementById('error-message').style.display = 'none';
-             statusText.textContent = `Carregando ${projectName}...`; progressBar.style.width = '5%';
-             loadingContainer.style.display = 'block';
-             clearDashboardState();
+            const file = PROJECT_FILES[projectName];
+            if (!file) return;
+
+            const loader = document.getElementById('loading-container');
+            const progress = document.getElementById('progress-bar');
+            const status = document.getElementById('loading-status');
+            
+            loader.style.display = 'flex';
+            progress.style.width = '10%';
+            status.textContent = `Buscando ${projectName}...`;
+
             try {
-                statusText.textContent = `Buscando ${fileName}...`;
-                const response = await fetch(fileName); progressBar.style.width = '25%';
-                if (!response.ok) { throw new Error(`Falha ${response.status} ao buscar ${fileName}`); }
-                statusText.textContent = `Lendo ${fileName}...`;
-                const content = await response.text(); progressBar.style.width = '45%';
-                await processContent(content, projectName);
+                const response = await fetch(file);
+                if (!response.ok) throw new Error("Erro ao baixar dados do servidor.");
+                progress.style.width = '40%';
+                const content = await response.text();
+                processContentAndInitialize(content, projectName);
             } catch (err) {
-                 console.error(`Falha ao carregar ${projectName}:`, err);
-                 showError(`Erro ao carregar ${projectName}. Detalhe: ${err.message}.`);
-                 loadingContainer.style.display = 'none'; initialMessage.style.display = 'block';
-                 initialMessage.textContent = `Falha ao carregar ${projectName}.`
+                loader.style.display = 'none';
+                alert("Erro ao carregar projeto: " + err.message);
             }
         };
 
-        // Função loadAllProjectsData ainda existe, mas não é chamada pelo seletor ou carga inicial
-        const loadAllProjectsData = async () => {
-            const loadingContainer = document.getElementById('loading-container');
-            const statusText = document.getElementById('loading-status');
-            const progressBar = document.getElementById('progress-bar');
-            const dashboardContent = document.getElementById('dashboard-content');
-            const initialMessage = document.getElementById('initial-message');
-            dashboardContent.style.display = 'none'; initialMessage.style.display = 'none';
-            document.getElementById('error-message').style.display = 'none';
-            statusText.textContent = `Carregando dados mesclados...`; progressBar.style.width = '5%';
-            loadingContainer.style.display = 'block';
-            clearDashboardState();
-            try {
-                const fileNames = Object.values(PROJECT_FILES);
-                const fetchPromises = fileNames.map(fileName =>
-                    fetch(fileName).then(response => {
-                        if (!response.ok) { console.error(`Falha ${response.status} ao buscar ${fileName}`); throw new Error(`Falha ${fileName}`); }
-                        return response.text();
-                    }).catch(err => { console.error(`Erro ${fileName}:`, err); return ""; })
-                );
-                statusText.textContent = 'Baixando arquivos...';
-                const allFileContents = await Promise.all(fetchPromises); progressBar.style.width = '45%';
-                const combinedContent = allFileContents.join('\n');
-                if (combinedContent.trim().length === 0) { throw new Error("Nenhum dado carregado."); }
-                await processContent(combinedContent, "Mesclado (Todos os Projetos)"); // Mantendo descrição antiga se precisar
-            } catch (err) {
-                console.error(`Falha dados mesclados:`, err);
-                showError(`Erro ao carregar dados mesclados. Detalhe: ${err.message}.`);
-                loadingContainer.style.display = 'none'; initialMessage.style.display = 'block';
-                initialMessage.textContent = 'Falha ao carregar dados mesclados.'
-            }
-        };
+        const initFilters = () => {
+            const years = [...new Set(allData.map(d => d.data.substring(0, 4)))].sort((a,b) => b-a);
+            const yFilter = document.getElementById('year-filter');
+            yFilter.innerHTML = '<option value="all">Todos os Anos</option>';
+            years.forEach(y => yFilter.add(new Option(y, y)));
 
-        const processFile = async (file) => {
-             if (!file) return;
-            if (!file.name.endsWith('.jsonl') && !file.name.endsWith('.txt') && !file.name.endsWith('.json')) {
-                showError('Carregue um arquivo .jsonl, .json ou .txt.'); return;
-            }
-            const loadingContainer = document.getElementById('loading-container');
-            const statusText = document.getElementById('loading-status');
-            const progressBar = document.getElementById('progress-bar');
-            const dashboardContent = document.getElementById('dashboard-content');
-            const initialMessage = document.getElementById('initial-message');
-            initialMessage.style.display = 'none'; dashboardContent.style.display = 'none';
-            document.getElementById('error-message').style.display = 'none';
-            statusText.textContent = 'Lendo arquivo...'; progressBar.style.width = '0%';
-            loadingContainer.style.display = 'block';
-            clearDashboardState();
-            document.getElementById('file-name').textContent = `Arquivo: ${file.name}`;
-            const reader = new FileReader();
-            reader.onprogress = (event) => {
-                if (event.lengthComputable) {
-                    const percentage = Math.round((event.loaded / event.total) * 45);
-                    statusText.textContent = `Lendo... ${Math.round(percentage / 0.45)}%`;
-                    progressBar.style.width = `${percentage}%`;
-                }
-            };
-            reader.onload = async (e) => { await processContent(e.target.result, `Manual: ${file.name}`); };
-            reader.onerror = () => {
-                showError('Não foi possível ler o arquivo.'); loadingContainer.style.display = 'none';
-                initialMessage.style.display = 'block'; initialMessage.textContent = 'Falha ao ler o arquivo.'
-            };
-            reader.readAsText(file);
+            const hyFilter = document.getElementById('heatmap-year-filter');
+            hyFilter.innerHTML = '<option value="all">Todos os Anos</option>';
+            years.forEach(y => hyFilter.add(new Option(y, y)));
         };
-
-        const handleFileUpload = (event) => { processFile(event.target.files[0]); };
 
         const runUpdate = () => {
-             if (allData.length === 0) { console.warn("runUpdate sem dados."); return; }
-            const selectedSpottedDate = document.getElementById('spotted-filter').value;
-            const selectedYear = document.getElementById('year-filter').value;
-            const selectedMonth = document.getElementById('month-filter').value;
-            let baseFilteredData = allData;
-            if (selectedSpottedDate) { baseFilteredData = baseFilteredData.filter(d => d.data === selectedSpottedDate); }
-            if (selectedYear !== 'all') {
-                const yearNumber = parseInt(selectedYear, 10);
-                const today = new Date(); const currentYear = today.getFullYear(); today.setHours(0, 0, 0, 0);
-                baseFilteredData = baseFilteredData.filter(d => {
-                    if (!d.data) return false;
-                     try { const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false;
-                           if (recordDate.getFullYear() !== yearNumber) return false;
-                           if (yearNumber === currentYear && recordDate > today) return false; return true;
-                     } catch (e) { return false; }
-                });
-            }
-            if (selectedMonth !== 'all') {
-                const monthNumber = parseInt(selectedMonth, 10);
-                baseFilteredData = baseFilteredData.filter(d => {
-                    if (!d.data) return false;
-                     try { const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false;
-                           return recordDate.getMonth() === monthNumber;
-                     } catch (e) { return false; }
-                });
-            }
-            const uniqueBaseFilteredData = getUniqueRecords(baseFilteredData);
-            updateDetailFilters(uniqueBaseFilteredData);
-            const selectedGroupname = document.getElementById('groupname-filter').value;
-            const selectedCategoria = document.getElementById('categoria-filter').value;
-            const selectedTipo = document.getElementById('tipo-filter').value;
-            const selectedDescricao = document.getElementById('descricao-filter').value;
-            let finalFilteredData = uniqueBaseFilteredData;
-            if (selectedGroupname !== 'all') finalFilteredData = finalFilteredData.filter(d => d.groupname === selectedGroupname);
-            if (selectedCategoria !== 'all') finalFilteredData = finalFilteredData.filter(d => d.categoria === selectedCategoria);
-            if (selectedTipo !== 'all') finalFilteredData = finalFilteredData.filter(d => d.tipo === selectedTipo);
-            if (selectedDescricao !== 'all') finalFilteredData = finalFilteredData.filter(d => d.descricao === selectedDescricao);
-            currentFinalData = finalFilteredData;
-             updateKPIs(uniqueBaseFilteredData); updateHistogramChart(uniqueBaseFilteredData);
-             updateDetailsChart(finalFilteredData); updateHeatmapChart(uniqueBaseFilteredData);
-             updateMonthlyResolutionRateChart(uniqueBaseFilteredData);
-             updateStatusHistoryChart(getUniqueRecords(allData), selectedYear, selectedMonth);
-             updateResolutionScatterChart(finalFilteredData); updateSlaByCategoryChart(finalFilteredData);
-             populateGroupingFilter(finalFilteredData);
-            const selectedGrouping = document.getElementById('grouping-filter').value;
-            let locationFilteredData = finalFilteredData;
-            if(selectedGrouping !== 'all') { locationFilteredData = finalFilteredData.filter(d => d.Agrupamento === selectedGrouping); }
-             updateLocationRankingChart(locationFilteredData); updateLocationCategoryHeatmap(locationFilteredData);
-             console.log("Dashboard atualizado.");
+            const year = document.getElementById('year-filter').value;
+            const month = document.getElementById('month-filter').value;
+            const spotted = document.getElementById('spotted-filter').value;
+
+            let filtered = allData;
+            if (spotted) filtered = filtered.filter(d => d.data === spotted);
+            if (year !== 'all') filtered = filtered.filter(d => d.data.startsWith(year));
+            if (month !== 'all') filtered = filtered.filter(d => new Date(d.data + "T12:00:00").getMonth() == month);
+
+            const seen = new Set();
+            currentFinalData = filtered.filter(d => seen.has(d.id) ? false : seen.add(d.id));
+
+            updateKPIs();
+            updateCharts();
+            updateDetailFilters();
         };
 
-         const updateDetailFilters = (data) => {
-             const groupnameSelect = document.getElementById('groupname-filter');
-             const categoriaSelect = document.getElementById('categoria-filter');
-             const tipoSelect = document.getElementById('tipo-filter');
-             const descricaoSelect = document.getElementById('descricao-filter');
-             const currentGroupname = groupnameSelect.value; const currentCategoria = categoriaSelect.value;
-             const currentTipo = tipoSelect.value; const currentDescricao = descricaoSelect.value;
-             const groupnamesUnicos = [...new Set(data.map(item => item.groupname))].filter(Boolean);
-             populateDropdown('groupname-filter', groupnamesUnicos, currentGroupname);
-             const dataFiltradaPorGrupo = currentGroupname === 'all' ? data : data.filter(d => d.groupname === currentGroupname);
-             const categoriasUnicas = [...new Set(dataFiltradaPorGrupo.map(item => item.categoria))].filter(Boolean);
-             populateDropdown('categoria-filter', categoriasUnicas, currentCategoria);
-             const dataFiltradaPorCategoria = currentCategoria === 'all' ? dataFiltradaPorGrupo : dataFiltradaPorGrupo.filter(d => d.categoria === currentCategoria);
-             const tiposUnicos = [...new Set(dataFiltradaPorCategoria.map(item => item.tipo))].filter(Boolean);
-             populateDropdown('tipo-filter', tiposUnicos, currentTipo);
-             const dataFiltradaPorTipo = currentTipo === 'all' ? dataFiltradaPorCategoria : dataFiltradaPorCategoria.filter(d => d.tipo === currentTipo);
-             const descricoesUnicas = [...new Set(dataFiltradaPorTipo.map(item => item.descricao))].filter(Boolean);
-             populateDropdown('descricao-filter', descricoesUnicas, currentDescricao);
-         };
+        const updateKPIs = () => {
+            const total = currentFinalData.length;
+            const open = currentFinalData.filter(d => d.situacao.toLowerCase() === 'open').length;
+            const closed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'closed').length;
+            const signed = currentFinalData.filter(d => d.situacao.toLowerCase() === 'signedoff').length;
+            const rate = total > 0 ? ((closed + signed) / total * 100).toFixed(1) : 0;
 
-        const populateDropdown = (elementId, options, selectedValue = 'all') => {
-            const select = document.getElementById(elementId); if (!select) return;
-            const currentValue = select.value;
-            while (select.options.length > 1) { select.remove(1); }
-            options.sort((a, b) => {
-                const strA = String(a === null || a === undefined ? '' : a);
-                const strB = String(b === null || b === undefined ? '' : b);
-                return strA.localeCompare(strB);
-            }).forEach(optionValue => {
-                 if(optionValue !== null && optionValue !== undefined) {
-                    select.add(new Option(String(optionValue), optionValue)); }
+            document.getElementById('total-records').textContent = total;
+            document.getElementById('open-records').textContent = open;
+            document.getElementById('closed-records').textContent = closed;
+            document.getElementById('signed-off-records').textContent = signed;
+            document.getElementById('not-accepted-records').textContent = currentFinalData.filter(d => d.situacao.toLowerCase() === 'notadefect').length;
+            document.getElementById('resolution-rate').textContent = `${rate}%`;
+        };
+
+        const updateCharts = () => {
+            renderHistogram();
+            renderResolutionRate();
+            renderStatusHistory();
+            renderCategoryDetails();
+            renderHeatmap();
+            renderScatter();
+            renderSLA();
+            renderLocationCharts();
+        };
+
+        function renderHistogram() {
+            const ctx = document.getElementById('histogramChart').getContext('2d');
+            const counts = Array(12).fill(0);
+            currentFinalData.forEach(d => { counts[new Date(d.data + "T12:00:00").getMonth()]++; });
+            if (charts.hist) charts.hist.destroy();
+            charts.hist = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{ label: 'Apontamentos', data: counts, backgroundColor: '#01455C', borderRadius: 6 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
             });
-            select.value = [...select.options].some(opt => opt.value === String(currentValue)) ? String(currentValue) : 'all';
-        };
-
-        const populateGlobalFilters = () => {
-            const years = [...new Set(allData.map(item => item.data ? new Date(item.data).getFullYear() : null))]
-                            .filter(Boolean).sort((a, b) => b - a);
-            populateDropdown('year-filter', years); document.getElementById('month-filter').value = 'all';
-        };
-        const populateHeatmapYearFilter = (data) => {
-            const years = [...new Set(data.map(item => item.data ? new Date(item.data).getFullYear() : null))]
-                            .filter(Boolean).sort((a, b) => b - a);
-            populateDropdown('heatmap-year-filter', years);
-             const currentHeatmapYear = document.getElementById('heatmap-year-filter').value;
-             if (!years.map(String).includes(currentHeatmapYear)) { document.getElementById('heatmap-year-filter').value = 'all'; }
-        };
-        const populateGroupingFilter = (data) => {
-            const groupings = [...new Set(data.map(item => item.Agrupamento))]
-                                .filter(g => g && g !== 'N/A').sort();
-            populateDropdown('grouping-filter', groupings);
-             const currentGrouping = document.getElementById('grouping-filter').value;
-             if (!groupings.includes(currentGrouping)) { document.getElementById('grouping-filter').value = 'all'; }
-        };
-
-        const updateKPIs = (data) => {
-            const totalCount = data.length; document.getElementById('total-records').textContent = totalCount;
-            document.getElementById('open-records').textContent = data.filter(d => d.situacao?.toLowerCase() === 'open').length;
-            const closedCount = data.filter(d => d.situacao?.toLowerCase() === 'closed').length;
-            const signedOffCount = data.filter(d => d.situacao?.toLowerCase() === 'signedoff').length;
-            document.getElementById('closed-records').textContent = closedCount; document.getElementById('signed-off-records').textContent = signedOffCount;
-            document.getElementById('not-accepted-records').textContent = data.filter(d => d.situacao?.toLowerCase() === 'notadefect').length;
-            const resolvedCount = closedCount + signedOffCount;
-            const resolutionRate = totalCount > 0 ? ((resolvedCount / totalCount) * 100).toFixed(1) : 0;
-            document.getElementById('resolution-rate').textContent = `${resolutionRate}%`;
-        };
-
-        const updateHistogramChart = (data) => {
-            const ctx = document.getElementById('histogramChart').getContext('2d'); const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const monthlyCounts = Array(12).fill(0);
-            data.forEach(item => { if (item.data) { try { const date = new Date(item.data); if(!isNaN(date)) { const month = date.getMonth(); if (month >= 0 && month < 12) monthlyCounts[month]++; } } catch(e){} } });
-            if (histogramChart) histogramChart.destroy();
-            histogramChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: [{ label: 'Apontamentos', data: monthlyCounts, backgroundColor: 'rgba(1, 70, 92, 0.7)', borderColor: 'rgba(1, 70, 92, 1)', borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false } } } });
-        };
-
-        const updateMonthlyResolutionRateChart = (data) => {
-            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d'); const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const monthlyTotals = Array(12).fill(0); const monthlyResolved = Array(12).fill(0);
-            data.forEach(item => { if (item.data) { try { const date = new Date(item.data); if(!isNaN(date)) { const month = date.getMonth(); if (month >= 0 && month < 12) { monthlyTotals[month]++; if (['closed', 'signedoff'].includes(item.situacao?.toLowerCase())) { monthlyResolved[month]++; } } } } catch(e) {} } });
-            const resolutionRates = monthlyTotals.map((total, index) => total > 0 ? (monthlyResolved[index] / total) * 100 : 0);
-            if (monthlyResolutionRateChart) monthlyResolutionRateChart.destroy();
-            monthlyResolutionRateChart = new Chart(ctx, { type: 'line', data: { labels: months, datasets: [{ label: 'Taxa de Resolução', data: resolutionRates, backgroundColor: 'rgba(159, 196, 25, 0.2)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 2, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: (value) => `${value}%` } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => ` Taxa: ${context.raw.toFixed(2)}%` } } } } });
-        };
-
-        const updateStatusHistoryChart = (data, selectedYear, selectedMonth) => {
-            const ctx = document.getElementById('statusHistoryChart').getContext('2d'); const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const today = new Date(); today.setHours(23, 59, 59, 999); const monthlyCreated = Array(12).fill(0);
-            data.forEach(item => { if (item.data) { try { const recordDate = new Date(item.data); if (isNaN(recordDate.getTime()) || recordDate > today) return; if (selectedYear !== 'all' && recordDate.getFullYear() != selectedYear) return; if (selectedMonth !== 'all' && recordDate.getMonth() != selectedMonth) return; const monthIndex = recordDate.getMonth(); if (monthIndex >= 0 && monthIndex < 12) { monthlyCreated[monthIndex]++; } } catch (e) {} } });
-            const monthlyResolved = Array(12).fill(0);
-            data.forEach(item => { const status = item.situacao?.toLowerCase(); if (item.lastChangedDate && (status === 'closed' || status === 'signedoff')) { try { const resolvedDate = new Date(item.lastChangedDate); if (isNaN(resolvedDate.getTime()) || resolvedDate > today) return; if (selectedYear !== 'all' && resolvedDate.getFullYear() != selectedYear) return; if (selectedMonth !== 'all' && resolvedDate.getMonth() != selectedMonth) return; const monthIndex = resolvedDate.getMonth(); if (monthIndex >= 0 && monthIndex < 12) { monthlyResolved[monthIndex]++; } } catch (e) {} } });
-            if (statusHistoryChart) statusHistoryChart.destroy();
-            statusHistoryChart = new Chart(ctx, { type: 'bar', data: { labels: months, datasets: [ { label: 'Criados no Mês', data: monthlyCreated, backgroundColor: 'rgba(239, 68, 68, 0.7)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 }, { label: 'Resolvidos no Mês', data: monthlyResolved, backgroundColor: 'rgba(159, 196, 25, 0.7)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 1 } ] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: false }, y: { beginAtZero: true, ticks: { precision: 0 }, stacked: false } }, plugins: { legend: { display: true, position: 'top' }, tooltip: { mode: 'index', intersect: false } } } });
-        };
-
-        const updateDetailsChart = (data) => {
-            const ctx = document.getElementById('detailsChart').getContext('2d'); const descriptionCounts = data.reduce((acc, item) => { const key = item.descricao || "Não definido"; acc[key] = (acc[key] || 0) + 1; return acc; }, {});
-            const sortedData = Object.entries(descriptionCounts).sort(([, a], [, b]) => b - a).slice(0, 15); const labels = sortedData.map(item => item[0]); const values = sortedData.map(item => item[1]);
-            if (detailsChart) detailsChart.destroy();
-            detailsChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Contagem', data: values, backgroundColor: 'rgba(159, 196, 25, 0.7)', borderColor: 'rgba(159, 196, 25, 1)', borderWidth: 1 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` Apontamentos: ${context.raw}` } } } } });
-        };
-
-        const updateHeatmapChart = (data) => {
-            const selectedYear = document.getElementById('heatmap-year-filter').value; let chartData = data;
-            if (selectedYear !== 'all') { const yearNumber = parseInt(selectedYear, 10); const today = new Date(); const currentYear = today.getFullYear(); today.setHours(0, 0, 0, 0); chartData = data.filter(d => { if (!d.data) return false; try { const recordDate = new Date(d.data); if (isNaN(recordDate.getTime())) return false; if (recordDate.getFullYear() !== yearNumber) return false; if (yearNumber === currentYear && recordDate > today) return false; return true; } catch(e){ return false; } }); }
-            const ctx = document.getElementById('heatmapChart').getContext('2d'); const monthLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']; const categoryCounts = {};
-            chartData.forEach(item => { if (item.data && item.categoria) { try { const date = new Date(item.data); if (!isNaN(date)) { const category = item.categoria; const monthIndex = date.getMonth(); if (monthIndex >= 0 && monthIndex < 12) { const month = monthLabels[monthIndex]; if (!categoryCounts[category]) categoryCounts[category] = {}; categoryCounts[category][month] = (categoryCounts[category][month] || 0) + 1; } } } catch (e) {} } });
-            const heatmapData = []; let maxValue = 0; const categoryLabels = Object.keys(categoryCounts).sort();
-            categoryLabels.forEach(category => { monthLabels.forEach(month => { const value = categoryCounts[category]?.[month] || 0; if (value > 0) heatmapData.push({ x: month, y: category, v: value }); if (value > maxValue) maxValue = value; }); });
-             if (heatmapChart) { try { heatmapChart.destroy(); } catch(e) {} }
-             if (categoryLabels.length === 0 || heatmapData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); document.getElementById('heatmap-legend').innerHTML = ''; heatmapChart = null; return; }
-            heatmapChart = new Chart(ctx, { type: 'matrix', data: { datasets: [{ label: 'Apontamentos', data: heatmapData, backgroundColor: (context) => { const value = context.dataset.data[context.dataIndex]?.v; if (!value) return 'rgba(245, 245, 245, 0.5)'; const alpha = value / maxValue; return `rgba(1, 70, 92, ${alpha})`; }, borderColor: 'white', borderWidth: 1, width: ({ chart }) => (chart.chartArea || {}).width / monthLabels.length - 1, height: ({ chart }) => (chart.chartArea || {}).height / categoryLabels.length - 1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: monthLabels }, y: { type: 'category', labels: categoryLabels, offset: true } }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: () => '', label: (context) => { const v = context.dataset.data[context.dataIndex]; return v ? `${v.y} em ${v.x}: ${v.v} apontamentos` : ''; } } } } } });
-            const legendContainer = document.getElementById('heatmap-legend'); legendContainer.innerHTML = '';
-            if (maxValue > 0) { const gradient = 'linear-gradient(to right, rgba(1, 70, 92, 0.05), rgba(1, 70, 92, 1))'; legendContainer.innerHTML = `<span>Baixa (1)</span><div style="width: 150px; height: 20px; background: ${gradient}; border-radius: 5px; margin: 0 10px;"></div><span>Alta (${maxValue})</span>`; }
-        };
-
-         const updateResolutionScatterChart = (data) => {
-             const ctx = document.getElementById('resolutionScatterChart').getContext('2d'); const legendContainer = document.getElementById('scatter-legend-table'); const inferenceContainer = document.getElementById('inference-section');
-             if (resolutionScatterChart) { try { resolutionScatterChart.destroy(); } catch(e) {} resolutionScatterChart = null; }
-             legendContainer.innerHTML = ''; inferenceContainer.innerHTML = ''; const statsByCategory = {};
-             data.forEach(item => { if (item.daysToResolve !== null && item.categoria) { if (!statsByCategory[item.categoria]) { statsByCategory[item.categoria] = { totalDays: 0, count: 0 }; } statsByCategory[item.categoria].totalDays += item.daysToResolve; statsByCategory[item.categoria].count++; } });
-             const scatterData = Object.keys(statsByCategory).map(category => { const stats = statsByCategory[category]; const avgDays = stats.count > 0 ? (stats.totalDays / stats.count) : 0; return { x: avgDays, y: stats.count, label: category }; }).filter(d => d.y > 0);
-             if (scatterData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); inferenceContainer.innerHTML = `<h3>Inferência Estatística</h3><p style="text-align:center; color: #555;">Nenhum dado de resolução disponível.</p>`; return; }
-             const avgDaysValues = scatterData.map(d => d.x); const minAvg = Math.min(...avgDaysValues); const maxAvg = Math.max(...avgDaysValues);
-             const getColorForTime = (value) => { if (maxAvg === minAvg || isNaN(minAvg) || isNaN(maxAvg)) return 'rgb(159, 196, 25)'; const ratio = (value - minAvg) / (maxAvg - minAvg); const r = Math.round(159 + (1 - 159) * ratio); const g = Math.round(196 + (69 - 196) * ratio); const b = Math.round(25 + (92 - 25) * ratio); return `rgb(${r}, ${g}, ${b})`; };
-             scatterData.forEach(d => d.color = getColorForTime(d.x));
-             resolutionScatterChart = new Chart(ctx, { type: 'scatter', data: { datasets: [{ data: scatterData, pointBackgroundColor: context => context.raw.color, pointRadius: 8, pointHoverRadius: 12, borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, title: { display: true, text: 'Tempo Médio Resolução (Dias)'}}, y: { beginAtZero: true, title: { display: true, text: 'Volume Resolvidos' }} }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (context) => { const point = context.raw; return point ? [`${point.label}`, `Volume: ${point.y}`, `Tempo Médio: ${point.x.toFixed(1)} dias`] : ''; } } } } } });
-             const top10Volume = [...scatterData].sort((a, b) => b.y - a.y).slice(0, 10); const top10Time = [...scatterData].sort((a, b) => b.x - a.x).slice(0, 10);
-             const generateListHTML = (title, items, metric) => { let listItems = items.map(item => `<li><div class="legend-color-box" style="background-color: ${item.color};"></div><div>${item.label} (${metric === 'volume' ? `${item.y} apont.` : `${item.x.toFixed(1)} dias`})</div></li>`).join(''); return `<div class="px-4"><h3>${title}</h3><ol>${listItems}</ol></div>`; };
-             legendContainer.innerHTML = generateListHTML('Top 10 Volume', top10Volume, 'volume') + generateListHTML('Top 10 Tempo Médio', top10Time, 'time');
-             if (scatterData.length < 2) { inferenceContainer.innerHTML = `<h3>Inferência Estatística</h3><p style="text-align:center; color: #555;">Análise de quadrantes requer múltiplas categorias.</p>`; } else { const validAvgDaysValues = avgDaysValues.filter(v => !isNaN(v)); const avgX = validAvgDaysValues.length > 0 ? validAvgDaysValues.reduce((a, b) => a + b, 0) / validAvgDaysValues.length : 0; const validYValues = scatterData.map(d => d.y).filter(v => !isNaN(v)); const avgY = validYValues.length > 0 ? validYValues.reduce((a, b) => a + b, 0) / validYValues.length : 0; const quadrants = { criticos: scatterData.filter(d => d.x > avgX && d.y > avgY).sort((a,b) => b.y - a.y), eficientes: scatterData.filter(d => d.x <= avgX && d.y > avgY).sort((a,b) => b.y - a.y), ineficientes: scatterData.filter(d => d.x > avgX && d.y <= avgY).sort((a,b) => b.x - a.x) }; const ICON_CRITICO = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-alerta)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`; const ICON_EFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-secundaria)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a14.96 14.96 0 00-5.84-2.56m0 0a14.96 14.96 0 01-5.84-2.56m5.84 2.56v-4.82m0 0a6 6 0 00-5.84-7.38v4.82m5.84 2.56h4.82a6 6 0 01-7.38 5.84m0 0a6 6 0 00-7.38-5.84h4.82" /></svg>`; const ICON_INEFICIENTE = `<svg xmlns="http://www.w3.org/2000/svg" fill="var(--cor-aviso)" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`; const generateInferenceHTML = (title, description, categories, iconSvg, quadrantClass) => { if (categories.length === 0) return ''; const items = categories.map(cat => `<span class="inference-category-tag" onclick="showDefectDetails('${cat.label.replace(/'/g, "\\'")}')">${cat.label}</span>`).join(''); return ` <div class="inference-card ${quadrantClass}"> <div class="inference-card-header"> ${iconSvg} <h4>${title}</h4> </div> <p>${description}</p> <div class="inference-tag-container">${items}</div> </div> `; }; inferenceContainer.innerHTML = ` <h3>Inferência Estatística e Plano de Ação</h3> <div class="inference-grid"> ${generateInferenceHTML('Pontos Críticos', 'Alto volume e alta demora. Atenção prioritária.', quadrants.criticos, ICON_CRITICO, 'criticos')} ${generateInferenceHTML('Pontos de Ineficiência', 'Baixo volume, alta demora. Revisar processo.', quadrants.ineficientes, ICON_INEFICIENTE, 'ineficientes')} ${generateInferenceHTML('Pontos Eficientes', 'Alto volume e baixa demora. Modelo de boas práticas.', quadrants.eficientes, ICON_EFICIENTE, 'eficientes')} </div> `; }
-         };
-
-        const updateSlaByCategoryChart = (data) => {
-            const ctx = document.getElementById('slaByCategoryChart').getContext('2d'); const slaByCategory = {};
-            [...new Set(data.map(item => item.categoria))].filter(Boolean).forEach(cat => { slaByCategory[cat] = { total: 0, withinSla: 0 }; });
-            data.forEach(item => { if (item.withinSla !== null && item.categoria && slaByCategory[item.categoria]) { slaByCategory[item.categoria].total++; if (item.withinSla === true) { slaByCategory[item.categoria].withinSla++; } } });
-            const labels = Object.keys(slaByCategory).sort(); const complianceData = labels.map(cat => { const item = slaByCategory[cat]; return item.total > 0 ? ((item.withinSla / item.total) * 100) : 0; });
-            if (slaByCategoryChart) slaByCategoryChart.destroy(); if (labels.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); slaByCategoryChart = null; return; }
-            slaByCategoryChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: '% Dentro do SLA', data: complianceData, backgroundColor: 'rgba(159, 196, 25, 0.7)' }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, max: 100, ticks: { callback: value => `${value}%` } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => ` ${context.dataset.label}: ${context.raw.toFixed(1)}%` } } } } });
-        };
-
-        const updateLocationRankingChart = (data) => {
-            const ctx = document.getElementById('locationRankingChart').getContext('2d'); const locationCounts = data.reduce((acc, item) => { const key = item.Location || "Não definido"; acc[key] = (acc[key] || 0) + 1; return acc; }, {});
-            const sortedData = Object.entries(locationCounts).sort(([, a], [, b]) => b - a).slice(0, 15); const labels = sortedData.map(item => item[0]); const values = sortedData.map(item => item[1]);
-            if (locationRankingChart) locationRankingChart.destroy(); if (labels.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); locationRankingChart = null; return; }
-            locationRankingChart = new Chart(ctx, { type: 'bar', data: { labels: labels, datasets: [{ label: 'Nº Apontamentos', data: values, backgroundColor: 'rgba(239, 68, 68, 0.7)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { display: false } } } });
-        };
-
-        const updateLocationCategoryHeatmap = (data) => {
-            const ctx = document.getElementById('locationCategoryHeatmap').getContext('2d'); const counts = {};
-            data.forEach(item => { if (item.Location && item.categoria) { if (!counts[item.Location]) counts[item.Location] = {}; counts[item.Location][item.categoria] = (counts[item.Location][item.categoria] || 0) + 1; } });
-            const locationTotals = Object.keys(counts).map(loc => ({ name: loc, total: Object.values(counts[loc]).reduce((a, b) => a + b, 0) })).sort((a, b) => b.total - a.total).slice(0, 20);
-            const locationLabels = locationTotals.map(l => l.name); const categoryLabels = [...new Set(data.map(item => item.categoria).filter(Boolean))].sort(); const heatmapData = []; let maxValue = 0;
-            locationLabels.forEach(loc => { categoryLabels.forEach(cat => { const value = counts[loc]?.[cat] || 0; if (value > 0) heatmapData.push({ x: cat, y: loc, v: value }); if (value > maxValue) maxValue = value; }); });
-            if (locationCategoryHeatmap) locationCategoryHeatmap.destroy(); if (locationLabels.length === 0 || categoryLabels.length === 0 || heatmapData.length === 0) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); locationCategoryHeatmap = null; return; }
-            const estimatedHeight = Math.max(600, locationLabels.length * 30); ctx.canvas.parentElement.style.height = `${estimatedHeight}px`;
-            locationCategoryHeatmap = new Chart(ctx, { type: 'matrix', data: { datasets: [{ label: 'Concentração', data: heatmapData, backgroundColor: (context) => { const value = context.dataset.data[context.dataIndex]?.v; if (!value) return 'rgba(245, 245, 245, 0.5)'; const alpha = maxValue > 0 ? Math.sqrt(value / maxValue) : 0; return `rgba(1, 70, 92, ${alpha})`; }, borderColor: 'white', borderWidth: 1, width: ({ chart }) => (chart.chartArea || {}).width / categoryLabels.length - 1, height: ({ chart }) => (chart.chartArea || {}).height / locationLabels.length - 1, }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: categoryLabels, ticks: { autoSkip: false } }, y: { type: 'category', labels: locationLabels, offset: true, ticks: { autoSkip: false } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { title: () => '', label: (context) => { const v = context.dataset.data[context.dataIndex]; return v ? `${v.y} | ${v.x}: ${v.v} apontamentos` : ''; } } } } } });
-        };
-
-        const showError = (message) => {
-            const errorElement = document.getElementById('error-message'); errorElement.textContent = message; errorElement.style.display = 'block';
-             document.getElementById('loading-container').style.display = 'none'; document.getElementById('dashboard-content').style.display = 'none'; document.getElementById('initial-message').style.display = 'none';
-        };
-
-        function openTab(evt, tabName) {
-            let i, tabcontent, tablinks; tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
-            tablinks = document.getElementsByClassName("tab-link");
-            for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
-            const targetTab = document.getElementById(tabName); if (targetTab) { targetTab.style.display = "block"; }
-             if (evt && evt.currentTarget) { evt.currentTarget.className += " active"; } else { const defaultTabButton = document.querySelector(`.tab-link[onclick*="'${tabName}'"]`); if (defaultTabButton) defaultTabButton.className += " active"; }
-            setTimeout(() => {
-                const activeCharts = { 'visaoGeral': [histogramChart, monthlyResolutionRateChart, statusHistoryChart, detailsChart, heatmapChart], 'eficiencia': [resolutionScatterChart, slaByCategoryChart], 'localizacao': [locationRankingChart, locationCategoryHeatmap] }[tabName] || [];
-                activeCharts.forEach(chart => { if (chart && typeof chart.resize === 'function') { try { chart.resize(); } catch (e) { console.warn("Erro resize:", e, chart); } } });
-            }, 50);
         }
 
-        function showDefectDetails(categoryName) {
-             if (!currentFinalData || currentFinalData.length === 0) { console.warn("showDefectDetails sem dados."); return; }
-            const categoryData = currentFinalData.filter(item => item.categoria === categoryName);
-            const defectCounts = categoryData.reduce((acc, item) => { const defect = item.descricao || 'Não especificado'; acc[defect] = (acc[defect] || 0) + 1; return acc; }, {});
-            const sortedDefects = Object.entries(defectCounts).sort(([, a], [, b]) => b - a).slice(0, 5);
-            const modalTitle = document.getElementById('modal-title'); const modalBody = document.getElementById('modal-body');
-            modalTitle.textContent = `Top 5 Defeitos para: ${categoryName}`;
-            if (sortedDefects.length === 0) { modalBody.innerHTML = '<p>Nenhum defeito encontrado.</p>'; } else { const listItems = sortedDefects.map(([defect, count]) => `<li><strong>${defect}</strong>: ${count} ocorrência(s)</li>`).join(''); modalBody.innerHTML = `<ol>${listItems}</ol>`; }
+        function renderResolutionRate() {
+            const ctx = document.getElementById('monthlyResolutionRateChart').getContext('2d');
+            const totals = Array(12).fill(0);
+            const solved = Array(12).fill(0);
+            currentFinalData.forEach(d => {
+                const m = new Date(d.data + "T12:00:00").getMonth();
+                totals[m]++;
+                if (['closed', 'signedoff'].includes(d.situacao.toLowerCase())) solved[m]++;
+            });
+            const rates = totals.map((t, i) => t > 0 ? (solved[i] / t * 100) : 0);
+            if (charts.res) charts.res.destroy();
+            charts.res = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{ data: rates, borderColor: '#9FC419', backgroundColor: 'rgba(159, 196, 25, 0.1)', fill: true, tension: 0.4, borderWidth: 4 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, beginAtZero: true } } }
+            });
+        }
+
+        function renderStatusHistory() {
+            const ctx = document.getElementById('statusHistoryChart').getContext('2d');
+            const created = Array(12).fill(0);
+            const resolved = Array(12).fill(0);
+            currentFinalData.forEach(d => {
+                created[new Date(d.data + "T12:00:00").getMonth()]++;
+                if (d.lastChangedDate) resolved[new Date(d.lastChangedDate + "T12:00:00").getMonth()]++;
+            });
+            if (charts.stat) charts.stat.destroy();
+            charts.stat = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [
+                        { label: 'Entrada', data: created, backgroundColor: '#ef4444', borderRadius: 4 },
+                        { label: 'Saída', data: resolved, backgroundColor: '#9FC419', borderRadius: 4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function renderCategoryDetails() {
+            const ctx = document.getElementById('detailsChart').getContext('2d');
+            const cat = document.getElementById('categoria-filter').value;
+            let data = currentFinalData;
+            if (cat !== 'all') data = data.filter(d => d.categoria === cat);
+            const counts = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
+            if (charts.details) charts.details.destroy();
+            charts.details = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sorted.map(s => s[0]),
+                    datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#01455C', borderRadius: 4 }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function renderHeatmap() {
+            const ctx = document.getElementById('heatmapChart').getContext('2d');
+            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const matrixData = [];
+            let max = 0;
+            cats.forEach(c => {
+                months.forEach((m, i) => {
+                    const v = currentFinalData.filter(d => d.categoria === c && new Date(d.data + "T12:00:00").getMonth() === i).length;
+                    if (v > 0) { matrixData.push({ x: m, y: c, v: v }); if (v > max) max = v; }
+                });
+            });
+            if (charts.heatmap) charts.heatmap.destroy();
+            charts.heatmap = new Chart(ctx, {
+                type: 'matrix',
+                data: {
+                    datasets: [{
+                        data: matrixData,
+                        backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex]?.v / max})`,
+                        width: ({chart}) => chart.chartArea.width / 12 - 2,
+                        height: ({chart}) => chart.chartArea.height / cats.length - 2
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { type: 'category', labels: months }, y: { type: 'category', labels: cats, offset: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            document.getElementById('heatmap-legend').innerHTML = `<span>Baixa (1)</span><div class="h-4 w-48 rounded bg-gradient-to-r from-blue-50 to-[--cor-primaria]"></div><span>Alta (${max})</span>`;
+        }
+
+        function renderScatter() {
+            const ctx = document.getElementById('resolutionScatterChart').getContext('2d');
+            const stats = {};
+            currentFinalData.forEach(d => {
+                if (d.daysToResolve !== null) {
+                    if (!stats[d.categoria]) stats[d.categoria] = { time: 0, count: 0 };
+                    stats[d.categoria].time += d.daysToResolve; stats[d.categoria].count++;
+                }
+            });
+            const points = Object.entries(stats).map(([name, s]) => ({ x: s.time / s.count, y: s.count, label: name }));
+            if (charts.scatter) charts.scatter.destroy();
+            charts.scatter = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: [{ data: points, backgroundColor: '#9FC419', pointRadius: 10, pointHoverRadius: 15 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { title: { display: true, text: 'Dias Médios' } }, y: { title: { display: true, text: 'Volume' } } },
+                    plugins: { tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } } }
+                }
+            });
+            updateScatterInsights(points);
+        }
+
+        function updateScatterInsights(points) {
+            const container = document.getElementById('inference-section');
+            if (points.length < 2) return;
+            const avgX = points.reduce((a,b) => a + b.x, 0) / points.length;
+            const avgY = points.reduce((a,b) => a + b.y, 0) / points.length;
+            const critical = points.filter(p => p.x > avgX && p.y > avgY);
+            container.innerHTML = `
+                <div class="p-6 bg-red-50 rounded-2xl border-l-4 border-red-400">
+                    <h4 class="font-bold text-red-800 mb-2">Atenção Prioritária (Críticos)</h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${critical.map(c => `<span onclick="showDefectDetails('${c.label}')" class="px-3 py-1 bg-red-200 text-red-800 text-xs font-bold rounded-full cursor-pointer hover:scale-105 transition-transform">${c.label}</span>`).join('')}
+                    </div>
+                </div>`;
+        }
+
+        function renderSLA() {
+            const ctx = document.getElementById('slaByCategoryChart').getContext('2d');
+            const stats = {};
+            currentFinalData.forEach(d => {
+                if (d.withinSla !== null) {
+                    if (!stats[d.categoria]) stats[d.categoria] = { ok: 0, total: 0 };
+                    stats[d.categoria].total++; if (d.withinSla) stats[d.categoria].ok++;
+                }
+            });
+            const sorted = Object.entries(stats).map(([name, s]) => ({ name, rate: (s.ok / s.total * 100) })).sort((a,b) => b.rate - a.rate);
+            if (charts.sla) charts.sla.destroy();
+            charts.sla = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: sorted.map(s => s.name), datasets: [{ data: sorted.map(s => s.rate), backgroundColor: '#9FC419', borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } }
+            });
+        }
+
+        function renderLocationCharts() {
+            const ctxRank = document.getElementById('locationRankingChart').getContext('2d');
+            const counts = currentFinalData.reduce((acc, d) => { acc[d.Location] = (acc[d.Location] || 0) + 1; return acc; }, {});
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 15);
+            if (charts.locRank) charts.locRank.destroy();
+            charts.locRank = new Chart(ctxRank, {
+                type: 'bar',
+                data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+            });
+            
+            const ctxMap = document.getElementById('locationCategoryHeatmap').getContext('2d');
+            const topLocs = sorted.map(s => s[0]);
+            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort().slice(0, 10);
+            const matrixData = []; let max = 0;
+            topLocs.forEach(l => {
+                cats.forEach(c => {
+                    const v = currentFinalData.filter(d => d.Location === l && d.categoria === c).length;
+                    if (v > 0) { matrixData.push({ x: c, y: l, v: v }); if (v > max) max = v; }
+                });
+            });
+            if (charts.locHeat) charts.locHeat.destroy();
+            charts.locHeat = new Chart(ctxMap, {
+                type: 'matrix',
+                data: { datasets: [{ data: matrixData, backgroundColor: (c) => `rgba(1, 69, 92, ${c.dataset.data[c.dataIndex].v / max})`, width: ({chart}) => chart.chartArea.width / cats.length - 2, height: ({chart}) => chart.chartArea.height / topLocs.length - 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'category', labels: cats }, y: { type: 'category', labels: topLocs, offset: true } } }
+            });
+        }
+
+        function openTab(evt, tabName) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let c of contents) c.style.display = "none";
+            const links = document.getElementsByClassName("tab-link");
+            for (let l of links) l.classList.remove("active");
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
+            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 50);
+        }
+
+        function showDefectDetails(category) {
+            const data = currentFinalData.filter(d => d.categoria === category);
+            const defects = data.reduce((acc, d) => { acc[d.descricao] = (acc[d.descricao] || 0) + 1; return acc; }, {});
+            const sorted = Object.entries(defects).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            document.getElementById('modal-title').textContent = `Top 5 Defeitos: ${category}`;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="space-y-4">
+                    ${sorted.map(([name, count], i) => `
+                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
+                            <span class="font-semibold text-slate-700">${name}</span>
+                            <span class="font-black text-[--cor-primaria]">${count}</span>
+                        </div>`).join('')}
+                </div>`;
             document.getElementById('modal-container').style.display = 'flex';
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-             const projectSelector = document.getElementById('project-selector');
-             const fileInput = document.getElementById('json-file-input');
-             const body = document.body; const overlay = document.getElementById('drag-drop-overlay');
-             const modalContainer = document.getElementById('modal-container');
-             const modalCloseBtn = document.getElementById('modal-close-btn'); const modalContent = document.getElementById('modal-content');
+        function closeModal() { document.getElementById('modal-container').style.display = 'none'; }
 
-             // *** JAVASCRIPT ALTERADO AQUI (Carga Inicial) ***
-             const defaultProjectValue = projectSelector.value;
-             // Garante que o valor padrão selecionado no HTML é carregado corretamente
-             if (PROJECT_FILES[defaultProjectValue]) {
-                 loadProjectData(defaultProjectValue);
-             } else {
-                  console.error("Projeto padrão inválido no HTML:", defaultProjectValue);
-                  showError(`Projeto padrão "${defaultProjectValue}" inválido ou não configurado.`);
-                  // Opcional: Carregar o primeiro projeto da lista como fallback
-                  // const firstProject = Object.keys(PROJECT_FILES)[0];
-                  // if (firstProject) loadProjectData(firstProject);
-             }
+        function updateDetailFilters() {
+            const cats = [...new Set(currentFinalData.map(d => d.categoria))].sort();
+            const catSelect = document.getElementById('categoria-filter');
+            const current = catSelect.value;
+            catSelect.innerHTML = '<option value="all">Categoria</option>';
+            cats.forEach(c => catSelect.add(new Option(c, c)));
+            catSelect.value = cats.includes(current) ? current : 'all';
+        }
 
-             // *** JAVASCRIPT ALTERADO AQUI (Listener do Seletor) ***
-             projectSelector.addEventListener('change', (event) => {
-                 const selectedValue = event.target.value;
-                 // Agora apenas chama loadProjectData para qualquer seleção válida
-                 if (PROJECT_FILES[selectedValue]) {
-                     loadProjectData(selectedValue);
-                 } else {
-                     console.error("Projeto selecionado inválido:", selectedValue);
-                     showError(`Projeto "${selectedValue}" não configurado.`);
-                 }
-             });
+        document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
+        document.getElementById('year-filter').addEventListener('change', runUpdate);
+        document.getElementById('month-filter').addEventListener('change', runUpdate);
+        document.getElementById('categoria-filter').addEventListener('change', runUpdate);
 
-            const filterIds = [ 'spotted-filter', 'year-filter', 'month-filter', 'groupname-filter', 'categoria-filter', 'tipo-filter', 'descricao-filter', 'heatmap-year-filter', 'grouping-filter' ];
-            filterIds.forEach(id => { const element = document.getElementById(id); if (element) { element.addEventListener('change', runUpdate); } });
-             fileInput.addEventListener('change', handleFileUpload);
-            let dragCounter = 0; body.addEventListener('dragenter', (e) => { e.preventDefault(); e.stopPropagation(); dragCounter++; overlay.style.display = 'flex'; }); body.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); }); body.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dragCounter--; if (dragCounter === 0) { overlay.style.display = 'none'; } }); body.addEventListener('drop', (e) => { e.preventDefault(); e.stopPropagation(); overlay.style.display = 'none'; dragCounter = 0; const files = e.dataTransfer.files; if (files && files.length > 0) { processFile(files[0]); } });
-            const closeModal = () => modalContainer.style.display = 'none'; modalCloseBtn.addEventListener('click', closeModal); modalContainer.addEventListener('click', (event) => { if (!modalContent.contains(event.target)) { closeModal(); } });
+        document.getElementById('json-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const loader = document.getElementById('loading-container');
+                loader.style.display = 'flex';
+                document.getElementById('loading-status').textContent = "Lendo arquivo local...";
+                
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    processContentAndInitialize(ev.target.result, file.name);
+                };
+                reader.onerror = () => {
+                    loader.style.display = 'none';
+                    alert("Erro ao ler o arquivo selecionado.");
+                };
+                reader.readAsText(file);
+            }
         });
+
+        document.addEventListener('dragenter', (e) => { e.preventDefault(); document.getElementById('drag-drop-overlay').style.display = 'flex'; });
+        document.getElementById('drag-drop-overlay').addEventListener('dragleave', (e) => { document.getElementById('drag-drop-overlay').style.display = 'none'; });
+        document.addEventListener('dragover', e => e.preventDefault());
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            document.getElementById('drag-drop-overlay').style.display = 'none';
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const input = document.getElementById('json-file-input');
+                const dt = new DataTransfer(); dt.items.add(file);
+                input.files = dt.files;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+
+        window.onload = () => {
+            const initialProject = document.getElementById('project-selector').value;
+            loadProjectData(initialProject);
+        };
     </script>
 </body>
 </html>
