@@ -22,11 +22,6 @@
             --cor-alerta: #ef4444;
             --cor-aviso: #f59e0b;
             --cor-info: #3b82f6;
-            /* Cores da Galeria Dark */
-            --gal-bg: #121212;
-            --gal-card: #1e1e1e;
-            --gal-accent: #3b82f6;
-            --gal-border: #333;
         }
 
         body {
@@ -89,14 +84,6 @@
         .stat-card.alerta { border-left-color: var(--cor-alerta); }
         .stat-card.sucesso { border-left-color: var(--cor-secundaria); }
 
-        .chart-explanation {
-            border-left: 4px solid var(--cor-info);
-            background: #f1f5f9;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-        }
-
         /* Loader Overlay */
         .loader-overlay {
             background: rgba(1, 69, 92, 0.95);
@@ -120,15 +107,16 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        /* Estilos Galeria Integrada (Apenas Dados) */
+        /* --- ESTILOS DA GALERIA INTEGRADA (CLARO/SISTEMA) --- */
         .galeria-wrapper {
-            background: var(--gal-bg);
+            background: #ffffff;
             border-radius: 1.5rem;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 750px;
-            border: 1px solid var(--gal-border);
+            height: 800px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
         }
 
         .gal-header {
@@ -136,57 +124,153 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(30, 30, 30, 0.95);
-            border-bottom: 1px solid var(--gal-border);
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 20;
         }
 
-        .data-sidebar { 
-            width: 350px; 
-            background: #181818; 
-            border-right: 1px solid #333; 
-            display: flex; 
-            flex-direction: column; 
-            overflow-y: auto;
+        /* View Switcher */
+        .view-switcher {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 10px;
+            gap: 4px;
         }
         
-        .data-item-card { 
-            padding: 16px; 
-            border-bottom: 1px solid #222; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-        }
-        
-        .data-item-card:hover { background: #252525; }
-        .data-item-card.selected { 
-            border-left: 4px solid var(--cor-secundaria); 
-            background: #2a2a2a; 
-        }
-
-        .detail-panel {
-            flex: 1;
-            overflow-y: auto;
-            background: #0a0a0a;
-            padding: 2.5rem;
-        }
-
-        .image-preview-box {
-            width: 100%;
-            height: 400px;
-            background: #000;
-            border-radius: 1rem;
+        .view-btn {
+            background: transparent;
+            color: #64748b;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 2rem;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        
+        .view-btn.active {
+            background: #ffffff;
+            color: var(--cor-primaria);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .image-preview-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+        .views-wrapper { flex: 1; position: relative; overflow: hidden; width: 100%; background: #ffffff; }
+        .gal-view-container {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
         }
+        .gal-view-container.active { opacity: 1; pointer-events: auto; z-index: 10; }
+
+        /* MODO CARROSSEL */
+        .view-carousel { display: flex; flex-direction: column; background: #f1f5f9; }
+        .image-stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .img-wrapper-foco { 
+            position: relative; max-width: 100%; max-height: 100%; display: flex; justify-content: center; align-items: center; 
+            border-radius: 12px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1); background: #fff;
+            padding: 10px; border: 1px solid #e2e8f0;
+        }
+        #mainImageGal { max-width: 100%; max-height: calc(100vh - 350px); object-fit: contain; opacity: 0; transition: opacity 0.4s ease; border-radius: 8px; }
+        #mainImageGal.loaded { opacity: 1; }
+        
+        .controls-bar { 
+            padding: 20px; background: #ffffff; border-top: 1px solid #e2e8f0; 
+            display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 20; 
+        }
+        .btn-control { 
+            background-color: #f1f5f9; color: var(--cor-primaria); border: 1px solid #cbd5e1; width: 44px; height: 44px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; 
+        }
+        .btn-control:hover { background-color: var(--cor-secundaria); color: white; border-color: var(--cor-secundaria); transform: translateY(-2px); }
+        .jump-box { display: flex; align-items: center; background: #f8fafc; padding: 5px 15px; border-radius: 20px; border: 1px solid #cbd5e1; font-weight: bold; color: #64748b; }
+        .jump-box input { background: transparent; border: none; color: var(--cor-primaria); width: 60px; text-align: center; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 900; outline: none; }
+        
+        /* MODO GRADE */
+        .view-grid { overflow-y: auto; padding: 25px; }
+        .grid-content { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); grid-auto-rows: 140px; gap: 15px; padding-bottom: 20px; }
+        .grid-item { 
+            background-color: #f8fafc; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; 
+            cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: all 0.2s;
+        }
+        .grid-item:hover { border-color: var(--cor-secundaria); transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .grid-item.current { border: 3px solid var(--cor-primaria); }
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s; }
+        .grid-item img.loaded { opacity: 1; }
+        .grid-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); color: var(--cor-primaria); font-weight: 800; font-size: 12px; padding: 6px; text-align: center; border-top: 1px solid #e2e8f0; }
+
+        /* MODO DADOS / RELATÓRIO */
+        .view-data { display: flex; flex-direction: row; }
+        
+        /* Sidebar */
+        .data-sidebar { 
+            width: 380px; background: #f8fafc; border-right: 1px solid #e2e8f0; 
+            display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
+        }
+        .data-item-card { 
+            padding: 16px 20px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; 
+            background: #ffffff;
+        }
+        .data-item-card:hover { background: #f1f5f9; }
+        .data-item-card.selected { 
+            border-left: 4px solid var(--cor-primaria); background: #eff6ff; 
+        }
+
+        /* Detail Panel Moderno (Claro) */
+        .detail-panel {
+            flex: 1; overflow-y: auto; background: #ffffff; padding: 2.5rem;
+            display: flex; justify-content: center; align-items: flex-start;
+        }
+
+        .report-card-modern {
+            background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); width: 100%; max-width: 1000px;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        .report-header-light {
+            padding: 25px 30px; border-bottom: 1px solid #e2e8f0; background: #f8fafc;
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+        }
+
+        .report-body-light {
+            display: flex; padding: 30px; gap: 30px; flex-wrap: wrap;
+        }
+
+        .report-image-area { flex: 0 0 45%; min-width: 300px; }
+        .report-image-wrapper-light {
+            width: 100%; height: 380px; background: #f1f5f9; border-radius: 12px;
+            border: 1px solid #e2e8f0; display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        .report-image-wrapper-light img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .report-info-grid {
+            flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px; align-content: start;
+        }
+
+        .info-box-light {
+            background: #ffffff; border: 1px solid #e2e8f0; padding: 16px; border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .info-box-light.full-width { grid-column: 1 / -1; }
+        .info-box-light.highlight { background: #f0fdf4; border-color: #bbf7d0; }
+
+        /* Utilitários Extras */
+        .status-badge-ui { font-size: 11px; padding: 4px 12px; border-radius: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge-ui.default { background-color: #e2e8f0; color: #475569; }
+        .status-badge-ui.success { background-color: #dcfce7; color: #166534; }
+        .status-badge-ui.error { background-color: #fee2e2; color: #991b1b; }
+        .status-badge-ui.warning { background-color: #fef3c7; color: #92400e; }
+        
+        .spinner-mini { width: 20px; height: 20px; border: 3px solid #e2e8f0; border-radius: 50%; border-top-color: var(--cor-primaria); animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .grid-sentinel { grid-column: 1 / -1; height: 80px; display: flex; justify-content: center; align-items: center; color: #64748b; font-weight: 600; font-size: 14px; gap: 10px; }
     </style>
 </head>
 <body>
@@ -326,30 +410,74 @@
                 </section>
             </div>
 
-            <!-- ABA: GALERIA E RELATÓRIOS (APENAS DADOS) -->
+            <!-- ABA: GALERIA E RELATÓRIOS (INTEGRADA E TEMA CLARO) -->
             <div id="galeriaRelatorios" class="tab-content space-y-8" style="display: none;">
-                <div class="galeria-wrapper shadow-2xl">
+                <div class="galeria-wrapper">
+                    <!-- Header Galeria -->
                     <div class="gal-header">
                         <div class="flex items-center gap-4">
-                            <span class="bg-[--cor-secundaria] text-black text-[10px] font-black px-2 py-1 rounded tracking-tighter">RELATÓRIO TÉCNICO</span>
-                            <div id="statusBadgeGal" class="text-xs text-white/30 font-bold uppercase tracking-widest">Sincronizado via SnagID</div>
+                            <span class="bg-[--cor-primaria] text-white text-[10px] font-black px-3 py-1.5 rounded-full tracking-wider uppercase shadow-sm">SnagR ID System</span>
+                            <div id="statusBadgeGal" class="status-badge-ui default">Sincronizado</div>
+                        </div>
+
+                        <!-- Sub-Menu Galeria -->
+                        <div class="view-switcher">
+                            <button class="view-btn active" onclick="switchGalView('carousel')" id="btnGalCarousel">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                Foco Analítico
+                            </button>
+                            <button class="view-btn" onclick="switchGalView('grid')" id="btnGalGrid">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                Grade Imagens
+                            </button>
+                            <button class="view-btn" onclick="switchGalView('data')" id="btnGalData">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                Relatórios
+                            </button>
                         </div>
                     </div>
 
-                    <div class="flex-1 flex overflow-hidden">
-                        <!-- LISTA LATERAL -->
-                        <div class="data-sidebar" id="dataListGal"></div>
-
-                        <!-- PAINEL DE DETALHES -->
-                        <div class="detail-panel" id="dataDetailGal">
-                            <div class="h-full flex flex-col items-center justify-center text-white/10 text-center">
-                                <svg class="w-20 h-20 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                <h3 class="text-lg font-black uppercase tracking-[0.2em]">Inspeção de Itens</h3>
-                                <p class="text-sm font-medium mt-2 max-w-xs">Selecione um registro na lista lateral para carregar a evidência fotográfica e os metadados do projeto.</p>
+                    <div class="views-wrapper">
+                        <!-- 1. MODO CARROSSEL -->
+                        <div id="galCarouselView" class="gal-view-container view-carousel active">
+                            <div class="image-stage">
+                                <div class="img-wrapper-foco">
+                                    <img id="mainImageGal" src="" alt="Imagem do Defeito" onerror="tratarErroImagemGal()">
+                                </div>
+                            </div>
+                            <div class="controls-bar">
+                                <button class="btn-control" onclick="mudarFotoGal(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                                <div class="jump-box"><span>ID</span><input type="number" id="jumpInputGal" min="1" value="1"></div>
+                                <button class="btn-control" onclick="mudarFotoGal(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                                <div style="width: 1px; height: 24px; background: #cbd5e1; margin: 0 10px;"></div>
+                                <button class="btn-control bg-white" onclick="copiarLinkGal()" title="Copiar Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
                             </div>
                         </div>
+
+                        <!-- 2. MODO GRADE -->
+                        <div id="galGridView" class="gal-view-container view-grid">
+                            <div id="gridContentGal" class="grid-content"></div>
+                        </div>
+
+                        <!-- 3. MODO DADOS (RELATÓRIOS) -->
+                        <div id="galDataView" class="gal-view-container view-data">
+                            <!-- Lista Lateral -->
+                            <div class="data-sidebar" id="dataListGal"></div>
+                            
+                            <!-- Painel Principal de Detalhe -->
+                            <div class="detail-panel" id="dataDetailGal">
+                                <div class="w-full flex justify-center items-center h-full">
+                                    <div class="text-center p-12 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 text-slate-500 max-w-md">
+                                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                        <h3 class="text-lg font-bold text-slate-700 mb-2">Selecione um Apontamento</h3>
+                                        <p class="text-sm">Clique em um item na lista lateral para visualizar a ficha técnica e a evidência fotográfica completa.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -370,13 +498,10 @@
     </footer>
 
     <script>
-        // Registro Global do Plugin de Datalabels para exibir rótulos
         Chart.register(ChartDataLabels);
 
-        // REDUNDÂNCIA: Gerenciamento Global de Gráficos
         let histogramChart, detailsChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart;
 
-        // CONFIGURAÇÃO CENTRALIZADA
         const BASE_DOMAIN = "https://bnengenharia.snagrweb.com/Config/bnengenharia.snagrweb.com/Projects";
         const URL_SUFIXO = "?v=Invalid%20date";
         
@@ -466,11 +591,11 @@
                 allData = processAndNormalizeData(rawJsonData);
                 allData.sort((a,b) => (a.data || "").localeCompare(b.data || ""));
 
-                // Sincronização Automática Relatório
-                renderListaGal();
-
                 initFilters();
                 runUpdate();
+                
+                // Reiniciar Lógicas da Galeria para o Novo Projeto
+                resetarGaleria(config.idStart);
 
                 document.getElementById('initial-message').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
@@ -489,7 +614,6 @@
 
             let filtered = allData;
             
-            // 1. Aplicando os Filtros Responsivamente
             if (spotted) filtered = filtered.filter(d => d.data === spotted);
             if (year !== 'all') filtered = filtered.filter(d => d.data.startsWith(year));
             if (month !== 'all') filtered = filtered.filter(d => new Date(d.data + "T12:00:00").getMonth() == month);
@@ -497,7 +621,6 @@
             const seen = new Set();
             currentFinalData = filtered.filter(d => seen.has(d.id) ? false : seen.add(d.id));
 
-            // CRÍTICO: Limpar os gráficos antigos ANTES de re-renderizar para responder aos filtros
             clearCharts();
 
             updateKPIs();
@@ -523,7 +646,6 @@
             document.getElementById('resolution-rate').textContent = `${rate}%`;
         }
 
-        // --- RENDERIZADORES DE GRÁFICOS REFINADOS ---
         function renderHistogram() {
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const counts = Array(12).fill(0);
@@ -532,28 +654,11 @@
                 type: 'bar',
                 data: {
                     labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-                    datasets: [{ 
-                        data: counts, 
-                        backgroundColor: '#01455C', 
-                        hoverBackgroundColor: '#025d7c', // Cor ao passar o mouse
-                        borderRadius: 8 
-                    }]
+                    datasets: [{ data: counts, backgroundColor: '#01455C', hoverBackgroundColor: '#025d7c', borderRadius: 8 }]
                 },
                 options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    interaction: { mode: 'index', intersect: false }, // Responsividade ao hover
-                    layout: { padding: { top: 20 } },
-                    plugins: { 
-                        legend: { display: false },
-                        datalabels: { // 2. Rótulos de dados
-                            anchor: 'end',
-                            align: 'top',
-                            color: '#01455C',
-                            font: { weight: 'bold', size: 11 },
-                            formatter: (val) => val > 0 ? val : ''
-                        }
-                    }, 
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, layout: { padding: { top: 20 } },
+                    plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', color: '#01455C', font: { weight: 'bold', size: 11 }, formatter: (val) => val > 0 ? val : '' } }, 
                     scales: { y: { beginAtZero: true, grid: { display: false } } } 
                 }
             });
@@ -571,34 +676,11 @@
                 type: 'line',
                 data: {
                     labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-                    datasets: [{ 
-                        data: rates, 
-                        borderColor: '#9FC419', 
-                        backgroundColor: 'rgba(159, 196, 25, 0.1)',
-                        pointHoverBackgroundColor: '#86a615',
-                        fill: true,
-                        tension: 0.4,
-                        borderWidth: 4,
-                        pointRadius: 4,
-                        pointHoverRadius: 7 // Cresce no hover
-                    }]
+                    datasets: [{ data: rates, borderColor: '#9FC419', backgroundColor: 'rgba(159, 196, 25, 0.1)', pointHoverBackgroundColor: '#86a615', fill: true, tension: 0.4, borderWidth: 4, pointRadius: 4, pointHoverRadius: 7 }]
                 },
                 options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    interaction: { mode: 'index', intersect: false }, // Responsividade ao hover
-                    layout: { padding: { top: 20 } },
-                    scales: { y: { max: 100, beginAtZero: true } }, 
-                    plugins: { 
-                        legend: { display: false },
-                        datalabels: { // Rótulos de dados para a linha
-                            anchor: 'end',
-                            align: 'top',
-                            color: '#86a615',
-                            font: { weight: 'bold', size: 10 },
-                            formatter: (val) => val > 0 ? val.toFixed(1) + '%' : ''
-                        }
-                    } 
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, layout: { padding: { top: 20 } }, scales: { y: { max: 100, beginAtZero: true } }, 
+                    plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', color: '#86a615', font: { weight: 'bold', size: 10 }, formatter: (val) => val > 0 ? val.toFixed(1) + '%' : '' } } 
                 }
             });
         }
@@ -615,33 +697,11 @@
             const points = Object.entries(stats).map(([n, s]) => ({ x: s.t/s.c, y: s.c, label: n }));
             resolutionScatterChart = new Chart(ctx, {
                 type: 'scatter',
-                data: { datasets: [{ 
-                    data: points, 
-                    backgroundColor: '#9FC419', 
-                    hoverBackgroundColor: '#01455C', // Muda a cor no hover
-                    pointRadius: 10, 
-                    pointHoverRadius: 15 
-                }]},
+                data: { datasets: [{ data: points, backgroundColor: '#9FC419', hoverBackgroundColor: '#01455C', pointRadius: 10, pointHoverRadius: 15 }]},
                 options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'nearest', intersect: true },
-                    layout: { padding: { top: 25, right: 30 } },
-                    scales: { 
-                        x: { title: { display: true, text: 'Dias Médios de Resolução', font: { weight: 'bold' } } },
-                        y: { title: { display: true, text: 'Volume de Itens', font: { weight: 'bold' } } }
-                    },
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } },
-                        datalabels: { // Mostrar nome da categoria como rótulo do ponto
-                            anchor: 'end',
-                            align: 'top',
-                            color: '#64748b',
-                            font: { size: 10 },
-                            formatter: (value) => value.label
-                        }
-                    }
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'nearest', intersect: true }, layout: { padding: { top: 25, right: 30 } },
+                    scales: { x: { title: { display: true, text: 'Dias Médios de Resolução', font: { weight: 'bold' } } }, y: { title: { display: true, text: 'Volume de Itens', font: { weight: 'bold' } } } },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } }, datalabels: { anchor: 'end', align: 'top', color: '#64748b', font: { size: 10 }, formatter: (value) => value.label } }
                 }
             });
         }
@@ -660,32 +720,10 @@
             
             slaByCategoryChart = new Chart(ctx, {
                 type: 'bar',
-                data: { 
-                    labels, 
-                    datasets: [{ 
-                        data, 
-                        backgroundColor: '#9FC419', 
-                        hoverBackgroundColor: '#86a615',
-                        borderRadius: 4 
-                    }]
-                },
+                data: { labels, datasets: [{ data, backgroundColor: '#9FC419', hoverBackgroundColor: '#86a615', borderRadius: 4 }]},
                 options: { 
-                    indexAxis: 'y', 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    interaction: { mode: 'index', intersect: false },
-                    layout: { padding: { right: 40 } },
-                    plugins: { 
-                        legend: { display: false },
-                        datalabels: { // Rótulo percentual da barra horizontal
-                            anchor: 'end',
-                            align: 'right',
-                            color: '#1e293b',
-                            font: { weight: 'bold' },
-                            formatter: (val) => val.toFixed(1) + '%'
-                        }
-                    }, 
-                    scales: { x: { max: 100 } } 
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, layout: { padding: { right: 40 } },
+                    plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'right', color: '#1e293b', font: { weight: 'bold' }, formatter: (val) => val.toFixed(1) + '%' } }, scales: { x: { max: 100 } } 
                 }
             });
         }
@@ -697,104 +735,286 @@
             
             locationRankingChart = new Chart(ctx, {
                 type: 'bar',
-                data: { 
-                    labels: sorted.map(s => s[0]), 
-                    datasets: [{ 
-                        data: sorted.map(s => s[1]), 
-                        backgroundColor: '#ef4444', 
-                        hoverBackgroundColor: '#dc2626',
-                        borderRadius: 4 
-                    }]
-                },
+                data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', hoverBackgroundColor: '#dc2626', borderRadius: 4 }]},
                 options: { 
-                    indexAxis: 'y', 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    interaction: { mode: 'index', intersect: false },
-                    layout: { padding: { right: 30 } },
-                    plugins: { 
-                        legend: { display: false },
-                        datalabels: { // Quantidade numérica na barra
-                            anchor: 'end',
-                            align: 'right',
-                            color: '#ef4444',
-                            font: { weight: 'bold' },
-                            formatter: (val) => val
-                        }
-                    } 
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, layout: { padding: { right: 30 } },
+                    plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'right', color: '#ef4444', font: { weight: 'bold' }, formatter: (val) => val } } 
                 }
             });
         }
 
-        // --- LÓGICA RELATÓRIO TÉCNICO (Sincronizada via SnagID) ---
+        // =========================================================================
+        // LÓGICA DA GALERIA INTEGRADA & RELATÓRIOS (TEMA CLARO CORPORATIVO)
+        // =========================================================================
+
+        let galIdAtual = 1;
+        let galFimAtingido = false;
+        let galGradeRenderizadaAte = 0;
+        const GAL_PASSO = 50;
+        let galObserver = null;
+        let galContagemErros = 0;
+        const GAL_MAX_ERROS = 20;
+
+        const galSentinel = document.createElement('div');
+        galSentinel.className = 'grid-sentinel';
+        galSentinel.innerHTML = '<div class="spinner-mini"></div> Buscando imagens...';
+
         function getGalUrlBase() {
-            const proj = PROJECTS_CONFIG[document.getElementById('project-selector').value];
-            return `${BASE_DOMAIN}/${proj.path}/images/tsnags/`;
+            const projName = document.getElementById('project-selector').value;
+            const projConf = PROJECTS_CONFIG[projName];
+            return `${BASE_DOMAIN}/${projConf.path}/images/tsnags/`;
         }
 
-        function renderListaGal() {
+        function resetarGaleria(startId) {
+            galIdAtual = startId;
+            galFimAtingido = false;
+            galGradeRenderizadaAte = 0;
+            galContagemErros = 0;
+            
+            document.getElementById('gridContentGal').innerHTML = '';
+            if (galSentinel.parentNode) galSentinel.parentNode.removeChild(galSentinel);
+            if (galObserver) galObserver.disconnect();
+            
+            renderizarListaGaleria();
+            
+            // Força a atualização da view atual
+            const activeView = document.querySelector('.gal-view-container.active').id;
+            if (activeView === 'galCarouselView') atualizarImagemGal();
+            else if (activeView === 'galGridView') expandirGradeGal(galIdAtual + GAL_PASSO);
+        }
+
+        function switchGalView(mode) {
+            document.querySelectorAll('.gal-view-container').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            
+            if (mode === 'carousel') {
+                document.getElementById('galCarouselView').classList.add('active');
+                document.getElementById('btnGalCarousel').classList.add('active');
+                atualizarImagemGal();
+            } else if (mode === 'grid') {
+                document.getElementById('galGridView').classList.add('active');
+                document.getElementById('btnGalGrid').classList.add('active');
+                if (!galObserver) iniciarInfiniteScrollGal();
+                if (galGradeRenderizadaAte === 0) expandirGradeGal(galIdAtual + GAL_PASSO);
+            } else if (mode === 'data') {
+                document.getElementById('galDataView').classList.add('active');
+                document.getElementById('btnGalData').classList.add('active');
+            }
+        }
+
+        function setGalStatus(texto, tipo = 'default') {
+            const badge = document.getElementById('statusBadgeGal');
+            badge.className = `status-badge-ui ${tipo}`;
+            badge.textContent = texto;
+        }
+
+        // --- Lógica Carrossel (Foco) ---
+        function atualizarImagemGal() {
+            if (galIdAtual < 1) galIdAtual = 1;
+            const imgEl = document.getElementById('mainImageGal');
+            document.getElementById('jumpInputGal').value = galIdAtual;
+            
+            imgEl.classList.remove('loaded');
+            setGalStatus('Carregando...', 'warning');
+            
+            setTimeout(() => { imgEl.src = `${getGalUrlBase()}${galIdAtual}.jpg${URL_SUFIXO}`; }, 50);
+            
+            imgEl.onload = function() {
+                imgEl.classList.add('loaded');
+                setGalStatus('Online', 'success');
+            };
+        }
+
+        function tratarErroImagemGal() {
+            const imgEl = document.getElementById('mainImageGal');
+            // SVG Placeholder Claro
+            imgEl.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='800' height='600' fill='%23f8fafc'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' font-weight='bold' fill='%2394a3b8'>Imagem Não Encontrada</text></svg>";
+            imgEl.classList.add('loaded');
+            setGalStatus('Indisponível', 'error');
+        }
+
+        function mudarFotoGal(dir) { galIdAtual += dir; atualizarImagemGal(); }
+        document.getElementById('jumpInputGal').addEventListener("keypress", (e) => { 
+            if (e.key === "Enter") { galIdAtual = parseInt(e.target.value) || 1; atualizarImagemGal(); } 
+        });
+        function copiarLinkGal() {
+            navigator.clipboard.writeText(`${getGalUrlBase()}${galIdAtual}.jpg${URL_SUFIXO}`).then(() => {
+                setGalStatus('Link Copiado!', 'success');
+            });
+        }
+
+        // --- Lógica Grade Infinita ---
+        function iniciarInfiniteScrollGal() {
+            galObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !galFimAtingido) expandirGradeGal(galGradeRenderizadaAte + GAL_PASSO);
+            }, { root: document.getElementById('galGridView'), rootMargin: '200px' });
+        }
+
+        function expandirGradeGal(novoLimite) {
+            if (galFimAtingido) return;
+            if (galSentinel.parentNode) galSentinel.parentNode.removeChild(galSentinel);
+            if (galObserver) galObserver.unobserve(galSentinel);
+            
+            const inicio = (galGradeRenderizadaAte === 0) ? galIdAtual : galGradeRenderizadaAte + 1;
+            renderizarLoteGradeGal(inicio, novoLimite);
+            galGradeRenderizadaAte = novoLimite;
+            
+            if (!galFimAtingido) {
+                document.getElementById('gridContentGal').appendChild(galSentinel);
+                if (galObserver) galObserver.observe(galSentinel);
+            }
+        }
+
+        function finalizarGaleriaGal() {
+            if (galFimAtingido) return;
+            galFimAtingido = true;
+            if (galObserver) galObserver.disconnect();
+            if (galSentinel) {
+                document.getElementById('gridContentGal').appendChild(galSentinel);
+                galSentinel.innerHTML = 'Fim da base de dados atingido.';
+            }
+        }
+
+        function renderizarLoteGradeGal(inicio, fim) {
+            if (galFimAtingido) return;
+            const fragment = document.createDocumentFragment();
+            for (let i = inicio; i <= fim; i++) {
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+                div.onclick = () => { galIdAtual = i; switchGalView('carousel'); };
+
+                const img = document.createElement('img');
+                img.loading = "lazy";
+                img.src = `${getGalUrlBase()}${i}.jpg${URL_SUFIXO}`;
+                img.onload = () => { img.classList.add('loaded'); galContagemErros = 0; };
+                img.onerror = () => { 
+                    img.style.display='none'; 
+                    div.style.background='#f1f5f9'; 
+                    div.style.border = '1px dashed #cbd5e1';
+                    galContagemErros++;
+                    if (galContagemErros >= GAL_MAX_ERROS) finalizarGaleriaGal();
+                };
+                const label = document.createElement('div');
+                label.className = 'grid-label';
+                label.innerText = `#${i}`;
+                
+                div.appendChild(img); div.appendChild(label); fragment.appendChild(div);
+            }
+            document.getElementById('gridContentGal').appendChild(fragment);
+        }
+
+        // --- Lógica Relatórios Técnicos (Base JSONL) ---
+        function renderizarListaGaleria() {
             const list = document.getElementById('dataListGal');
             list.innerHTML = '';
-            // Lista os primeiros 150 itens para navegação fluida
-            rawJsonData.slice(0, 150).forEach((item) => {
+            
+            // Cabeçalho da Lista
+            const header = document.createElement('div');
+            header.className = 'p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center sticky top-0 font-bold text-slate-700 text-sm z-10';
+            header.innerHTML = `<span>Itens Encontrados</span> <span class="text-xs text-[--cor-secundaria-dark] font-black bg-white px-2 py-1 rounded shadow-sm">${rawJsonData.length}</span>`;
+            list.appendChild(header);
+
+            rawJsonData.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'data-item-card';
-                div.onclick = () => verDetalheGal(item, div);
+                div.onclick = () => verDetalheCompletoGal(item, div);
+                
+                // Tratar cores dos status
+                let statusColor = "bg-slate-100 text-slate-600";
+                const st = (item.Status || '').toLowerCase();
+                if(st === 'open') statusColor = "bg-red-50 text-red-600 border border-red-100";
+                if(st === 'closed' || st === 'signedoff') statusColor = "bg-green-50 text-green-700 border border-green-100";
+
                 div.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-[10px] font-black text-blue-400 tracking-tighter">SNAG #${item.SnagID}</span>
-                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-white/10 text-white/50 uppercase font-black">${item.Status}</span>
+                    <div class="flex justify-between items-start mb-1.5">
+                        <span class="text-[13px] font-black text-[--cor-primaria]">#${item.SnagID}</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded font-bold uppercase ${statusColor}">${item.Status || 'N/A'}</span>
                     </div>
-                    <div class="text-[11px] text-white/70 font-bold truncate">${item.Defect || 'Sem Descrição'}</div>
+                    <div class="text-xs text-slate-600 font-semibold truncate mb-1" title="${item.ShortDescrip || item.Defect}">${item.ShortDescrip || item.Defect || 'Sem Descrição'}</div>
+                    <div class="text-[10px] text-slate-400 font-medium truncate uppercase tracking-wide">${item.Location || 'Local não definido'}</div>
                 `;
                 list.appendChild(div);
             });
         }
 
-        function verDetalheGal(item, el) {
+        function verDetalheCompletoGal(item, el) {
             document.querySelectorAll('.data-item-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             const detail = document.getElementById('dataDetailGal');
+            const imgSrc = `${getGalUrlBase()}${item.SnagID}.jpg${URL_SUFIXO}`;
             
+            // Formatador de Data
+            let createdDate = item.Spotted || "-";
+            if (createdDate && createdDate.length > 10) createdDate = createdDate.split(' ')[0];
+
             detail.innerHTML = `
-                <div class="max-w-4xl mx-auto space-y-8">
-                    <div class="image-preview-box">
-                        <img src="${getGalUrlBase()}${item.SnagID}.jpg${URL_SUFIXO}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23111%22/%3E%3C/svg%3E'">
+                <div class="report-card-modern">
+                    <!-- Cabeçalho -->
+                    <div class="report-header-light">
+                        <div class="w-full">
+                            <h2 class="text-xl font-bold text-slate-800 mb-3">${item.ShortDescrip || item.Defect || 'Descrição Indisponível'}</h2>
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <span class="status-badge-ui bg-slate-800 text-white">ID #${item.SnagID}</span>
+                                <span class="status-badge-ui bg-blue-50 text-blue-700 border border-blue-200">PRIORIDADE ${item.Priority || '-'}</span>
+                                <span class="status-badge-ui bg-slate-100 text-slate-600 border border-slate-200">${item.Status || 'N/A'}</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Identificador</label>
-                            <span class="text-white text-base font-black">#${item.SnagID}</span>
-                        </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Status Atual</label>
-                            <span class="text-white text-base font-black uppercase">${item.Status}</span>
-                        </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Prioridade</label>
-                            <span class="text-white text-base font-black">Nível ${item.Priority || 'N/A'}</span>
-                        </div>
-                        
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 md:col-span-1">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Categoria</label>
-                            <span class="text-white text-sm font-bold">${item.Category || 'N/A'}</span>
-                        </div>
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 md:col-span-2">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Localização</label>
-                            <span class="text-white text-sm font-bold">${item.Location || 'Não especificada'}</span>
+
+                    <!-- Corpo -->
+                    <div class="report-body-light">
+                        <!-- Imagem -->
+                        <div class="report-image-area">
+                            <div class="report-image-wrapper-light">
+                                <img src="${imgSrc}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100%\\' height=\\'100%\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23f8fafc\\'/><text x=\\'50%\\' y=\\'50%\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'14\\' fill=\\'%2394a3b8\\' font-weight=\\'bold\\'>Sem Evidência</text></svg>'">
+                            </div>
                         </div>
 
-                        <div class="p-5 bg-white/5 rounded-2xl border border-white/5 col-span-full">
-                            <label class="text-[9px] font-black text-white/20 uppercase block mb-1 tracking-widest">Descrição Técnica do Defeito</label>
-                            <p class="text-white text-sm leading-relaxed font-medium">${item.Defect || 'Nenhum detalhe adicional registrado para este item.'}</p>
+                        <!-- Grid Info -->
+                        <div class="report-info-grid">
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Localização</div>
+                                <div class="text-sm font-semibold text-[--cor-primaria]">${item.Location || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Planta / Desenho</div>
+                                <div class="text-sm font-semibold text-[--cor-primaria]">${item.DrwgTitle || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Grupo Responsável</div>
+                                <div class="text-sm font-semibold text-slate-700">${item.Groupname || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Criado Por</div>
+                                <div class="text-sm font-semibold text-slate-700">${item.Fullname || item.By || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Categoria</div>
+                                <div class="text-sm font-semibold text-slate-700">${item.Category || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tipo Defeito</div>
+                                <div class="text-sm font-semibold text-slate-700">${item.Defect || '-'}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Data Criação</div>
+                                <div class="text-sm font-semibold text-slate-700">${createdDate}</div>
+                            </div>
+                            <div class="info-box-light">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vencimento (SLA)</div>
+                                <div class="text-sm font-semibold text-slate-700">${item.DoByFmt || '-'}</div>
+                            </div>
+                            <div class="info-box-light full-width highlight">
+                                <div class="text-[10px] font-bold text-green-700 uppercase tracking-widest mb-1">Detalhes / Descrição Completa</div>
+                                <div class="text-sm font-medium text-slate-800 leading-relaxed">${item.Description || item.Defect || 'Sem observações extras.'}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        // --- AUXILIARES E EVENTOS ---
+        // --- AUXILIARES GERAIS ---
         function initFilters() {
             const years = [...new Set(allData.map(d => d.data.substring(0, 4)))].sort((a,b) => b-a);
             const yFilter = document.getElementById('year-filter');
@@ -815,7 +1035,6 @@
             }, 50);
         }
 
-        // Registro dos Listeners incluindo o filtro de "Data Spotted" para responsividade imediata
         document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
         document.getElementById('year-filter').addEventListener('change', runUpdate);
         document.getElementById('month-filter').addEventListener('change', runUpdate);
