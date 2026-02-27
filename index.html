@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js"></script>
+    <!-- Plugin para Rótulos de Dados (DataLabels) -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -368,6 +370,9 @@
     </footer>
 
     <script>
+        // Registro Global do Plugin de Datalabels para exibir rótulos
+        Chart.register(ChartDataLabels);
+
         // REDUNDÂNCIA: Gerenciamento Global de Gráficos
         let histogramChart, detailsChart, slaByCategoryChart, monthlyResolutionRateChart, resolutionScatterChart, statusHistoryChart, locationRankingChart;
 
@@ -483,12 +488,17 @@
             const spotted = document.getElementById('spotted-filter').value;
 
             let filtered = allData;
+            
+            // 1. Aplicando os Filtros Responsivamente
             if (spotted) filtered = filtered.filter(d => d.data === spotted);
             if (year !== 'all') filtered = filtered.filter(d => d.data.startsWith(year));
             if (month !== 'all') filtered = filtered.filter(d => new Date(d.data + "T12:00:00").getMonth() == month);
             
             const seen = new Set();
             currentFinalData = filtered.filter(d => seen.has(d.id) ? false : seen.add(d.id));
+
+            // CRÍTICO: Limpar os gráficos antigos ANTES de re-renderizar para responder aos filtros
+            clearCharts();
 
             updateKPIs();
             renderHistogram();
@@ -522,9 +532,30 @@
                 type: 'bar',
                 data: {
                     labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-                    datasets: [{ data: counts, backgroundColor: '#01455C', borderRadius: 8 }]
+                    datasets: [{ 
+                        data: counts, 
+                        backgroundColor: '#01455C', 
+                        hoverBackgroundColor: '#025d7c', // Cor ao passar o mouse
+                        borderRadius: 8 
+                    }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    interaction: { mode: 'index', intersect: false }, // Responsividade ao hover
+                    layout: { padding: { top: 20 } },
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { // 2. Rótulos de dados
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#01455C',
+                            font: { weight: 'bold', size: 11 },
+                            formatter: (val) => val > 0 ? val : ''
+                        }
+                    }, 
+                    scales: { y: { beginAtZero: true, grid: { display: false } } } 
+                }
             });
         }
 
@@ -544,13 +575,31 @@
                         data: rates, 
                         borderColor: '#9FC419', 
                         backgroundColor: 'rgba(159, 196, 25, 0.1)',
+                        pointHoverBackgroundColor: '#86a615',
                         fill: true,
                         tension: 0.4,
                         borderWidth: 4,
-                        pointRadius: 4
+                        pointRadius: 4,
+                        pointHoverRadius: 7 // Cresce no hover
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100, beginAtZero: true } }, plugins: { legend: { display: false } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    interaction: { mode: 'index', intersect: false }, // Responsividade ao hover
+                    layout: { padding: { top: 20 } },
+                    scales: { y: { max: 100, beginAtZero: true } }, 
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { // Rótulos de dados para a linha
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#86a615',
+                            font: { weight: 'bold', size: 10 },
+                            formatter: (val) => val > 0 ? val.toFixed(1) + '%' : ''
+                        }
+                    } 
+                }
             });
         }
 
@@ -566,15 +615,33 @@
             const points = Object.entries(stats).map(([n, s]) => ({ x: s.t/s.c, y: s.c, label: n }));
             resolutionScatterChart = new Chart(ctx, {
                 type: 'scatter',
-                data: { datasets: [{ data: points, backgroundColor: '#9FC419', pointRadius: 10, pointHoverRadius: 15 }]},
+                data: { datasets: [{ 
+                    data: points, 
+                    backgroundColor: '#9FC419', 
+                    hoverBackgroundColor: '#01455C', // Muda a cor no hover
+                    pointRadius: 10, 
+                    pointHoverRadius: 15 
+                }]},
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
+                    interaction: { mode: 'nearest', intersect: true },
+                    layout: { padding: { top: 25, right: 30 } },
                     scales: { 
                         x: { title: { display: true, text: 'Dias Médios de Resolução', font: { weight: 'bold' } } },
                         y: { title: { display: true, text: 'Volume de Itens', font: { weight: 'bold' } } }
                     },
-                    plugins: { tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } } }
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.y} itens | ${c.raw.x.toFixed(1)} dias` } },
+                        datalabels: { // Mostrar nome da categoria como rótulo do ponto
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#64748b',
+                            font: { size: 10 },
+                            formatter: (value) => value.label
+                        }
+                    }
                 }
             });
         }
@@ -589,10 +656,37 @@
                 }
             });
             const labels = Object.keys(stats).sort();
+            const data = labels.map(l => (stats[l].ok/stats[l].tot*100));
+            
             slaByCategoryChart = new Chart(ctx, {
                 type: 'bar',
-                data: { labels, datasets: [{ data: labels.map(l => (stats[l].ok/stats[l].tot*100)), backgroundColor: '#9FC419', borderRadius: 4 }]},
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { max: 100 } } }
+                data: { 
+                    labels, 
+                    datasets: [{ 
+                        data, 
+                        backgroundColor: '#9FC419', 
+                        hoverBackgroundColor: '#86a615',
+                        borderRadius: 4 
+                    }]
+                },
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    interaction: { mode: 'index', intersect: false },
+                    layout: { padding: { right: 40 } },
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { // Rótulo percentual da barra horizontal
+                            anchor: 'end',
+                            align: 'right',
+                            color: '#1e293b',
+                            font: { weight: 'bold' },
+                            formatter: (val) => val.toFixed(1) + '%'
+                        }
+                    }, 
+                    scales: { x: { max: 100 } } 
+                }
             });
         }
 
@@ -600,10 +694,35 @@
             const ctx = document.getElementById('locationRankingChart').getContext('2d');
             const counts = currentFinalData.reduce((acc, d) => { acc[d.Location] = (acc[d.Location] || 0) + 1; return acc; }, {});
             const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 15);
+            
             locationRankingChart = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: sorted.map(s => s[0]), datasets: [{ data: sorted.map(s => s[1]), backgroundColor: '#ef4444', borderRadius: 4 }]},
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                data: { 
+                    labels: sorted.map(s => s[0]), 
+                    datasets: [{ 
+                        data: sorted.map(s => s[1]), 
+                        backgroundColor: '#ef4444', 
+                        hoverBackgroundColor: '#dc2626',
+                        borderRadius: 4 
+                    }]
+                },
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    interaction: { mode: 'index', intersect: false },
+                    layout: { padding: { right: 30 } },
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { // Quantidade numérica na barra
+                            anchor: 'end',
+                            align: 'right',
+                            color: '#ef4444',
+                            font: { weight: 'bold' },
+                            formatter: (val) => val
+                        }
+                    } 
+                }
             });
         }
 
@@ -696,9 +815,11 @@
             }, 50);
         }
 
+        // Registro dos Listeners incluindo o filtro de "Data Spotted" para responsividade imediata
         document.getElementById('project-selector').addEventListener('change', (e) => loadProjectData(e.target.value));
         document.getElementById('year-filter').addEventListener('change', runUpdate);
         document.getElementById('month-filter').addEventListener('change', runUpdate);
+        document.getElementById('spotted-filter').addEventListener('change', runUpdate);
 
         window.onload = () => loadProjectData(document.getElementById('project-selector').value);
     </script>
