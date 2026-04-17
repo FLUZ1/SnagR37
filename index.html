@@ -959,7 +959,18 @@
             border-bottom: 1px solid #f8fafc;
             font-size: 0.84rem;
             color: var(--text-mid);
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
+
+        /* Colunas específicas para células - ajuste de largura para ID (Seq) e Data */
+        tbody tr td:nth-child(1) { width: 50px !important; min-width: 50px !important; max-width: 50px !important; white-space: nowrap !important; } /* Seq */
+        tbody tr td:nth-child(2), tbody tr td:nth-child(6) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; white-space: nowrap !important; } /* Data e Conclusão */
+        tbody tr td:nth-child(3) { width: 80px !important; min-width: 80px !important; max-width: 80px !important; } /* Tema */
+        tbody tr td:nth-child(5) { width: 100px !important; min-width: 100px !important; max-width: 100px !important; } /* Responsável */
+        tbody tr td:nth-child(7) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Status */
+        tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; } /* Descrição e Plano de Ação */
 
         tbody tr {
             transition: background 0.15s;
@@ -2127,15 +2138,7 @@
 
             /* --- Divisor de seção --- */
             #print-table-section-label {
-                display: block !important;
-                font-size: 7pt;
-                font-weight: 800;
-                color: #94a3b8;
-                text-transform: uppercase;
-                letter-spacing: 0.09em;
-                margin-bottom: 8px;
-                padding-bottom: 6px;
-                border-bottom: 1px solid #e2e8f0;
+                display: none !important;
             }
 
             /* --- Tabela --- */
@@ -2192,7 +2195,7 @@
             #th-responsavel { width: 100px !important; min-width: 100px !important; max-width: 100px !important; }
             #th-status { width: 70px !important; min-width: 70px !important; max-width: 70px !important; }
             #th-assunto { width: auto !important; min-width: 100px !important; }
-            #th-descricao, #th-acao { width: auto !important; min-width: 150px !important; }
+            #th-descricao, #th-acao { width: auto !important; min-width: 200px !important; white-space: normal !important; }
 
             tbody {
                 display: table-row-group !important;
@@ -2221,7 +2224,7 @@
             tbody tr td:nth-child(3) { width: 80px !important; min-width: 80px !important; max-width: 80px !important; } /* Tema */
             tbody tr td:nth-child(5) { width: 100px !important; min-width: 100px !important; max-width: 100px !important; } /* Responsável */
             tbody tr td:nth-child(7) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Status */
-            tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 150px !important; white-space: normal !important; } /* Descrição e Plano de Ação */
+            tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; } /* Descrição e Plano de Ação */
 
             tbody tr:nth-child(even) td {
                 background: #f8fafc !important;
@@ -3010,17 +3013,17 @@
                 <table id="dataTable">
                     <thead>
                         <tr>
-                            <th id="th-seq" onclick="handleSort('seq')" style="width:110px;">Seq.</th>
-                            <th id="th-dataAta" onclick="handleSort('dataAta')" style="width:108px;">Data</th>
+                            <th id="th-seq" onclick="handleSort('seq')" style="width:50px; min-width:50px; max-width:50px;">Seq.</th>
+                            <th id="th-dataAta" onclick="handleSort('dataAta')" style="width:70px; min-width:70px; max-width:70px;">Data</th>
                             <th id="th-tema" onclick="handleSort('tema')" style="width:140px;">Tema</th>
                             <th id="th-assunto" onclick="handleSort('assunto')">Assunto</th>
                             <th id="th-responsavel" onclick="handleSort('responsavel')" style="width:150px;">Responsável
                             </th>
-                            <th id="th-dataConclusao" onclick="handleSort('dataConclusao')" style="width:108px;">
+                            <th id="th-dataConclusao" onclick="handleSort('dataConclusao')" style="width:70px; min-width:70px; max-width:70px;">
                                 Conclusão</th>
                             <th id="th-status" onclick="handleSort('status')" style="width:120px;">Status</th>
-                            <th id="th-descricao" style="width:200px;">Descrição</th>
-                            <th id="th-acao" style="width:200px;">Plano de Ação</th>
+                            <th id="th-descricao" style="width:auto; min-width:200px;">Descrição</th>
+                            <th id="th-acao" style="width:auto; min-width:200px;">Plano de Ação</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
