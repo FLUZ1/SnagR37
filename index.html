@@ -929,6 +929,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: auto;
         }
 
         thead th {
@@ -970,7 +971,7 @@
         tbody tr td:nth-child(3) { width: 80px !important; min-width: 80px !important; max-width: 80px !important; } /* Tema */
         tbody tr td:nth-child(5) { width: 100px !important; min-width: 100px !important; max-width: 100px !important; } /* Responsável */
         tbody tr td:nth-child(7) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Status */
-        tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; } /* Descrição e Plano de Ação */
+        tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; word-wrap: break-word !important; overflow-wrap: break-word !important; hyphens: auto !important; } /* Descrição e Plano de Ação */
 
         tbody tr {
             transition: background 0.15s;
@@ -2222,7 +2223,7 @@
             tbody tr td:nth-child(3) { width: 80px !important; min-width: 80px !important; max-width: 80px !important; } /* Tema */
             tbody tr td:nth-child(5) { width: 100px !important; min-width: 100px !important; max-width: 100px !important; } /* Responsável */
             tbody tr td:nth-child(7) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Status */
-            tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; } /* Descrição e Plano de Ação */
+            tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 200px !important; white-space: normal !important; text-align: justify !important; word-wrap: break-word !important; overflow-wrap: break-word !important; hyphens: auto !important; } /* Descrição e Plano de Ação */
 
             tbody tr:nth-child(even) td {
                 background: #f8fafc !important;
@@ -4465,8 +4466,8 @@
                     <span class="status-badge status-${(item.status || '').replace(/\s/g, '')}">${item.status}</span>
                     <span style="cursor:help; font-size:10px; opacity:0.25; margin-left:8px;" onclick="event.stopPropagation(); showHistory('atas','${item.id}','${item.assunto}')">🕒</span>
                 </td>
-                <td data-label="Descrição" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word;">${item.descricao || '-'}</td>
-                <td data-label="Plano de Ação" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word;">${item.acao || '-'}</td>`;
+                <td data-label="Descrição" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word; hyphens:auto; text-align:justify;">${item.descricao || '-'}</td>
+                <td data-label="Plano de Ação" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word; hyphens:auto; text-align:justify;">${item.acao || '-'}</td>`;
                 tr.onclick = () => openViewItem(item);
                 tbody.appendChild(tr);
             });
