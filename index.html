@@ -1998,7 +1998,14 @@
             #summary-cards-list,
             #btn-add-item-admin,
             #heatmap-tooltip,
-            .modal {
+            .modal,
+            .mobile-table-cards table,
+            .mobile-table-cards thead,
+            .mobile-table-cards tbody,
+            .mobile-table-cards th,
+            .mobile-table-cards td,
+            .mobile-table-cards tr,
+            .mobile-table-cards td::before {
                 display: none !important;
             }
 
@@ -2155,11 +2162,16 @@
             table {
                 width: 100% !important;
                 border-collapse: collapse !important;
+                display: table !important;
             }
 
             thead {
                 display: table-header-group;
                 /* repete em cada página */
+            }
+
+            thead tr {
+                display: table-row !important;
             }
 
             thead th {
@@ -2172,10 +2184,20 @@
                 letter-spacing: 0.07em;
                 font-weight: 800;
                 border: none !important;
+                display: table-cell !important;
             }
 
             thead th:first-child {
                 border-radius: 0;
+            }
+
+            tbody {
+                display: table-row-group !important;
+            }
+
+            tbody tr {
+                display: table-row !important;
+                page-break-inside: avoid;
             }
 
             td {
@@ -2184,10 +2206,7 @@
                 border-bottom: 1px solid #f1f5f9 !important;
                 color: #334155 !important;
                 vertical-align: middle;
-            }
-
-            tbody tr {
-                page-break-inside: avoid;
+                display: table-cell !important;
             }
 
             tbody tr:nth-child(even) td {
@@ -2986,6 +3005,8 @@
                             <th id="th-dataConclusao" onclick="handleSort('dataConclusao')" style="width:108px;">
                                 Conclusão</th>
                             <th id="th-status" onclick="handleSort('status')" style="width:120px;">Status</th>
+                            <th id="th-descricao" style="width:200px;">Descrição</th>
+                            <th id="th-acao" style="width:200px;">Plano de Ação</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -4414,7 +4435,9 @@
                 <td data-label="Status">
                     <span class="status-badge status-${(item.status || '').replace(/\s/g, '')}">${item.status}</span>
                     <span style="cursor:help; font-size:10px; opacity:0.25; margin-left:8px;" onclick="event.stopPropagation(); showHistory('atas','${item.id}','${item.assunto}')">🕒</span>
-                </td>`;
+                </td>
+                <td data-label="Descrição" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.descricao || '-'}</td>
+                <td data-label="Plano de Ação" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.acao || '-'}</td>`;
                 tr.onclick = () => openViewItem(item);
                 tbody.appendChild(tr);
             });
