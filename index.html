@@ -2178,11 +2178,21 @@
                 font-weight: 800;
                 border: none !important;
                 display: table-cell !important;
+                white-space: normal !important;
             }
 
             thead th:first-child {
                 border-radius: 0;
             }
+
+            /* Colunas específicas - larguras reduzidas para ID e Data */
+            #th-seq { width: 50px !important; min-width: 50px !important; max-width: 50px !important; }
+            #th-dataAta, #th-dataConclusao { width: 70px !important; min-width: 70px !important; max-width: 70px !important; }
+            #th-tema { width: 80px !important; min-width: 80px !important; max-width: 80px !important; }
+            #th-responsavel { width: 100px !important; min-width: 100px !important; max-width: 100px !important; }
+            #th-status { width: 70px !important; min-width: 70px !important; max-width: 70px !important; }
+            #th-assunto { width: auto !important; min-width: 100px !important; }
+            #th-descricao, #th-acao { width: auto !important; min-width: 150px !important; }
 
             tbody {
                 display: table-row-group !important;
@@ -2200,7 +2210,18 @@
                 color: #334155 !important;
                 vertical-align: middle;
                 display: table-cell !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
             }
+
+            /* Colunas específicas para células - ajuste de largura */
+            tbody tr td:nth-child(1) { width: 50px !important; min-width: 50px !important; max-width: 50px !important; } /* Seq */
+            tbody tr td:nth-child(2), tbody tr td:nth-child(6) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Data e Conclusão */
+            tbody tr td:nth-child(3) { width: 80px !important; min-width: 80px !important; max-width: 80px !important; } /* Tema */
+            tbody tr td:nth-child(5) { width: 100px !important; min-width: 100px !important; max-width: 100px !important; } /* Responsável */
+            tbody tr td:nth-child(7) { width: 70px !important; min-width: 70px !important; max-width: 70px !important; } /* Status */
+            tbody tr td:nth-child(8), tbody tr td:nth-child(9) { width: auto !important; min-width: 150px !important; white-space: normal !important; } /* Descrição e Plano de Ação */
 
             tbody tr:nth-child(even) td {
                 background: #f8fafc !important;
@@ -4429,8 +4450,8 @@
                     <span class="status-badge status-${(item.status || '').replace(/\s/g, '')}">${item.status}</span>
                     <span style="cursor:help; font-size:10px; opacity:0.25; margin-left:8px;" onclick="event.stopPropagation(); showHistory('atas','${item.id}','${item.assunto}')">🕒</span>
                 </td>
-                <td data-label="Descrição" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.descricao || '-'}</td>
-                <td data-label="Plano de Ação" style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.acao || '-'}</td>`;
+                <td data-label="Descrição" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word;">${item.descricao || '-'}</td>
+                <td data-label="Plano de Ação" style="white-space:normal; word-wrap:break-word; overflow-wrap:break-word;">${item.acao || '-'}</td>`;
                 tr.onclick = () => openViewItem(item);
                 tbody.appendChild(tr);
             });
