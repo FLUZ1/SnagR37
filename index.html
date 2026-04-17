@@ -4095,7 +4095,21 @@
             const fT = document.getElementById('filter-tema').value;
             const fA = document.getElementById('filter-assunto').value;
             let filtered = allData.filter(d => fS.includes(d.status) && (!fT || d.tema === fT) && (!fA || d.assunto === fA));
+            
+            // Define ordem personalizada para status
+            const statusOrder = { 'Crítica': 1, 'Aberta': 2, 'Em análise': 3, 'Informativo': 4, 'Fechado': 5 };
+            
             filtered.sort((a, b) => {
+                // Se houver filtro de status ativo (nem todos selecionados), ordena pela ordem personalizada
+                const allStatuses = Array.from(document.querySelectorAll('#multiselect-status-options input')).map(cb => cb.value);
+                const hasActiveFilter = fS.length < allStatuses.length || fS.length !== new Set(allStatuses).size;
+                
+                if (hasActiveFilter && statusOrder[a.status] && statusOrder[b.status]) {
+                    const orderDiff = statusOrder[a.status] - statusOrder[b.status];
+                    if (orderDiff !== 0) return orderDiff;
+                }
+                
+                // Ordenação secundária pela coluna atual
                 let vA = a[currentSortCol] || "", vB = b[currentSortCol] || "";
                 if (currentSortCol === 'seq') { vA = parseInt(vA) || 0; vB = parseInt(vB) || 0; }
                 return vA < vB ? (currentSortDir === 'asc' ? -1 : 1) : vA > vB ? (currentSortDir === 'asc' ? 1 : -1) : 0;
