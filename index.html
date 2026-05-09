@@ -2863,6 +2863,7 @@
             <a id="nav-report">Periódicos</a>
             <a id="nav-relatorios-esp">Específicos</a>
             <a id="nav-apontamentos">Apontamentos</a>
+            <a id="nav-controle-tec">Controle Tecnológico</a>
             <a id="nav-ckl">Segurança</a>
             <a id="nav-logs" style="display:none;">Admin</a>
             <a id="nav-pdf-tools" style="display:none;">Ferramentas PDF</a>
@@ -2876,6 +2877,7 @@
         <a id="m-nav-report">📄 Periódicos</a>
         <a id="m-nav-relatorios-esp">🔬 Específicos</a>
         <a id="m-nav-apontamentos">📌 Apontamentos</a>
+        <a id="m-nav-controle-tec">🧪 Controle Tecnológico</a>
         <a id="m-nav-ckl">🦺 Segurança</a>
         <a id="m-nav-logs" style="display:none;">🛡️ Admin</a>
         <a id="m-nav-pdf-tools" style="display:none;">🔧 Ferramentas PDF</a>
@@ -3429,6 +3431,97 @@
         </div>
 
     </div>
+
+    <!-- ===== CONTROLE TECNOLÓGICO - CONCRETO ===== -->
+    <div id="controle-tec-page" class="container">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Controle Tecnológico - Concreto</div>
+                <div class="page-subtitle">Painel de indicadores de qualidade do concreto - Projeto PG37</div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Amostras (28 dias)</div>
+                <div class="kpi-value" id="ct-total-amostras">-</div>
+                <div class="kpi-trend" id="ct-amostras-status"></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">FCK Médio Atingido</div>
+                <div class="kpi-value" id="ct-fck-medio">-</div>
+                <div class="kpi-trend" id="ct-fck-medio-status"></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa de Aprovação</div>
+                <div class="kpi-value" id="ct-taxa-aprovacao">-</div>
+                <div class="kpi-trend" id="ct-aprovacao-status"></div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Central com Melhor Desempenho</div>
+                <div class="kpi-value" id="ct-melhor-central" style="font-size:1rem;">-</div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="charts-row">
+            <div class="chart-box" style="flex:2; min-width:420px;">
+                <div class="chart-header">
+                    <div class="chart-title">Controle de Resistência ao Longo do Tempo</div>
+                    <div class="chart-subtitle">FCK Atingido (28 dias) vs Data de Concretagem</div>
+                </div>
+                <canvas id="ct-controle-resistencia-chart"></canvas>
+            </div>
+            <div class="chart-box" style="flex:1; min-width:320px;">
+                <div class="chart-header">
+                    <div class="chart-title">Desempenho por Fornecedor</div>
+                    <div class="chart-subtitle">Distribuição de FCK por Central</div>
+                </div>
+                <canvas id="ct-fornecedor-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-row">
+            <div class="chart-box" style="flex:1; min-width:320px;">
+                <div class="chart-header">
+                    <div class="chart-title">Evolução de Resistência</div>
+                    <div class="chart-subtitle">Comparativo 14 dias vs 28 dias</div>
+                </div>
+                <canvas id="ct-evolucao-chart"></canvas>
+            </div>
+            <div class="chart-box" style="flex:1; min-width:320px;">
+                <div class="chart-header">
+                    <div class="chart-title">Resumo por Elemento Concretado</div>
+                    <div class="chart-subtitle">Principais peças estruturais</div>
+                </div>
+                <canvas id="ct-elementos-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-container" style="margin-top:24px;">
+            <div class="table-scroll">
+                <table id="ct-data-table">
+                    <thead>
+                        <tr>
+                            <th>Data Concretagem</th>
+                            <th>Relatório</th>
+                            <th>Série</th>
+                            <th>Central</th>
+                            <th>Elemento</th>
+                            <th>FCK Esperado</th>
+                            <th>FCK Atingido (28d)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div id="ckl-page" class="container">
         <iframe src="https://fluz1.github.io/SSO/"
             style="width:100%; height:82vh; border:none; border-radius:var(--radius); box-shadow:var(--shadow-md);"></iframe>
@@ -4004,7 +4097,7 @@
             if (el) { el.style.display = 'block'; requestAnimationFrame(() => el.classList.add('show')); }
             const allNavLinks = document.querySelectorAll('nav a, .mobile-nav a');
             allNavLinks.forEach(a => a.classList.remove('active'));
-            const map = { 'dashboard-page': ['nav-dashboard', 'm-nav-dashboard'], 'report-page': ['nav-report', 'm-nav-report'], 'relatorios-esp-page': ['nav-relatorios-esp', 'm-nav-relatorios-esp'], 'apontamentos-page': ['nav-apontamentos', 'm-nav-apontamentos'], 'ckl-page': ['nav-ckl', 'm-nav-ckl'], 'logs-page': ['nav-logs', 'm-nav-logs'], 'pdf-tools-page': ['nav-pdf-tools', 'm-nav-pdf-tools'] };
+            const map = { 'dashboard-page': ['nav-dashboard', 'm-nav-dashboard'], 'report-page': ['nav-report', 'm-nav-report'], 'relatorios-esp-page': ['nav-relatorios-esp', 'm-nav-relatorios-esp'], 'apontamentos-page': ['nav-apontamentos', 'm-nav-apontamentos'], 'controle-tec-page': ['nav-controle-tec', 'm-nav-controle-tec'], 'ckl-page': ['nav-ckl', 'm-nav-ckl'], 'logs-page': ['nav-logs', 'm-nav-logs'], 'pdf-tools-page': ['nav-pdf-tools', 'm-nav-pdf-tools'] };
             const navIds = map[id];
             if (navIds) navIds.forEach(nid => { const el = document.getElementById(nid); if (el) el.classList.add('active'); });
             if (id === 'report-page') loadReports();
@@ -4018,6 +4111,9 @@
                 aptInitialized = true;
                 aptInitDashboard();
             }
+            if (id === 'controle-tec-page') {
+                ctRenderDashboard();
+            }
             closeMobileNav();
         }
 
@@ -4025,6 +4121,7 @@
         document.getElementById('nav-report').onclick = () => showPage('report-page');
         document.getElementById('nav-relatorios-esp').onclick = () => showPage('relatorios-esp-page');
         document.getElementById('nav-apontamentos').onclick = () => showPage('apontamentos-page');
+        document.getElementById('nav-controle-tec').onclick = () => showPage('controle-tec-page');
         document.getElementById('nav-ckl').onclick = () => showPage('ckl-page');
         document.getElementById('nav-logs').onclick = () => showPage('logs-page');
         document.getElementById('nav-pdf-tools').onclick = () => showPage('pdf-tools-page');
@@ -4032,6 +4129,7 @@
         document.getElementById('m-nav-report').onclick = () => showPage('report-page');
         document.getElementById('m-nav-relatorios-esp').onclick = () => showPage('relatorios-esp-page');
         document.getElementById('m-nav-apontamentos').onclick = () => showPage('apontamentos-page');
+        document.getElementById('m-nav-controle-tec').onclick = () => showPage('controle-tec-page');
         document.getElementById('m-nav-ckl').onclick = () => showPage('ckl-page');
         document.getElementById('m-nav-logs').onclick = () => showPage('logs-page');
         document.getElementById('m-nav-pdf-tools').onclick = () => showPage('pdf-tools-page');
@@ -5959,6 +6057,316 @@
 
             // Load default project
             aptLoadProjectData(document.getElementById('apt-project-selector').value);
+        }
+
+        // ===== CONTROLE TECNOLÓGICO - CONCRETO =====
+        let ctChartsInitialized = false;
+        let ctControleResistenciaChart, ctFornecedorChart, ctEvolucaoChart, ctElementosChart;
+
+        async function ctLoadData() {
+            try {
+                const q = query(collection(db, "concreto"), where("projeto", "==", "PG37"));
+                const snap = await getDocs(q);
+                return snap.docs.map(d => d.data());
+            } catch (err) {
+                console.error('Erro ao carregar dados de concreto:', err);
+                return [];
+            }
+        }
+
+        function parseDateBR(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+                return new Date(`${year}-${parts[1]}-${parts[0]}`);
+            }
+            return null;
+        }
+
+        function parseNumberBR(numStr) {
+            if (!numStr) return null;
+            if (typeof numStr === 'number') return numStr;
+            return parseFloat(numStr.replace(',', '.'));
+        }
+
+        async function ctRenderDashboard() {
+            const data = await ctLoadData();
+            if (data.length === 0) {
+                document.getElementById('ct-total-amostras').textContent = '0';
+                document.getElementById('ct-fck-medio').textContent = '-';
+                document.getElementById('ct-taxa-aprovacao').textContent = '-';
+                document.getElementById('ct-melhor-central').textContent = 'Sem dados';
+                return;
+            }
+
+            // Filter only 28 days samples for main metrics
+            const amostras28d = data.filter(d => d['FCK_Atingido_28 dia(s)'] !== undefined && d['FCK_Atingido_28 dia(s)'] !== null);
+            
+            // KPI: Total Amostras
+            document.getElementById('ct-total-amostras').textContent = amostras28d.length;
+
+            // KPI: FCK Médio
+            const fckValues = amostras28d.map(d => parseNumberBR(d['FCK_Atingido_28 dia(s)'])).filter(v => v !== null);
+            const fckMedio = fckValues.length > 0 ? fckValues.reduce((a, b) => a + b, 0) / fckValues.length : 0;
+            document.getElementById('ct-fck-medio').textContent = fckMedio.toFixed(1) + ' MPa';
+
+            // KPI: Taxa de Aprovação
+            let aprovadas = 0;
+            amostras28d.forEach(d => {
+                const fckAtingido = parseNumberBR(d['FCK_Atingido_28 dia(s)']);
+                const fckEsperado = parseNumberBR(d['FCK Esperado (MPa)']);
+                if (fckAtingido !== null && fckEsperado !== null && fckAtingido >= fckEsperado) {
+                    aprovadas++;
+                }
+            });
+            const taxaAprovacao = amostras28d.length > 0 ? (aprovadas / amostras28d.length) * 100 : 0;
+            document.getElementById('ct-taxa-aprovacao').textContent = taxaAprovacao.toFixed(1) + '%';
+
+            // Status indicators
+            const setKpiStatus = (elId, value, threshold, higherIsBetter = true) => {
+                const el = document.getElementById(elId);
+                if (higherIsBetter) {
+                    if (value >= threshold) { el.textContent = '✅ Excelente'; el.style.color = 'var(--success)'; }
+                    else if (value >= threshold * 0.9) { el.textContent = '⚠️ Atenção'; el.style.color = 'var(--warning)'; }
+                    else { el.textContent = '❌ Crítico'; el.style.color = 'var(--danger)'; }
+                } else {
+                    if (value <= threshold) { el.textContent = '✅ Excelente'; el.style.color = 'var(--success)'; }
+                    else if (value <= threshold * 1.1) { el.textContent = '⚠️ Atenção'; el.style.color = 'var(--warning)'; }
+                    else { el.textContent = '❌ Crítico'; el.style.color = 'var(--danger)'; }
+                }
+            };
+
+            setKpiStatus('ct-fck-medio-status', fckMedio, 35);
+            setKpiStatus('ct-aprovacao-status', taxaAprovacao, 90);
+
+            // KPI: Melhor Central
+            const centralStats = {};
+            amostras28d.forEach(d => {
+                const central = d['Central'] || 'Não informada';
+                const fck = parseNumberBR(d['FCK_Atingido_28 dia(s)']);
+                if (!centralStats[central]) centralStats[central] = { sum: 0, count: 0 };
+                if (fck !== null) {
+                    centralStats[central].sum += fck;
+                    centralStats[central].count++;
+                }
+            });
+            let melhorCentral = '-';
+            let melhorMedia = 0;
+            Object.entries(centralStats).forEach(([central, stats]) => {
+                if (stats.count > 0) {
+                    const media = stats.sum / stats.count;
+                    if (media > melhorMedia) {
+                        melhorMedia = media;
+                        melhorCentral = central;
+                    }
+                }
+            });
+            document.getElementById('ct-melhor-central').textContent = melhorCentral;
+
+            // Chart 1: Controle de Resistência ao Longo do Tempo
+            const controleData = amostras28d
+                .map(d => ({
+                    dataConcretagem: parseDateBR(d['Data Concretagem']),
+                    fckAtingido: parseNumberBR(d['FCK_Atingido_28 dia(s)']),
+                    fckEsperado: parseNumberBR(d['FCK Esperado (MPa)'])
+                }))
+                .filter(d => d.dataConcretagem !== null && d.fckAtingido !== null)
+                .sort((a, b) => a.dataConcretagem - b.dataConcretagem);
+
+            const ctx1 = document.getElementById('ct-controle-resistencia-chart').getContext('2d');
+            if (ctControleResistenciaChart) ctControleResistenciaChart.destroy();
+            ctControleResistenciaChart = new Chart(ctx1, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'FCK Atingido (28 dias)',
+                        data: controleData.map(d => ({ x: d.dataConcretagem, y: d.fckAtingido })),
+                        backgroundColor: controleData.map(d => {
+                            const esperado = d.fckEsperado || 35;
+                            return d.fckAtingido >= esperado ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)';
+                        }),
+                        borderColor: controleData.map(d => {
+                            const esperado = d.fckEsperado || 35;
+                            return d.fckAtingido >= esperado ? 'rgba(16, 185, 129, 1)' : 'rgba(239, 68, 68, 1)';
+                        }),
+                        borderWidth: 1.5,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `FCK: ${ctx.parsed.y.toFixed(1)} MPa`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'day', displayFormats: { day: 'dd/MM/yyyy' } },
+                            title: { display: true, text: 'Data de Concretagem' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'FCK (MPa)' }
+                        }
+                    }
+                }
+            });
+
+            // Add target line annotation (simplified approach using a line dataset)
+            const avgFckEsperado = controleData.length > 0 
+                ? controleData.filter(d => d.fckEsperado !== null).reduce((sum, d) => sum + d.fckEsperado, 0) / controleData.filter(d => d.fckEsperado !== null).length 
+                : 35;
+
+            // Chart 2: Desempenho por Fornecedor (Boxplot-like using bar with error bars simulation)
+            const fornecedorData = {};
+            amostras28d.forEach(d => {
+                const central = d['Central'] || 'Não informada';
+                const fck = parseNumberBR(d['FCK_Atingido_28 dia(s)']);
+                if (!fornecedorData[central]) fornecedorData[central] = [];
+                if (fck !== null) fornecedorData[central].push(fck);
+            });
+
+            const ctx2 = document.getElementById('ct-fornecedor-chart').getContext('2d');
+            if (ctFornecedorChart) ctFornecedorChart.destroy();
+            ctFornecedorChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(fornecedorData),
+                    datasets: [{
+                        label: 'FCK Médio (28 dias)',
+                        data: Object.values(fornecedorData).map(vals => vals.reduce((a, b) => a + b, 0) / vals.length),
+                        backgroundColor: 'rgba(1, 69, 92, 0.7)',
+                        borderColor: 'rgba(1, 69, 92, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'FCK (MPa)' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Evolução de Resistência (14 vs 28 dias)
+            const amostras14d = data.filter(d => d['FCK_Atingido_14 dia(s)'] !== undefined && d['FCK_Atingido_14 dia(s)'] !== null);
+            const evolucaoLabels = ['14 dias', '28 dias'];
+            const evolucaoData = [
+                amostras14d.length > 0 ? amostras14d.map(d => parseNumberBR(d['FCK_Atingido_14 dia(s)'])).filter(v => v !== null).reduce((a, b) => a + b, 0) / amostras14d.map(d => parseNumberBR(d['FCK_Atingido_14 dia(s)'])).filter(v => v !== null).length : 0,
+                fckValues.length > 0 ? fckValues.reduce((a, b) => a + b, 0) / fckValues.length : 0
+            ];
+
+            const ctx3 = document.getElementById('ct-evolucao-chart').getContext('2d');
+            if (ctEvolucaoChart) ctEvolucaoChart.destroy();
+            ctEvolucaoChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: evolucaoLabels,
+                    datasets: [{
+                        label: 'FCK Médio Atingido',
+                        data: evolucaoData,
+                        borderColor: 'rgba(159, 196, 25, 1)',
+                        backgroundColor: 'rgba(159, 196, 25, 0.2)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 8,
+                        pointBackgroundColor: 'rgba(159, 196, 25, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'FCK (MPa)' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 4: Resumo por Elemento Concretado
+            const elementoData = {};
+            amostras28d.forEach(d => {
+                const elemento = d['Elemento Concretado'] || 'Não informado';
+                const fck = parseNumberBR(d['FCK_Atingido_28 dia(s)']);
+                if (!elementoData[elemento]) elementoData[elemento] = { total: 0, count: 0 };
+                if (fck !== null) {
+                    elementoData[elemento].total += fck;
+                    elementoData[elemento].count++;
+                }
+            });
+
+            // Top 5 elementos
+            const topElementos = Object.entries(elementoData)
+                .filter(([_, stats]) => stats.count > 0)
+                .map(([elem, stats]) => ({ elem, media: stats.total / stats.count, count: stats.count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
+
+            const ctx4 = document.getElementById('ct-elementos-chart').getContext('2d');
+            if (ctElementosChart) ctElementosChart.destroy();
+            ctElementosChart = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: topElementos.map(e => e.elem.length > 20 ? e.elem.substring(0, 20) + '...' : e.elem),
+                    datasets: [{
+                        label: 'FCK Médio',
+                        data: topElementos.map(e => e.media),
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: false,
+                            title: { display: true, text: 'FCK (MPa)' }
+                        }
+                    }
+                }
+            });
+
+            // Populate table
+            const tableBody = document.querySelector('#ct-data-table tbody');
+            tableBody.innerHTML = '';
+            controleData.slice(0, 50).forEach(d => {
+                const row = document.createElement('tr');
+                const statusClass = d.fckAtingido >= (d.fckEsperado || 35) ? 'status-ok' : 'status-pending';
+                const statusText = d.fckAtingido >= (d.fckEsperado || 35) ? '✅ Aprovado' : '⚠️ Abaixo';
+                row.innerHTML = `
+                    <td>${d.dataConcretagem.toLocaleDateString('pt-BR')}</td>
+                    <td style="font-size:0.8rem;">${d.fckEsperado ? d.fckEsperado.toFixed(1) : '-'} MPa</td>
+                    <td style="font-weight:700; color:${statusClass === 'status-ok' ? 'var(--success)' : 'var(--warning)'}">${statusText}</td>
+                `;
+                tableBody.appendChild(row);
+            });
         }
 
     </script>
